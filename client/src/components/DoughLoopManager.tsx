@@ -6,9 +6,12 @@ import DoughLoopList from './DoughLoopList';
 import LogoutButton from './LogoutButton';
 import DrumLoopEditor from './DrumLoopEditor';
 import type { DoughLoop } from '../store';
+import DrumLoopPlayer from './DrumLoopPlayer';
+import * as Tone from 'tone';
 
 export default function DoughLoopManager() {
   const user = useStore((s) => s.user);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
 
   // 🆙 LIFT grid + name state
@@ -16,6 +19,11 @@ export default function DoughLoopManager() {
     () => Array(4).fill(null).map(() => Array(16).fill(false))
   );
   const [name, setName] = useState('');
+
+  const handlePlayToggle = async () => {
+	await Tone.start(); // <-- resumes AudioContext
+	setIsPlaying((prev) => !prev);
+};
 
   // Optional: reset selected loop on logout
   useEffect(() => {
@@ -40,6 +48,11 @@ export default function DoughLoopManager() {
         name={name}
         setName={setName}
       />
+	<DrumLoopPlayer grid={grid} isPlaying={isPlaying} />
+	<button onClick={handlePlayToggle}>
+		{isPlaying ? 'Stop' : 'Play'}
+	</button>
+	  
 
       {user && (
         <>
