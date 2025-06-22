@@ -72,55 +72,56 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-
-
 // server/index.js or routes/doughloops.js
 app.post('/doughloops', async (req, res) => {
-  const { userId, name, beatRep } = req.body;
-  if (!userId || !name || !beatRep) {
-    return res.status(400).json({ error: 'Missing fields' });
-  }
+    const { userId, name, beatRep } = req.body;
 
-  try {
-	const db = await getDB();
-    const result = await db.run(
-      'INSERT INTO doughloops (userId, name, beatRep) VALUES (?, ?, ?)',
-      [userId, name, beatRep]
-    );
-    const newLoop = {
-      id: result.lastID,
-      userId,
-      name,
-      beatRep,
-    };
-    res.status(201).json(newLoop);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Database insert failed' });
-  }
+    if (!userId || !name || !beatRep) {
+        return res.status(400).json({ error: 'Missing fields' });
+    }
+
+    try {
+        const db = await getDB();
+        const existing = await db.get('SELECT id FROM doughloops WHERE userId = ? AND name = ?', [
+            userId,
+            name,
+        ]);
+
+        if (existing) {
+            await db.run('UPDATE doughloops SET beatRep = ? WHERE id = ?', [beatRep, existing.id]);
+            const updated = await db.get('SELECT * FROM doughloops WHERE id = ?', [existing.id]);
+            return res.status(200).json(updated);
+        } else {
+            const result = await db.run(
+                'INSERT INTO doughloops (userId, name, beatRep) VALUES (?, ?, ?)',
+                [userId, name, beatRep]
+            );
+            return res.status(201).json({
+                id: result.lastID,
+                userId,
+                name,
+                beatRep,
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Save failed' });
+    }
 });
-
 
 app.get('/doughloops', async (req, res) => {
-  const { userId } = req.query;
-  if (!userId) return res.status(400).json({ error: 'Missing userId' });
+    const { userId } = req.query;
+    if (!userId) return res.status(400).json({ error: 'Missing userId' });
 
-  try {
-	const db = await getDB();
-    const loops = await db.all(
-      'SELECT * FROM doughloops WHERE userId = ?',
-      [userId]
-    );
-    res.json(loops);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch loops' });
-  }
+    try {
+        const db = await getDB();
+        const loops = await db.all('SELECT * FROM doughloops WHERE userId = ?', [userId]);
+        res.json(loops);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch loops' });
+    }
 });
-
-
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));

@@ -26,6 +26,7 @@ interface StoreState {
     // DoughLoop actions
     setDoughLoops: (loops: DoughLoop[]) => void;
     addDoughLoop: (loop: DoughLoop) => void;
+    replaceDoughLoop: (loop: DoughLoop) => void;
 
     // UI actions
     setLoading: (loading: boolean) => void;
@@ -43,6 +44,10 @@ export const useStore = create<StoreState>((set) => ({
 
     setDoughLoops: (loops) => set({ doughLoops: loops }),
     addDoughLoop: (loop) => set((state) => ({ doughLoops: [...state.doughLoops, loop] })),
+    replaceDoughLoop: (loop: DoughLoop) =>
+        set((state) => ({
+            doughLoops: state.doughLoops.map((dl) => (dl.id === loop.id ? loop : dl)),
+        })),
 
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),

@@ -4,6 +4,7 @@ import { useStore } from '../store';
 export default function NewDoughLoopForm() {
     const user = useStore((s) => s.user);
     const addDoughLoop = useStore((s) => s.addDoughLoop);
+    const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
     const [name, setName] = useState('');
     const [beatRep, setBeatRep] = useState('');
     const [loading, setLoading] = useState(false);
@@ -29,7 +30,13 @@ export default function NewDoughLoopForm() {
             if (!res.ok) throw new Error('Failed to create DoughLoop');
 
             const newLoop = await res.json();
-            addDoughLoop(newLoop);
+
+            if (res.status === 201) {
+                addDoughLoop(newLoop);
+            } else if (res.status === 200) {
+                replaceDoughLoop(newLoop);
+            }
+
             setName('');
             setBeatRep('');
         } catch (err: any) {

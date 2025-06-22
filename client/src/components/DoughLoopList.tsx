@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useStore } from '../store';
+import { DoughLoop } from '../store';
 
-export default function DoughLoopList() {
+interface Props {
+    onSelectLoop: (loop: DoughLoop) => void;
+    selectedLoop?: DoughLoop;
+}
+
+export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
     const user = useStore((s) => s.user);
     const doughLoops = useStore((s) => s.doughLoops);
     const setDoughLoops = useStore((s) => s.setDoughLoops);
@@ -35,8 +41,15 @@ export default function DoughLoopList() {
             <h3>Your DoughLoops</h3>
             <ul>
                 {doughLoops.map((loop) => (
-                    <li key={loop.id}>
-                        <strong>{loop.name}</strong>: {loop.beatRep}
+                    <li
+                        key={loop.id}
+                        style={{
+                            cursor: 'pointer',
+                            fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
+                        }}
+                        onClick={() => onSelectLoop(loop)}
+                    >
+                        {loop.name}
                     </li>
                 ))}
             </ul>
