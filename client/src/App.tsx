@@ -5,10 +5,13 @@ import AuthPage from './components/AuthPage';
 import DoughLoopManager from './components/DoughLoopManager';
 
 export default function App(): JSX.Element {
+
+	const user = useStore((s) => s.user);
+	
     return (
         <div>
             <h1>Welcome to DoughLoops</h1>
-            <AuthPage />
+            {user ? null : <AuthPage/>}
 			<DoughLoopManager />
         </div>
     );

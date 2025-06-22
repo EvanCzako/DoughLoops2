@@ -108,7 +108,6 @@ app.get('/doughloops', async (req, res) => {
 
   try {
 	const db = await getDB();
-	console.log(userId);
     const loops = await db.all(
       'SELECT * FROM doughloops WHERE userId = ?',
       [userId]
