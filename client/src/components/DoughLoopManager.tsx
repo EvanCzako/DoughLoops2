@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useStore } from '../store';
-import NewDoughLoopForm from './NewDoughLoopForm';
 import DoughLoopList from './DoughLoopList';
 import LogoutButton from './LogoutButton';
 import DrumLoopEditor from './DrumLoopEditor';
@@ -13,6 +12,7 @@ export default function DoughLoopManager() {
   const user = useStore((s) => s.user);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
+	const [currentStep, setCurrentStep] = useState<number | null>(null);
 
   // 🆙 LIFT grid + name state
   const [grid, setGrid] = useState<boolean[][]>(
@@ -32,6 +32,8 @@ export default function DoughLoopManager() {
     }
   }, [user]);
 
+  console.log('Current step:', currentStep);
+
   return (
     <div style={{ padding: 24, maxWidth: 600, margin: 'auto' }}>
       {user ? (
@@ -47,8 +49,13 @@ export default function DoughLoopManager() {
         setGrid={setGrid}
         name={name}
         setName={setName}
+		currentStep={currentStep}
       />
-	<DrumLoopPlayer grid={grid} isPlaying={isPlaying} />
+	<DrumLoopPlayer
+		grid={grid}
+		isPlaying={isPlaying}
+		onStep={setCurrentStep}
+	/>
 	<button onClick={handlePlayToggle}>
 		{isPlaying ? 'Stop' : 'Play'}
 	</button>

@@ -5,10 +5,12 @@ import type { DoughLoop } from '../store';
 
 interface DrumLoopEditorProps {
   selectedLoop?: DoughLoop;
+  currentStep: number | null;
   grid: boolean[][];
   setGrid: (g: boolean[][]) => void;
   name: string;
   setName: (s: string) => void;
+
 }
 
 export default function DrumLoopEditor({
@@ -17,6 +19,7 @@ export default function DrumLoopEditor({
   setGrid,
   name,
   setName,
+  currentStep
 }: DrumLoopEditorProps) {
 
     const user = useStore((s) => s.user);
@@ -69,7 +72,11 @@ export default function DrumLoopEditor({
         <div className="loop-editor">
             <h3>Create a new DoughLoop</h3>
 
-            <DrumGrid grid={grid} setGrid={setGrid} />
+			<DrumGrid
+				grid={grid}
+				setGrid={setGrid}
+				currentStep={currentStep}
+			/>
 
             {user ? (
                 <div>
