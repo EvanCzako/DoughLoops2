@@ -42,3 +42,6 @@ server/.cache/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Linting
+.eslintcache
