@@ -1,55 +1,78 @@
+.drum-grid-outer {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.drum-grid-scroll {
+  display: inline-block; /* key: shrinkwrap width */
+  overflow-x: visible;
+}
+
+.ghost-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.ghost-row .label {
+  width: 60px;
+  min-width: 60px;
+  margin-right: 12px;
+}
+
+.ghost-cell {
+  width: 28px;
+  height: 6px;
+  min-width: 28px;
+  flex-shrink: 0;
+  background-color: transparent;
+}
+
+.ghost-cell.active {
+  background-color: #00c6ff;
+  border-radius: 2px;
+  box-shadow: 0 0 4px #00c6ff;
+}
+
 .drum-grid {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.ghost-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 32px);
-  gap: 4px;
-  margin-left: 60px;
-}
-
-.ghost-cell {
-  width: 32px;
-  height: 8px;
-  background-color: transparent;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-.ghost-cell.active {
-  background-color: #ff9f1c;
-}
-
 .grid-row {
   display: flex;
   align-items: center;
-  gap: 4px;
 }
 
 .label {
   width: 60px;
+  min-width: 60px;
+  margin-right: 12px;
+  flex-shrink: 0;
   text-align: right;
-  padding-right: 8px;
-  font-weight: bold;
-  font-family: monospace;
 }
 
 .cell {
-  width: 32px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  flex-shrink: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .even-beat {
-  background-color: #f0f0f0;
+  background-color: #f7f7f7;
 }
+
 .odd-beat {
-  background-color: #e0e0e0;
+  background-color: #eaeaea;
 }
+
 .playing {
-  outline: 2px solid #ff9f1c;
+  outline: 2px solid #00c6ff;
   border-radius: 4px;
 }
