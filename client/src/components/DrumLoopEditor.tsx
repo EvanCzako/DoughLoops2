@@ -5,7 +5,7 @@ import type { DoughLoop } from '../store';
 
 interface DrumLoopEditorProps {
   selectedLoop?: DoughLoop;
-  currentStep: number | null;
+  currentStep?: number;
   grid: boolean[][];
   setGrid: (g: boolean[][]) => void;
   name: string;

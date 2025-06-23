@@ -12,7 +12,8 @@ export default function DoughLoopManager() {
   const user = useStore((s) => s.user);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
-	const [currentStep, setCurrentStep] = useState<number | null>(null);
+	const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
+	const [bpm, setBpm] = useState(120);
 
   // 🆙 LIFT grid + name state
   const [grid, setGrid] = useState<boolean[][]>(
@@ -31,8 +32,6 @@ export default function DoughLoopManager() {
       setSelectedLoop(undefined);
     }
   }, [user]);
-
-  console.log('Current step:', currentStep);
 
   return (
     <div style={{ padding: 24, maxWidth: 600, margin: 'auto' }}>
@@ -55,7 +54,22 @@ export default function DoughLoopManager() {
 		grid={grid}
 		isPlaying={isPlaying}
 		onStep={setCurrentStep}
+		bpm={bpm}
 	/>
+	<div style={{ margin: '20px 0' }}>
+		<label>
+			BPM: {bpm}
+			<input
+			type="range"
+			min="60"
+			max="180"
+			value={bpm}
+			onChange={(e) => setBpm(Number(e.target.value))}
+			style={{ width: '100%' }}
+			/>
+		</label>
+	</div>
+
 	<button onClick={handlePlayToggle}>
 		{isPlaying ? 'Stop' : 'Play'}
 	</button>
