@@ -4,24 +4,22 @@ import DrumGrid from './DrumGrid';
 import type { DoughLoop } from '../store';
 
 interface DrumLoopEditorProps {
-  selectedLoop?: DoughLoop;
-  currentStep?: number;
-  grid: boolean[][];
-  setGrid: (g: boolean[][]) => void;
-  name: string;
-  setName: (s: string) => void;
-
+    selectedLoop?: DoughLoop;
+    currentStep?: number;
+    grid: boolean[][];
+    setGrid: (g: boolean[][]) => void;
+    name: string;
+    setName: (s: string) => void;
 }
 
 export default function DrumLoopEditor({
-  selectedLoop,
-  grid,
-  setGrid,
-  name,
-  setName,
-  currentStep
+    selectedLoop,
+    grid,
+    setGrid,
+    name,
+    setName,
+    currentStep,
 }: DrumLoopEditorProps) {
-
     const user = useStore((s) => s.user);
     const addDoughLoop = useStore((s) => s.addDoughLoop);
     const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
@@ -72,11 +70,7 @@ export default function DrumLoopEditor({
         <div className="loop-editor">
             <h3>Create a new DoughLoop</h3>
 
-			<DrumGrid
-				grid={grid}
-				setGrid={setGrid}
-				currentStep={currentStep}
-			/>
+            <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
 
             {user ? (
                 <div>

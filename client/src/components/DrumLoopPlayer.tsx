@@ -2,93 +2,85 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 
 interface DrumLoopPlayerProps {
-  grid: boolean[][];
-  isPlaying: boolean;
-  bpm?: number;
-  onStep?: (step: number) => void; // <-- new prop
+    grid: boolean[][];
+    isPlaying: boolean;
+    bpm?: number;
+    onStep?: (step: number) => void; // <-- new prop
 }
 
-
 export default function DrumLoopPlayer({
-  grid,
-  isPlaying,
-  bpm = 120,
-  onStep
+    grid,
+    isPlaying,
+    bpm = 120,
+    onStep,
 }: DrumLoopPlayerProps) {
-  const stepRef = useRef(0);
-  const playersRef = useRef<Record<string, Tone.Player>>({});
-  const [samplesLoaded, setSamplesLoaded] = useState(false);
+    const stepRef = useRef(0);
+    const playersRef = useRef<Record<string, Tone.Player>>({});
+    const [samplesLoaded, setSamplesLoaded] = useState(false);
 
-  // Load samples once
-  useEffect(() => {
-    const kick = new Tone.Player('/samples/kick1.mp3').toDestination();
-    const snare = new Tone.Player('/samples/snare1.mp3').toDestination();
-    const hihat = new Tone.Player('/samples/hat1.mp3').toDestination();
-    const clap = new Tone.Player('/samples/clap1.mp3').toDestination();
+    // Load samples once
+    useEffect(() => {
+        const kick = new Tone.Player('/samples/kick1.mp3').toDestination();
+        const snare = new Tone.Player('/samples/snare1.mp3').toDestination();
+        const hihat = new Tone.Player('/samples/hat1.mp3').toDestination();
+        const clap = new Tone.Player('/samples/clap1.mp3').toDestination();
 
-    playersRef.current = { kick, snare, hihat, clap };
+        playersRef.current = { kick, snare, hihat, clap };
 
-    // Wait for all samples to load
-    Promise.all([
-      kick.loaded,
-      snare.loaded,
-      hihat.loaded,
-      clap.loaded,
-    ]).then(() => {
-      setSamplesLoaded(true);
-      console.log('All samples loaded 🎉');
-    });
-  }, []);
-	const gridRef = useRef(grid);
+        // Wait for all samples to load
+        Promise.all([kick.loaded, snare.loaded, hihat.loaded, clap.loaded]).then(() => {
+            setSamplesLoaded(true);
+            console.log('All samples loaded 🎉');
+        });
+    }, []);
+    const gridRef = useRef(grid);
 
-	useEffect(() => {
-		gridRef.current = grid;
-	}, [grid]);
+    useEffect(() => {
+        gridRef.current = grid;
+    }, [grid]);
 
-	useEffect(() => {
-		if (!samplesLoaded) return;
-		if (grid.length < 4) return;
+    useEffect(() => {
+        if (!samplesLoaded) return;
+        if (grid.length < 4) return;
 
-		stepRef.current = 0;
+        stepRef.current = 0;
 
-		// Cancel any old scheduled repeats and clear all Transport events
-		Tone.Transport.cancel();
+        // Cancel any old scheduled repeats and clear all Transport events
+        Tone.Transport.cancel();
 
-		const repeat = (time: number) => {
-			const step = stepRef.current;
-			const numSteps = gridRef.current[0]?.length || 16;
+        const repeat = (time: number) => {
+            const step = stepRef.current;
+            const numSteps = gridRef.current[0]?.length || 16;
 
-			if (gridRef.current[0][step]) playersRef.current.kick.start(time);
-			if (gridRef.current[1][step]) playersRef.current.snare.start(time);
-			if (gridRef.current[2][step]) playersRef.current.hihat.start(time);
-			if (gridRef.current[3][step]) playersRef.current.clap.start(time);
+            if (gridRef.current[0][step]) playersRef.current.kick.start(time);
+            if (gridRef.current[1][step]) playersRef.current.snare.start(time);
+            if (gridRef.current[2][step]) playersRef.current.hihat.start(time);
+            if (gridRef.current[3][step]) playersRef.current.clap.start(time);
 
-			onStep?.(step);
+            onStep?.(step);
 
-			stepRef.current = (step + 1) % numSteps;
-		};
+            stepRef.current = (step + 1) % numSteps;
+        };
 
-		// Schedule the repeat and save the event ID
-		const repeatId = Tone.Transport.scheduleRepeat(repeat, '16n');
+        // Schedule the repeat and save the event ID
+        const repeatId = Tone.Transport.scheduleRepeat(repeat, '16n');
 
-		Tone.Transport.bpm.value = bpm;
+        Tone.Transport.bpm.value = bpm;
 
-		if (isPlaying) {
-			Tone.start().then(() => {
-			Tone.Transport.start();
-			});
-		} else {
-			Tone.Transport.stop();
-		}
+        if (isPlaying) {
+            Tone.start().then(() => {
+                Tone.Transport.start();
+            });
+        } else {
+            Tone.Transport.stop();
+        }
 
-		return () => {
-			// Clear only this scheduled event, then stop Transport
-			Tone.Transport.clear(repeatId);
-			Tone.Transport.stop();
-		};
-		}, [isPlaying, bpm, samplesLoaded]);
+        return () => {
+            // Clear only this scheduled event, then stop Transport
+            Tone.Transport.clear(repeatId);
+            Tone.Transport.stop();
+        };
+    }, [isPlaying, bpm, samplesLoaded]);
 
-
-
-  return null; // No UI needed here
+    return null; // No UI needed here
 }
