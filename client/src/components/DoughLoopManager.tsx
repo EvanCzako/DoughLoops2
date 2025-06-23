@@ -15,12 +15,13 @@ export default function DoughLoopManager() {
     const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
     const [bpm, setBpm] = useState(120);
 
-    // 🆙 LIFT grid + name state
-    const [grid, setGrid] = useState<boolean[][]>(() =>
-        Array(4)
-            .fill(null)
-            .map(() => Array(16).fill(false))
-    );
+	const [numBeats, setNumBeats] = useState(4); // 4 beats default (4*4 = 16 steps)
+	const numSteps = numBeats * 4;
+
+	const emptyGrid = Array(4).fill(null).map(() => Array(numSteps).fill(false));
+	const [grid, setGrid] = useState<boolean[][]>(emptyGrid);
+    
+
     const [name, setName] = useState('');
 
     const handlePlayToggle = async () => {
@@ -28,7 +29,18 @@ export default function DoughLoopManager() {
         setIsPlaying((prev) => !prev);
     };
 
-    // Optional: reset selected loop on logout
+	// When numBeats changes, reset grid to correct length
+	useEffect(() => {
+		setGrid((prev) =>
+			prev.map((row) => {
+			const newRow = [...row];
+			newRow.length = numBeats * 4;
+			return newRow.fill(false, row.length);
+			})
+		);
+	}, [numBeats]);
+
+	// Reset selected loop on logout
     useEffect(() => {
         if (!user && selectedLoop) {
             setSelectedLoop(undefined);
@@ -53,6 +65,19 @@ export default function DoughLoopManager() {
                 currentStep={currentStep}
             />
             <DrumLoopPlayer grid={grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
+			<div style={{ marginBottom: 16 }}>
+				<label>
+					Beats: {numBeats}
+					<input
+					type="range"
+					min={1}
+					max={8}
+					value={numBeats}
+					onChange={(e) => setNumBeats(Number(e.target.value))}
+					style={{ width: '100%' }}
+					/>
+				</label>
+			</div>
             <div style={{ margin: '20px 0' }}>
                 <label>
                     BPM: {bpm}
@@ -66,6 +91,7 @@ export default function DoughLoopManager() {
                     />
                 </label>
             </div>
+
 
             <button onClick={handlePlayToggle}>{isPlaying ? 'Stop' : 'Play'}</button>
 

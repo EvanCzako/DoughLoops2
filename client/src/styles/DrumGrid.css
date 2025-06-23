@@ -1,45 +1,55 @@
 .drum-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .ghost-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 32px);
-    gap: 4px;
-    margin-left: 60px; /* to align with labels */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 32px);
+  gap: 4px;
+  margin-left: 60px;
 }
 
 .ghost-cell {
-    width: 32px;
-    height: 8px;
-    background-color: transparent;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+  width: 32px;
+  height: 8px;
+  background-color: transparent;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
-
 .ghost-cell.active {
-    background-color: #ff9f1c;
+  background-color: #ff9f1c;
 }
 
 .grid-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .label {
-    width: 60px;
-    text-align: right;
-    padding-right: 8px;
-    font-weight: bold;
-    font-family: monospace;
+  width: 60px;
+  text-align: right;
+  padding-right: 8px;
+  font-weight: bold;
+  font-family: monospace;
 }
 
 .cell {
-    width: 32px;
-    display: flex;
-    justify-content: center;
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.even-beat {
+  background-color: #f0f0f0;
+}
+.odd-beat {
+  background-color: #e0e0e0;
+}
+.playing {
+  outline: 2px solid #ff9f1c;
+  border-radius: 4px;
 }

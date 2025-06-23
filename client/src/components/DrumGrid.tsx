@@ -19,33 +19,45 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 
     const numCols = grid[0]?.length || 0;
 
-    return (
-        <div className="drum-grid">
-            {/* Ghost row for current step highlight */}
-            <div className="ghost-row">
-                {Array.from({ length: numCols }).map((_, colIndex) => (
-                    <div
-                        key={`ghost-${colIndex}`}
-                        className={`ghost-cell ${currentStep === colIndex ? 'active' : ''}`}
-                    />
-                ))}
-            </div>
+	const beatIndex = Math.floor((currentStep ?? 0) / 4); // 0-indexed beat number
+	const isEvenBeat = beatIndex % 2 === 0;
 
-            {/* Instrument rows */}
-            {grid.map((row, rowIndex) => (
-                <div className="grid-row" key={`row-${rowIndex}`}>
-                    <span className="label">{instruments[rowIndex]}</span>
-                    {row.map((checked, colIndex) => (
-                        <div key={`cell-${rowIndex}-${colIndex}`} className="cell">
-                            <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => toggle(rowIndex, colIndex)}
-                            />
-                        </div>
-                    ))}
-                </div>
-            ))}
-        </div>
+    return (
+<div className="drum-grid">
+  <div className="ghost-row">
+    {Array.from({ length: grid[0]?.length || 0 }).map((_, colIndex) => (
+      <div
+        key={`ghost-${colIndex}`}
+        className={`ghost-cell ${currentStep === colIndex ? 'active' : ''}`}
+      />
+    ))}
+  </div>
+
+  {grid.map((row, rowIndex) => (
+    <div className="grid-row" key={`row-${rowIndex}`}>
+      <span className="label">{instruments[rowIndex]}</span>
+      {row.map((checked, colIndex) => {
+        const beatIndex = Math.floor(colIndex / 4);
+        const isEvenBeat = beatIndex % 2 === 0;
+
+        return (
+          <div
+            key={`cell-${rowIndex}-${colIndex}`}
+            className={`cell ${isEvenBeat ? 'even-beat' : 'odd-beat'} ${
+              currentStep === colIndex ? 'playing' : ''
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={() => toggle(rowIndex, colIndex)}
+            />
+          </div>
+        );
+      })}
+    </div>
+  ))}
+</div>
+
     );
 }
