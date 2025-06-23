@@ -63,6 +63,8 @@ export default function DoughLoopManager() {
                 name={name}
                 setName={setName}
                 currentStep={currentStep}
+				setNumBeats = {setNumBeats}
+				numBeats={numBeats}
             />
             <DrumLoopPlayer grid={grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
 			<div style={{ marginBottom: 16 }}>

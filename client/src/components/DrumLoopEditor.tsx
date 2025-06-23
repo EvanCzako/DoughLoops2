@@ -10,6 +10,8 @@ interface DrumLoopEditorProps {
     setGrid: (g: boolean[][]) => void;
     name: string;
     setName: (s: string) => void;
+	setNumBeats: (n: number) => void;
+	numBeats: number;
 }
 
 export default function DrumLoopEditor({
@@ -19,6 +21,8 @@ export default function DrumLoopEditor({
     name,
     setName,
     currentStep,
+	setNumBeats,
+	numBeats
 }: DrumLoopEditorProps) {
     const user = useStore((s) => s.user);
     const addDoughLoop = useStore((s) => s.addDoughLoop);
@@ -26,45 +30,47 @@ export default function DrumLoopEditor({
     const setError = useStore((s) => s.setError);
 
     // Load the selected loop into the grid
-    useEffect(() => {
-        if (selectedLoop) {
-            const decoded = decodeBeatRep(selectedLoop.beatRep);
-            if (decoded) {
-                setGrid(decoded);
-                setName(selectedLoop.name);
-            } else {
-                setError('Invalid beatRep string');
-            }
-        }
-    }, [selectedLoop]);
+	useEffect(() => {
+		if (selectedLoop) {
+			const decoded = decodeDrumGrid(selectedLoop.beatRep);
+			if (decoded) {
+				setNumBeats(decoded.numBeats);
+				setGrid(decoded.grid);
+			} else {
+				console.error('Invalid loop data');
+			}
+		}
+	}, [selectedLoop]);
 
-    const handleSave = async () => {
-        if (!user) return null;
+	const handleSave = async () => {
+		if (!user) return null;
 
-        const beatRep = grid.map((row) => row.map((b) => (b ? '1' : '0')).join('')).join('|');
+		const beatRep = encodeDrumGrid(grid, numBeats); // use the new encoding function
 
-        try {
-            const res = await fetch('http://localhost:3000/doughloops', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: user.id, name, beatRep }),
-            });
+		try {
+			const res = await fetch('http://localhost:3000/doughloops', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ userId: user.id, name, beatRep }),
+			});
 
-            if (!res.ok) throw new Error('Failed to save');
+			if (!res.ok) throw new Error('Failed to save');
 
-            const newLoop = await res.json();
+			const newLoop = await res.json();
 
-            if (res.status === 201) {
-                addDoughLoop(newLoop);
-            } else if (res.status === 200) {
-                replaceDoughLoop(newLoop);
-            }
+			if (res.status === 201) {
+				addDoughLoop(newLoop);
+			} else if (res.status === 200) {
+				replaceDoughLoop(newLoop);
+			}
 
-            setName('');
-        } catch (err) {
-            setError('Error saving loop');
-        }
-    };
+			setName('');
+		} catch (err) {
+			setError('Error saving loop');
+		}
+	};
+
+
 
     return (
         <div className="loop-editor">
@@ -87,13 +93,31 @@ export default function DrumLoopEditor({
     );
 }
 
-export function decodeBeatRep(beatRep: string): boolean[][] | null {
-    const rows = beatRep.split('|');
+export function decodeDrumGrid(encoded: string): { grid: boolean[][]; numBeats: number } | null {
+    try {
+        const [beatStr, flatStr] = encoded.split('::');
+        const numBeats = parseInt(beatStr, 10);
+        if (isNaN(numBeats) || numBeats < 1 || numBeats > 8) return null;
 
-    // Validation: ensure each row is the same length and only 1s and 0s
-    const isValid = rows.every((row) => /^[01]+$/.test(row) && row.length === rows[0].length);
+        const numSteps = numBeats * 4;
+        const rows = flatStr.split('|');
+        if (rows.length !== 4) return null;
 
-    if (!isValid) return null;
+        const grid = rows.map((row) => {
+            if (row.length !== numSteps) throw new Error('Bad length');
+            return row.split('').map((c) => c === '1');
+        });
 
-    return rows.map((row) => row.split('').map((c) => c === '1'));
+        return { grid, numBeats };
+    } catch {
+        return null;
+    }
+}
+
+
+export function encodeDrumGrid(grid: boolean[][], numBeats: number): string {
+    const flat = grid
+        .map((row) => row.map((b) => (b ? '1' : '0')).join(''))
+        .join('|');
+    return `${numBeats}::${flat}`;
 }
