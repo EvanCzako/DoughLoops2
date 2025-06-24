@@ -5,7 +5,11 @@ import { initDB } from './schema.js';
 import bcrypt from 'bcrypt';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://evanczako.github.io'],
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // 👇 Initialize tables on startup
@@ -122,6 +126,8 @@ app.get('/doughloops', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch loops' });
     }
 });
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));

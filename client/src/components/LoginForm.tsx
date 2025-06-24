@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { useStore, User } from '../store';
 
 export default function LoginForm() {
+
+
+	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     const setUser = useStore((state) => state.setUser);
 
     const [username, setUsername] = useState('');
@@ -18,7 +22,7 @@ export default function LoginForm() {
         setSuccess(null);
 
         try {
-            const res = await fetch('http://localhost:3000/login', {
+            const res = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),

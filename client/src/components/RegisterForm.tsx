@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 
 export default function RegisterForm() {
+
+
+	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -27,7 +30,7 @@ export default function RegisterForm() {
         setLoading(true);
 
         try {
-            const res = await fetch('http://localhost:3000/register', {
+            const res = await fetch(`${API_BASE_URL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),

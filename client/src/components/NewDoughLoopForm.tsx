@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useStore } from '../store';
 
 export default function NewDoughLoopForm() {
+
+
+	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const user = useStore((s) => s.user);
     const addDoughLoop = useStore((s) => s.addDoughLoop);
     const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
@@ -21,7 +24,7 @@ export default function NewDoughLoopForm() {
         setError(null);
 
         try {
-            const res = await fetch('http://localhost:3000/doughloops', {
+            const res = await fetch(`${API_BASE_URL}/doughloops`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: user!.id, name, beatRep }),

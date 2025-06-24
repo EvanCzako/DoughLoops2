@@ -21,6 +21,9 @@ export default function DrumLoopEditor({
     currentStep,
 }: DrumLoopEditorProps) {
 
+	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 	const store = useStore((s) => s);
 	const setBpm = useStore((s) => s.setBpm);
 	const setNumBeats = useStore((s) => s.setNumBeats);
@@ -61,7 +64,7 @@ export default function DrumLoopEditor({
 		const beatRep = encodeDrumGrid(grid, bpm, numBeats, numSubdivisions); // use the new encoding function
 
 		try {
-			const res = await fetch('http://localhost:3000/doughloops', {
+			const res = await fetch(`${API_BASE_URL}/doughloops`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ userId: user.id, name, beatRep }),
