@@ -21,6 +21,9 @@ export default function DoughLoopManager() {
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
 
+
+
+
     const numSteps = numBeats * 4;
 
     const emptyGrid = Array(4)
@@ -44,6 +47,11 @@ export default function DoughLoopManager() {
                 return newRow.fill(false, row.length);
             })
         );
+
+			console.log("=======================");
+		
+		console.log("BASE_URL:", import.meta.env.BASE_URL);
+		console.log("Kick path:", `${import.meta.env.BASE_URL}samples/kick1.mp3`);
     }, [numBeats, numSubdivisions]);
 
     // Reset selected loop on logout

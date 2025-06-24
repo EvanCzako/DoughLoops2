@@ -14,21 +14,24 @@ export default function DrumLoopPlayer({
     bpm = 120,
     onStep,
 }: DrumLoopPlayerProps) {
+
+	const base = import.meta.env.BASE_URL;
+
     const stepRef = useRef(0);
     const playersRef = useRef<Record<string, Tone.Player>>({});
     const [samplesLoaded, setSamplesLoaded] = useState(false);
 
     // Load samples once
     useEffect(() => {
-        const kick = new Tone.Player('/samples/kick1.mp3').toDestination();
-        const snare = new Tone.Player('/samples/snare1.mp3').toDestination();
-        const hihat = new Tone.Player('/samples/hat1.mp3').toDestination();
-        const clap = new Tone.Player('/samples/clap1.mp3').toDestination();
+        const kick = new Tone.Player(`${base}samples/kick1.mp3`).toDestination();
+        const snare = new Tone.Player(`${base}samples/snare1.mp3`).toDestination();
+        const hat = new Tone.Player(`${base}samples/hat1.mp3`).toDestination();
+        const clap = new Tone.Player(`${base}samples/clap1.mp3`).toDestination();
 
-        playersRef.current = { kick, snare, hihat, clap };
+        playersRef.current = { kick, snare, hat, clap };
 
         // Wait for all samples to load
-        Promise.all([kick.loaded, snare.loaded, hihat.loaded, clap.loaded]).then(() => {
+        Promise.all([kick.loaded, snare.loaded, hat.loaded, clap.loaded]).then(() => {
             setSamplesLoaded(true);
             console.log('All samples loaded 🎉');
         });
@@ -54,7 +57,7 @@ export default function DrumLoopPlayer({
 
             if (gridRef.current[0][step]) playersRef.current.kick.start(time);
             if (gridRef.current[1][step]) playersRef.current.snare.start(time);
-            if (gridRef.current[2][step]) playersRef.current.hihat.start(time);
+            if (gridRef.current[2][step]) playersRef.current.hat.start(time);
             if (gridRef.current[3][step]) playersRef.current.clap.start(time);
 
             onStep?.(step);
