@@ -1,4 +1,5 @@
 import React from 'react';
+import { useStore } from '../store';
 import '../styles/DrumGrid.css';
 
 interface DrumGridProps {
@@ -8,19 +9,22 @@ interface DrumGridProps {
 }
 
 export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
-    const instruments = ['kick', 'snare', 'hihat', 'clap'];
+
+	const setEditingLoopId = useStore((s) => s.setEditingLoopId)
+
+	const numSubdivisions = useStore((s) => s.numSubdivisions);
+
+	const instruments = ['kick', 'snare', 'hihat', 'clap'];
 
     const toggle = (row: number, col: number) => {
         const updated = grid.map((r, ri) =>
             ri === row ? r.map((c, ci) => (ci === col ? !c : c)) : r
         );
         setGrid(updated);
+		setEditingLoopId(null);
     };
 
     const numCols = grid[0]?.length || 0;
-
-	const beatIndex = Math.floor((currentStep ?? 0) / 4); // 0-indexed beat number
-	const isEvenBeat = beatIndex % 2 === 0;
 
     return (
 		<div className="drum-grid-outer">
@@ -40,7 +44,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 					<div className="grid-row" key={`row-${rowIndex}`}>
 					<span className="label">{instruments[rowIndex]}</span>
 					{row.map((checked, colIndex) => {
-						const beatIndex = Math.floor(colIndex / 4);
+						const beatIndex = Math.floor(colIndex / numSubdivisions);
 						const isEvenBeat = beatIndex % 2 === 0;
 
 						return (

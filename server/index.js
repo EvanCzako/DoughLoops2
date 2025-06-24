@@ -76,8 +76,6 @@ app.post('/login', async (req, res) => {
 app.post('/doughloops', async (req, res) => {
     const { userId, name, beatRep } = req.body;
 
-	console.log(req);
-
     if (!userId || !name || !beatRep) {
         return res.status(400).json({ error: 'Missing fields' });
     }

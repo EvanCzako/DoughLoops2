@@ -13,9 +13,15 @@ export default function DoughLoopManager() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
     const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
-    const [bpm, setBpm] = useState(120);
+	const bpm = useStore((s) => s.bpm);
+	const setBpm = useStore((s) => s.setBpm);
 
-	const [numBeats, setNumBeats] = useState(4); // 4 beats default (4*4 = 16 steps)
+
+	const numBeats = useStore((s) => s.numBeats);
+	const setNumBeats = useStore((s) => s.setNumBeats);
+	const numSubdivisions = useStore((s) => s.numSubdivisions);
+	const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
+
 	const numSteps = numBeats * 4;
 
 	const emptyGrid = Array(4).fill(null).map(() => Array(numSteps).fill(false));
@@ -34,11 +40,12 @@ export default function DoughLoopManager() {
 		setGrid((prev) =>
 			prev.map((row) => {
 			const newRow = [...row];
-			newRow.length = numBeats * 4;
+			newRow.length = numBeats * numSubdivisions;
 			return newRow.fill(false, row.length);
 			})
 		);
-	}, [numBeats]);
+	}, [numBeats, numSubdivisions]);
+
 
 	// Reset selected loop on logout
     useEffect(() => {
@@ -63,8 +70,6 @@ export default function DoughLoopManager() {
                 name={name}
                 setName={setName}
                 currentStep={currentStep}
-				setNumBeats = {setNumBeats}
-				numBeats={numBeats}
             />
             <DrumLoopPlayer grid={grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
 			<div style={{ marginBottom: 16 }}>
@@ -79,6 +84,17 @@ export default function DoughLoopManager() {
 					style={{ width: '100%' }}
 					/>
 				</label>
+			</div>
+			<div style={{ margin: '10px 0' }}>
+				<label htmlFor="subdivisions">Subdivisions per Beat: {numSubdivisions}</label>
+				<input
+					id="subdivisions"
+					type="range"
+					min={1}
+					max={8}
+					value={numSubdivisions}
+					onChange={(e) => setNumSubdivisions(Number(e.target.value))}
+				/>
 			</div>
             <div style={{ margin: '20px 0' }}>
                 <label>

@@ -8,11 +8,20 @@ interface Props {
 }
 
 export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
-    const user = useStore((s) => s.user);
-    const doughLoops = useStore((s) => s.doughLoops);
-    const setDoughLoops = useStore((s) => s.setDoughLoops);
-    const setError = useStore((s) => s.setError);
-    const setLoading = useStore((s) => s.setLoading);
+
+	const editingLoopId = useStore((s) => s.editingLoopId);
+	const user = useStore((s) => s.user);
+	const setLoading = useStore((s) => s.setLoading);
+	const setDoughLoops = useStore((s) => s.setDoughLoops);
+	const setError = useStore((s) => s.setError);
+	const doughLoops = useStore((s) => s.doughLoops);
+
+	const handleSelectLoop = (loop: DoughLoop) => {
+		// If the user is editing this loop, and it's now dirty, reset it
+		if (editingLoopId !== loop.id) {
+			onSelectLoop({...loop}); // trigger the loading logic again
+		}
+	};
 
     useEffect(() => {
         const fetchLoops = async () => {
@@ -47,7 +56,7 @@ export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
                             cursor: 'pointer',
                             fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
                         }}
-                        onClick={() => onSelectLoop(loop)}
+                        onClick={() => onSelectLoop({...loop})}
                     >
                         {loop.name}
                     </li>

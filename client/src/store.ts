@@ -18,6 +18,17 @@ interface StoreState {
     doughLoops: DoughLoop[];
     loading: boolean;
     error: string | null;
+	numBeats: number;
+	numSubdivisions: number;
+	bpm: number;
+	selectedLoopId: number | null;
+	editingLoopId: number | null; 
+
+	setNumBeats: (numBeats: number) => void;
+	setNumSubdivisions: (numSubdivisions: number) => void;
+	setBpm: (bpm: number) => void;
+	setSelectedLoopId: (id: number | null) => void;
+	setEditingLoopId: (id: number | null) => void;
 
     // Auth actions
     setUser: (user: User | null) => void;
@@ -38,9 +49,19 @@ export const useStore = create<StoreState>((set) => ({
     doughLoops: [],
     loading: false,
     error: null,
+	numBeats: 4,
+	numSubdivisions: 4,
+	bpm: 120,
+	selectedLoopId: null,
+	editingLoopId: null,
 
     setUser: (user) => set({ user }),
     logout: () => set({ user: null, doughLoops: [] }),
+	setNumBeats: (numBeats: number) => set({ numBeats, editingLoopId: null }),
+	setNumSubdivisions: (numSubdivisions: number) => set({ numSubdivisions, editingLoopId: null }),
+	setBpm: (bpm: number) => set({ bpm, editingLoopId: null }),
+	setSelectedLoopId: (id: number | null) => set({selectedLoopId: id}),
+	setEditingLoopId: (id: number | null) => set({editingLoopId: id}),
 
     setDoughLoops: (loops) => set({ doughLoops: loops }),
     addDoughLoop: (loop) => set((state) => ({ doughLoops: [...state.doughLoops, loop] })),
