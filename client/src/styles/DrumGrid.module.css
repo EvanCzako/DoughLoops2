@@ -28,7 +28,7 @@
 
 .ghostCell {
   width: 24px;
-  height: 24px;
+  height: 6px;
   margin: 0 2px;
   border-radius: 2px;
   background: #222;
@@ -126,11 +126,11 @@
 
 /* Use subtle hue shifts for even/odd beats */
 .evenBeatHue {
-  background-color: hsla(270, 80%, 30%, 0.3);
+  background-color: hsla(270, 80%, 30%, 0.746);
 }
 
 .oddBeatHue {
-  background-color: hsla(320, 70%, 35%, 0.25);
+  background-color: hsla(320, 70%, 35%, 0.657);
 }
 
 /* Make sure drum grid rows and cells are above */
