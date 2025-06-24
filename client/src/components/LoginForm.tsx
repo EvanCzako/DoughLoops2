@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import { useStore, User } from '../store';
 
 export default function LoginForm() {
-
-
-	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const setUser = useStore((state) => state.setUser);
 

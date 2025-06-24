@@ -20,73 +20,64 @@ export default function DrumLoopEditor({
     setName,
     currentStep,
 }: DrumLoopEditorProps) {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-
-	const store = useStore((s) => s);
-	const setBpm = useStore((s) => s.setBpm);
-	const setNumBeats = useStore((s) => s.setNumBeats);
-	const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-	const setEditingLoopId = useStore((s) => s.setEditingLoopId);
-	const addDoughLoop = useStore((s) => s.addDoughLoop);
-	const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
-	const setError = useStore((s) => s.setError);
-	const user = useStore((s) => s.user);
-	const bpm = useStore((s) => s.bpm);
-	const numBeats = useStore((s) => s.numBeats);
-	const numSubdivisions = useStore((s) => s.numSubdivisions);
-	
-
-	
-
+    const store = useStore((s) => s);
+    const setBpm = useStore((s) => s.setBpm);
+    const setNumBeats = useStore((s) => s.setNumBeats);
+    const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
+    const setEditingLoopId = useStore((s) => s.setEditingLoopId);
+    const addDoughLoop = useStore((s) => s.addDoughLoop);
+    const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
+    const setError = useStore((s) => s.setError);
+    const user = useStore((s) => s.user);
+    const bpm = useStore((s) => s.bpm);
+    const numBeats = useStore((s) => s.numBeats);
+    const numSubdivisions = useStore((s) => s.numSubdivisions);
 
     // Load the selected loop into the grid
-	useEffect(() => {
-		if (!selectedLoop) return;
+    useEffect(() => {
+        if (!selectedLoop) return;
 
-		const decoded = decodeDrumGrid(selectedLoop.beatRep);
-		if (!decoded) return;
+        const decoded = decodeDrumGrid(selectedLoop.beatRep);
+        if (!decoded) return;
 
-		setGrid(decoded.grid);
-		setBpm(decoded.bpm);
-		setNumBeats(decoded.numBeats);
-		setNumSubdivisions(decoded.subdivisions);
-		setName(selectedLoop.name);
+        setGrid(decoded.grid);
+        setBpm(decoded.bpm);
+        setNumBeats(decoded.numBeats);
+        setNumSubdivisions(decoded.subdivisions);
+        setName(selectedLoop.name);
 
-		setEditingLoopId(selectedLoop.id); // 👈 track which loop is being edited
-	}, [selectedLoop]);
+        setEditingLoopId(selectedLoop.id); // 👈 track which loop is being edited
+    }, [selectedLoop]);
 
+    const handleSave = async () => {
+        if (!user) return null;
 
-	const handleSave = async () => {
-		if (!user) return null;
+        const beatRep = encodeDrumGrid(grid, bpm, numBeats, numSubdivisions); // use the new encoding function
 
-		const beatRep = encodeDrumGrid(grid, bpm, numBeats, numSubdivisions); // use the new encoding function
+        try {
+            const res = await fetch(`${API_BASE_URL}/doughloops`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: user.id, name, beatRep }),
+            });
 
-		try {
-			const res = await fetch(`${API_BASE_URL}/doughloops`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ userId: user.id, name, beatRep }),
-			});
+            if (!res.ok) throw new Error('Failed to save');
 
-			if (!res.ok) throw new Error('Failed to save');
+            const newLoop = await res.json();
 
-			const newLoop = await res.json();
+            if (res.status === 201) {
+                addDoughLoop(newLoop);
+            } else if (res.status === 200) {
+                replaceDoughLoop(newLoop);
+            }
 
-			if (res.status === 201) {
-				addDoughLoop(newLoop);
-			} else if (res.status === 200) {
-				replaceDoughLoop(newLoop);
-			}
-
-			setName('');
-		} catch (err) {
-			setError('Error saving loop');
-		}
-	};
-
-
+            setName('');
+        } catch (err) {
+            setError('Error saving loop');
+        }
+    };
 
     return (
         <div className="loop-editor">
@@ -130,33 +121,30 @@ export default function DrumLoopEditor({
 //     }
 // }
 
-
 function decodeDrumGrid(encoded: string): {
-  bpm: number;
-  numBeats: number;
-  subdivisions: number;
-  grid: boolean[][];
+    bpm: number;
+    numBeats: number;
+    subdivisions: number;
+    grid: boolean[][];
 } | null {
-  try {
-    const [meta, ...rows] = encoded.split('::');
-    const [bpmStr, beatsStr, subsStr] = meta.split(',');
+    try {
+        const [meta, ...rows] = encoded.split('::');
+        const [bpmStr, beatsStr, subsStr] = meta.split(',');
 
-    const bpm = parseInt(bpmStr, 10);
-    const numBeats = parseInt(beatsStr, 10);
-    const subdivisions = parseInt(subsStr, 10);
-    const cols = numBeats * subdivisions;
+        const bpm = parseInt(bpmStr, 10);
+        const numBeats = parseInt(beatsStr, 10);
+        const subdivisions = parseInt(subsStr, 10);
+        const cols = numBeats * subdivisions;
 
-    if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
+        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
 
-    const grid = rows.map((row) => [...row].map((char) => char === '1'));
+        const grid = rows.map((row) => [...row].map((char) => char === '1'));
 
-    return { bpm, numBeats, subdivisions, grid };
-  } catch {
-    return null;
-  }
+        return { bpm, numBeats, subdivisions, grid };
+    } catch {
+        return null;
+    }
 }
-
-
 
 // export function encodeDrumGrid(grid: boolean[][], numBeats: number): string {
 //     const flat = grid
@@ -166,11 +154,11 @@ function decodeDrumGrid(encoded: string): {
 // }
 
 function encodeDrumGrid(
-  grid: boolean[][],
-  bpm: number,
-  numBeats: number,
-  subdivisions: number
+    grid: boolean[][],
+    bpm: number,
+    numBeats: number,
+    subdivisions: number
 ): string {
-  const rows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
-  return `${bpm},${numBeats},${subdivisions}::${rows.join('::')}`;
+    const rows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
+    return `${bpm},${numBeats},${subdivisions}::${rows.join('::')}`;
 }

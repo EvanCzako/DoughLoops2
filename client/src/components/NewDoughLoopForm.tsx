@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../store';
 
 export default function NewDoughLoopForm() {
-
-
-	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const user = useStore((s) => s.user);
     const addDoughLoop = useStore((s) => s.addDoughLoop);
     const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);

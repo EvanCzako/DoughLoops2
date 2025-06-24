@@ -3,13 +3,13 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "homepage": "https://evanczako.github.io/DoughLoops2",
+    "homepage": "https://evanczako.github.io/DoughLoops2/",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-		"deploy": "gh-pages -d dist"
+        "deploy": "gh-pages -d dist"
     },
     "dependencies": {
         "react": "^19.1.0",

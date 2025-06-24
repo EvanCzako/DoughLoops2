@@ -2,9 +2,7 @@
 import React, { useState } from 'react';
 
 export default function RegisterForm() {
-
-
-	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
