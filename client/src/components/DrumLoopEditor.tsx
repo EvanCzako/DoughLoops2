@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '../store';
 import DrumGrid from './DrumGrid';
 import type { DoughLoop } from '../store';
+import styles from '../styles/DoughLoopManager.module.css'
+import DoughLoopManager from './DoughLoopManager';
 
 interface DrumLoopEditorProps {
     selectedLoop?: DoughLoop;
@@ -80,7 +82,7 @@ export default function DrumLoopEditor({
     };
 
     return (
-        <div className="loop-editor">
+        <div className={styles.drumLoopEditor}>
 
             <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
 
@@ -98,27 +100,6 @@ export default function DrumLoopEditor({
         </div>
     );
 }
-
-// export function decodeDrumGrid(encoded: string): { grid: boolean[][]; numBeats: number } | null {
-//     try {
-//         const [beatStr, flatStr] = encoded.split('::');
-//         const numBeats = parseInt(beatStr, 10);
-//         if (isNaN(numBeats) || numBeats < 1 || numBeats > 8) return null;
-
-//         const numSteps = numBeats * 4;
-//         const rows = flatStr.split('|');
-//         if (rows.length !== 4) return null;
-
-//         const grid = rows.map((row) => {
-//             if (row.length !== numSteps) throw new Error('Bad length');
-//             return row.split('').map((c) => c === '1');
-//         });
-
-//         return { grid, numBeats };
-//     } catch {
-//         return null;
-//     }
-// }
 
 function decodeDrumGrid(encoded: string): {
     bpm: number;
@@ -144,13 +125,6 @@ function decodeDrumGrid(encoded: string): {
         return null;
     }
 }
-
-// export function encodeDrumGrid(grid: boolean[][], numBeats: number): string {
-//     const flat = grid
-//         .map((row) => row.map((b) => (b ? '1' : '0')).join(''))
-//         .join('|');
-//     return `${numBeats}::${flat}`;
-// }
 
 function encodeDrumGrid(
     grid: boolean[][],

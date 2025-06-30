@@ -55,7 +55,7 @@ export default function DoughLoopManager() {
     }, [user]);
 
     return (
-        <div style={{ padding: 24, maxWidth: 600, margin: 'auto' }}>
+        <div className={styles.doughLoopManager}>
 
             <DrumLoopEditor
                 selectedLoop={selectedLoop}
