@@ -10,8 +10,8 @@ export default function App(): JSX.Element {
 
     return (
         <div>
-            <h1>Welcome to DoughLoops</h1>
-            {user ? null : <AuthPage />}
+            <h1>DoughLoops</h1>
+            <AuthPage/>
             <DoughLoopManager />
         </div>
     );

@@ -58,13 +58,14 @@
   width: 50px;
   text-align: right;
   margin-right: 8px;
+  margin-top: 2px;
   flex-shrink: 0;
 }
 
 .cell {
   width: 24px;
   height: 24px;
-  margin: 0 2px;
+  margin: 2px 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,7 +101,7 @@
 .gridContainer {
   position: relative;
   /* force height to contain all rows */
-  height: calc(24px * 4 + 6px * 3); /* cell height * rows + gap * (rows-1) */
+  height: calc(28px * 4 + 6px * 3); /* cell height * rows + gap * (rows-1) */
 }
 
 /* Beat background container positioned behind grid rows */

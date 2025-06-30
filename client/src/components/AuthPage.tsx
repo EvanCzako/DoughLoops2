@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import { useStore } from '../store';
+import styles from '../styles/AuthPage.module.css';
+import LogoutButton from './LogoutButton';
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
 
-    return (
-        <div style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
+	const user = useStore((s) => s.user);
+
+	const loggedOutDisp = <div style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
             <div style={{ marginBottom: 16, textAlign: 'center' }}>
                 <button
                     onClick={() => setIsLogin(true)}
@@ -26,5 +30,21 @@ export default function AuthPage() {
 
             {isLogin ? <LoginForm /> : <RegisterForm />}
         </div>
+
+	const loggedInDisp = <div>
+		<div className={styles.logoutContainer}>
+			{user ? (
+				<>
+					<h2>Hey, {user.username} 👋</h2>
+					<LogoutButton />
+				</>
+			) : null}
+		</div>
+	</div>
+
+    return (
+		<div className={styles.userAuthSection}>
+			{user ? loggedInDisp : loggedOutDisp }
+		</div>
     );
 }

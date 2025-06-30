@@ -7,6 +7,7 @@ import DrumLoopEditor from './DrumLoopEditor';
 import type { DoughLoop } from '../store';
 import DrumLoopPlayer from './DrumLoopPlayer';
 import * as Tone from 'tone';
+import styles from '../styles/DoughLoopManager.module.css';
 
 export default function DoughLoopManager() {
     const user = useStore((s) => s.user);
@@ -20,9 +21,6 @@ export default function DoughLoopManager() {
     const setNumBeats = useStore((s) => s.setNumBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-
-
-
 
     const numSteps = numBeats * 4;
 
@@ -47,11 +45,6 @@ export default function DoughLoopManager() {
                 return newRow.fill(false, row.length);
             })
         );
-
-			console.log("=======================");
-		
-		console.log("BASE_URL:", import.meta.env.BASE_URL);
-		console.log("Kick path:", `${import.meta.env.BASE_URL}samples/kick1.mp3`);
     }, [numBeats, numSubdivisions]);
 
     // Reset selected loop on logout
@@ -63,12 +56,6 @@ export default function DoughLoopManager() {
 
     return (
         <div style={{ padding: 24, maxWidth: 600, margin: 'auto' }}>
-            {user ? (
-                <>
-                    <h2>Welcome, {user.username} 👋</h2>
-                    <LogoutButton />
-                </>
-            ) : null}
 
             <DrumLoopEditor
                 selectedLoop={selectedLoop}

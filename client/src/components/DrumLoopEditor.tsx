@@ -81,7 +81,6 @@ export default function DrumLoopEditor({
 
     return (
         <div className="loop-editor">
-            <h3>Create a new DoughLoop</h3>
 
             <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
 
