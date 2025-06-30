@@ -1,20 +1,29 @@
+:root {
+  --cell-size: clamp(20px, 3vw, 60px);
+}
+
+.responsiveCell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+
 .drumGridOuter {
   background: #000;
   padding: 16px;
   color: white;
-  /* Remove overflow-x here; handled in scrollContainer */
 }
 
 .scrollContainer {
   overflow-x: auto;
   white-space: nowrap;
-  /* Make sure scroll container takes full width */
   width: 100%;
+  height: 400px;
 }
 
 .innerGridContainer {
-  /* This container grows horizontally with grid width */
-  /* Prevent line wrap */
   white-space: nowrap;
 }
 
@@ -22,18 +31,17 @@
   display: flex;
   align-items: center;
   margin-bottom: 8px;
-  /* Make sure no wrapping */
   white-space: nowrap;
 }
 
 .ghostCell {
-  width: 24px;
-  height: 6px;
-  margin: 0 2px;
+  width: var(--cell-size);
+  height: calc(var(--cell-size) * 0.25); /* shorter for ghost row */
+  /* margin: 0 2px; */
   border-radius: 2px;
   background: #222;
   transition: background 0.2s;
-  flex-shrink: 0; /* prevent shrinking */
+  flex-shrink: 0;
   box-sizing: border-box;
 }
 
@@ -63,9 +71,9 @@
 }
 
 .cell {
-  width: 24px;
-  height: 24px;
-  margin: 2px 2px;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  /* margin: 2px 2px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +109,8 @@
 .gridContainer {
   position: relative;
   /* force height to contain all rows */
-  height: calc(28px * 4 + 6px * 3); /* cell height * rows + gap * (rows-1) */
+  height: fit-content;
+  
 }
 
 /* Beat background container positioned behind grid rows */
@@ -121,7 +130,6 @@
 .beatStripe {
   height: 100%;
   flex-shrink: 0;
-  /* width will be set inline via style prop in React */
   transition: background-color 0.3s;
 }
 
@@ -146,3 +154,4 @@
   position: relative; /* make sure outline shows */
   z-index: 2;
 }
+

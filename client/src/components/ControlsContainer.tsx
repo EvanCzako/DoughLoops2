@@ -1,16 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useStore } from '../store';
-import DoughLoopList from './DoughLoopList';
-import LogoutButton from './LogoutButton';
-import DrumLoopEditor from './DrumLoopEditor';
 import type { DoughLoop } from '../store';
 import DrumLoopPlayer from './DrumLoopPlayer';
 import * as Tone from 'tone';
-import styles from '../styles/DoughLoopManager.module.css';
-import ControlsContainer from './ControlsContainer';
+import styles from '../styles/ControlsContainer.module.css';
 
-export default function DoughLoopManager() {
+export default function ControlsContainer() {
     const user = useStore((s) => s.user);
     const [isPlaying, setIsPlaying] = useState(false);
     const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
@@ -56,25 +52,47 @@ export default function DoughLoopManager() {
     }, [user]);
 
     return (
-        <div className={styles.doughLoopManager}>
+        <div className={styles.controlsContainer}>
+            <DrumLoopPlayer grid={grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
+            <div style={{ marginBottom: 16 }}>
+                <label>
+                    Beats: {numBeats}
+                    <input
+                        type="range"
+                        min={1}
+                        max={8}
+                        value={numBeats}
+                        onChange={(e) => setNumBeats(Number(e.target.value))}
+                        style={{ width: '100%' }}
+                    />
+                </label>
+            </div>
+            <div style={{ margin: '10px 0' }}>
+                <label htmlFor="subdivisions">Subdivisions per Beat: {numSubdivisions}</label>
+                <input
+                    id="subdivisions"
+                    type="range"
+                    min={1}
+                    max={8}
+                    value={numSubdivisions}
+                    onChange={(e) => setNumSubdivisions(Number(e.target.value))}
+                />
+            </div>
+            <div style={{ margin: '20px 0' }}>
+                <label>
+                    BPM: {bpm}
+                    <input
+                        type="range"
+                        min="60"
+                        max="180"
+                        value={bpm}
+                        onChange={(e) => setBpm(Number(e.target.value))}
+                        style={{ width: '100%' }}
+                    />
+                </label>
+            </div>
 
-            <DrumLoopEditor
-                selectedLoop={selectedLoop}
-                grid={grid}
-                setGrid={setGrid}
-                name={name}
-                setName={setName}
-                currentStep={currentStep}
-            />
-        
-			<ControlsContainer/>
-
-            {user && (
-                <>
-                    <hr style={{ margin: '20px 0' }} />
-                    <DoughLoopList selectedLoop={selectedLoop} onSelectLoop={setSelectedLoop} />
-                </>
-            )}
+            <button onClick={handlePlayToggle}>{isPlaying ? 'Stop' : 'Play'}</button>
         </div>
     );
 }

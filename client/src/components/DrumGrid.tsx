@@ -21,20 +21,19 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     setEditingLoopId(null);
   };
 
-  const numCols = grid[0]?.length || 0;
-  const numRows = grid.length;
-  const cellWidth = 28;
-  const gridWidthPx = numCols * cellWidth + 50 + 16;
+	const numCols = grid[0]?.length || 0;
+	const numRows = grid.length;
 
   // Calculate beat width in px for each beat group
-  const beatWidth = numSubdivisions * cellWidth;
+  const beatWidth = `calc(var(--cell-size) * ${numSubdivisions})`;
+
 
   return (
     <div className={styles.drumGridOuter}>
       <div className={styles.scrollContainer} style={{ width: '100%', overflowX: 'auto' }}>
         <div
           className={styles.innerGridContainer}
-          style={{ width: gridWidthPx }}
+          style={{ width: 'fit-content' }}
         >
           {/* Ghost Row */}
           <div className={styles.ghostRow}>
@@ -55,12 +54,13 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
             <div className={styles.beatBackground}>
               {Array.from({ length: numCols / numSubdivisions }).map((_, beatIndex) => (
 				<div
-					key={`beat-bg-${beatIndex}`}
-					className={`${styles.beatStripe} ${
-						beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
-					}`}
-					style={{ width: beatWidth }}
+				key={`beat-bg-${beatIndex}`}
+				className={`${styles.beatStripe} ${
+					beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
+				}`}
+				style={{ width: beatWidth }}
 				/>
+
               ))}
             </div>
 
@@ -72,7 +72,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                   {row.map((checked, colIndex) => (
                     <div
                       key={`cell-${rowIndex}-${colIndex}`}
-                      className={`${styles.cell} ${currentStep === colIndex ? styles.playing : ''}`}
+                      className={`${styles.cell} ${styles.responsiveCell} ${currentStep === colIndex ? styles.playing : ''}`}
                     >
                       <input
                         type="checkbox"
