@@ -6,9 +6,11 @@ import DrumLoopPlayer from './DrumLoopPlayer';
 import * as Tone from 'tone';
 import styles from '../styles/ControlsContainer.module.css';
 
-export default function ControlsContainer() {
+export default function ControlsContainer(opts: {
+	setIsPlaying: (playing: boolean) => void;
+}) {
     const user = useStore((s) => s.user);
-    const [isPlaying, setIsPlaying] = useState(false);
+    // const [isPlaying, setIsPlaying] = useState(false);
     const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
     const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
     const bpm = useStore((s) => s.bpm);
@@ -30,7 +32,7 @@ export default function ControlsContainer() {
 
     const handlePlayToggle = async () => {
         await Tone.start(); // <-- resumes AudioContext
-        setIsPlaying((prev) => !prev);
+        opts.setIsPlaying((prev) => !prev);
     };
 
     // When numBeats changes, reset grid to correct length

@@ -107,7 +107,7 @@ export default function DoughLoopManager() {
 
             <button onClick={handlePlayToggle}>{isPlaying ? 'Stop' : 'Play'}</button>
 
-			<ControlsContainer/>
+			<ControlsContainer isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
 
             {user && (
                 <>
