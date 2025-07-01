@@ -70,9 +70,10 @@ export default function DrumLoopPlayer({
         Tone.Transport.bpm.value = bpm;
 
         if (isPlaying) {
-			console.log("Start");
             Tone.start().then(() => {
                 Tone.Transport.start();
+				console.log("Tone Transport called!");
+				console.log(Tone.Transport.state);
             });
         } else {
             Tone.Transport.stop();
