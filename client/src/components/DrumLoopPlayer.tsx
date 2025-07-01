@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useStore } from '../store';
 import * as Tone from 'tone';
 
 interface DrumLoopPlayerProps {
@@ -19,6 +20,7 @@ export default function DrumLoopPlayer({
     const stepRef = useRef(0);
     const playersRef = useRef<Record<string, Tone.Player>>({});
     const [samplesLoaded, setSamplesLoaded] = useState(false);
+	const numSubdivisions = useStore((s) => s.numSubdivisions)
 
     // Load samples once
     useEffect(() => {
@@ -66,7 +68,11 @@ export default function DrumLoopPlayer({
         };
 
         // Schedule the repeat and save the event ID
-        const repeatId = Tone.Transport.scheduleRepeat(repeat, '16n');
+		const secondsPerBeat = 60 / bpm;
+		const stepDuration = secondsPerBeat / numSubdivisions;
+
+		const repeatId = Tone.Transport.scheduleRepeat(repeat, stepDuration);
+
 
         Tone.Transport.bpm.value = bpm;
 
@@ -85,7 +91,7 @@ export default function DrumLoopPlayer({
             Tone.Transport.clear(repeatId);
             Tone.Transport.stop();
         };
-    }, [isPlaying, bpm, samplesLoaded]);
+    }, [isPlaying, bpm, samplesLoaded, numSubdivisions]);
 
     return null; // No UI needed here
 }
