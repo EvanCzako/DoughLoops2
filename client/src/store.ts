@@ -1,4 +1,4 @@
- // client/src/store.ts
+// client/src/store.ts
 import { create } from 'zustand';
 
 export interface User {
@@ -23,14 +23,16 @@ interface StoreState {
     bpm: number;
     selectedLoopId: number | null;
     editingLoopId: number | null;
-	isPlaying: boolean;
+    isPlaying: boolean;
+	currentStep: number;
 
+	setCurrentStep: (step: number) => void;
     setNumBeats: (numBeats: number) => void;
     setNumSubdivisions: (numSubdivisions: number) => void;
     setBpm: (bpm: number) => void;
     setSelectedLoopId: (id: number | null) => void;
     setEditingLoopId: (id: number | null) => void;
-	setIsPlaying: (playing: boolean) => void;
+    setIsPlaying: (playing: boolean) => void;
 
     // Auth actions
     setUser: (user: User | null) => void;
@@ -56,7 +58,8 @@ export const useStore = create<StoreState>((set) => ({
     bpm: 120,
     selectedLoopId: null,
     editingLoopId: null,
-	isPlaying: false,
+    isPlaying: false,
+	currentStep: 0,
 
     setUser: (user) => set({ user }),
     logout: () => set({ user: null, doughLoops: [] }),
@@ -65,7 +68,8 @@ export const useStore = create<StoreState>((set) => ({
     setBpm: (bpm: number) => set({ bpm, editingLoopId: null }),
     setSelectedLoopId: (id: number | null) => set({ selectedLoopId: id }),
     setEditingLoopId: (id: number | null) => set({ editingLoopId: id }),
-	setIsPlaying: (playing: boolean) => set({isPlaying: playing}),
+    setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
+	setCurrentStep: (step: number) => set({currentStep: step}),
 
     setDoughLoops: (loops) => set({ doughLoops: loops }),
     addDoughLoop: (loop) => set((state) => ({ doughLoops: [...state.doughLoops, loop] })),

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '../store';
 import DrumGrid from './DrumGrid';
 import type { DoughLoop } from '../store';
-import styles from '../styles/DoughLoopManager.module.css'
+import styles from '../styles/DoughLoopManager.module.css';
 import DoughLoopManager from './DoughLoopManager';
 
 interface DrumLoopEditorProps {
@@ -83,7 +83,6 @@ export default function DrumLoopEditor({
 
     return (
         <div className={styles.drumLoopEditor}>
-
             <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
 
             {user ? (

@@ -12,9 +12,11 @@ import ControlsContainer from './ControlsContainer';
 
 export default function DoughLoopManager() {
     const user = useStore((s) => s.user);
-    const [isPlaying, setIsPlaying] = useState(false);
+    const isPlaying = useStore((s) => s.isPlaying);
+    const setIsPlaying = useStore((s) => s.setIsPlaying);
     const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
-    const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
+	const currentStep = useStore((s) => s.currentStep);
+	const setCurrentStep = useStore((s) => s.setCurrentStep);
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
 
@@ -34,7 +36,7 @@ export default function DoughLoopManager() {
 
     const handlePlayToggle = async () => {
         await Tone.start(); // <-- resumes AudioContext
-        setIsPlaying((prev) => !prev);
+        setIsPlaying(!isPlaying);
     };
 
     // When numBeats changes, reset grid to correct length
@@ -57,7 +59,6 @@ export default function DoughLoopManager() {
 
     return (
         <div className={styles.doughLoopManager}>
-
             <DrumLoopEditor
                 selectedLoop={selectedLoop}
                 grid={grid}
@@ -66,48 +67,8 @@ export default function DoughLoopManager() {
                 setName={setName}
                 currentStep={currentStep}
             />
-            <DrumLoopPlayer grid={grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
-            <div style={{ marginBottom: 16 }}>
-                <label>
-                    Beats: {numBeats}
-                    <input
-                        type="range"
-                        min={1}
-                        max={8}
-                        value={numBeats}
-                        onChange={(e) => setNumBeats(Number(e.target.value))}
-                        style={{ width: '100%' }}
-                    />
-                </label>
-            </div>
-            <div style={{ margin: '10px 0' }}>
-                <label htmlFor="subdivisions">Subdivisions per Beat: {numSubdivisions}</label>
-                <input
-                    id="subdivisions"
-                    type="range"
-                    min={1}
-                    max={8}
-                    value={numSubdivisions}
-                    onChange={(e) => setNumSubdivisions(Number(e.target.value))}
-                />
-            </div>
-            <div style={{ margin: '20px 0' }}>
-                <label>
-                    BPM: {bpm}
-                    <input
-                        type="range"
-                        min="60"
-                        max="180"
-                        value={bpm}
-                        onChange={(e) => setBpm(Number(e.target.value))}
-                        style={{ width: '100%' }}
-                    />
-                </label>
-            </div>
 
-            <button onClick={handlePlayToggle}>{isPlaying ? 'Stop' : 'Play'}</button>
-
-			<ControlsContainer isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
+            <ControlsContainer />
 
             {user && (
                 <>

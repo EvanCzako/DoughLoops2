@@ -10,9 +10,9 @@ export default function App(): JSX.Element {
 
     return (
         <div>
-			<TitleBox/>
+            <TitleBox />
             <DoughLoopManager />
-            <AuthPage/>
+            <AuthPage />
         </div>
     );
 }

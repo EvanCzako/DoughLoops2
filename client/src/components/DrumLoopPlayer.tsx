@@ -14,8 +14,7 @@ export default function DrumLoopPlayer({
     bpm = 120,
     onStep,
 }: DrumLoopPlayerProps) {
-
-	const base = import.meta.env.BASE_URL;
+    const base = import.meta.env.BASE_URL;
 
     const stepRef = useRef(0);
     const playersRef = useRef<Record<string, Tone.Player>>({});
@@ -71,6 +70,7 @@ export default function DrumLoopPlayer({
         Tone.Transport.bpm.value = bpm;
 
         if (isPlaying) {
+			console.log("Start");
             Tone.start().then(() => {
                 Tone.Transport.start();
             });

@@ -1,157 +1,154 @@
 :root {
-  --cell-size: clamp(20px, 3vw, 60px);
+    --cell-size: clamp(20px, 3vw, 60px);
 }
 
 .responsiveCell {
-  width: var(--cell-size);
-  height: var(--cell-size);
-  flex-shrink: 0;
-  box-sizing: border-box;
+    width: var(--cell-size);
+    height: var(--cell-size);
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
-
 .drumGridOuter {
-  background: #000;
-  padding: 16px;
-  color: white;
+    background: #000;
+    padding: 16px;
+    color: white;
 }
 
 .scrollContainer {
-  overflow-x: auto;
-  white-space: nowrap;
-  width: 100%;
-  height: 400px;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    height: 400px;
 }
 
 .innerGridContainer {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 .ghostRow {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  white-space: nowrap;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    white-space: nowrap;
 }
 
 .ghostCell {
-  width: var(--cell-size);
-  height: calc(var(--cell-size) * 0.25); /* shorter for ghost row */
-  /* margin: 0 2px; */
-  border-radius: 2px;
-  background: #222;
-  transition: background 0.2s;
-  flex-shrink: 0;
-  box-sizing: border-box;
+    width: var(--cell-size);
+    height: calc(var(--cell-size) * 0.25); /* shorter for ghost row */
+    /* margin: 0 2px; */
+    border-radius: 2px;
+    background: #222;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .active {
-  background: #444;
+    background: #444;
 }
 
 .drumGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    white-space: nowrap;
 }
 
 .gridRow {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
 }
 
 .label {
-  width: 50px;
-  text-align: right;
-  margin-right: 8px;
-  margin-top: 2px;
-  flex-shrink: 0;
+    width: 50px;
+    text-align: right;
+    margin-right: 8px;
+    margin-top: 2px;
+    flex-shrink: 0;
 }
 
 .cell {
-  width: var(--cell-size);
-  height: var(--cell-size);
-  /* margin: 2px 2px; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-sizing: border-box;
+    width: var(--cell-size);
+    height: var(--cell-size);
+    /* margin: 2px 2px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .cell input[type='checkbox'] {
-  appearance: none;
-  width: 100%;
-  height: 100%;
-  background: #111;
-  border: 1px solid #333;
-  border-radius: 2px;
-  cursor: pointer;
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 2px;
+    cursor: pointer;
 }
 
 .cell input[type='checkbox']:checked {
-  background: rgb(255, 140, 0);
+    background: rgb(255, 140, 0);
 }
 
 .playing {
-  outline: 2px solid rgb(255, 0, 242);
+    outline: 2px solid rgb(255, 0, 242);
 }
 
 /* Remove previous alternating backgrounds from cells */
 .cell.evenBeat,
 .cell.oddBeat {
-  background-color: transparent !important;
+    background-color: transparent !important;
 }
 
 /* New container for the grid */
 .gridContainer {
-  position: relative;
-  /* force height to contain all rows */
-  height: fit-content;
-  
+    position: relative;
+    /* force height to contain all rows */
+    height: fit-content;
 }
 
 /* Beat background container positioned behind grid rows */
 .beatBackground {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%; /* cover full width of container */
-  pointer-events: none;
-  z-index: 0;
-  display: flex;
-  margin-left: 58px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%; /* cover full width of container */
+    pointer-events: none;
+    z-index: 0;
+    display: flex;
+    margin-left: 58px;
 }
 
 /* Each vertical stripe for a beat */
 .beatStripe {
-  height: 100%;
-  flex-shrink: 0;
-  transition: background-color 0.3s;
+    height: 100%;
+    flex-shrink: 0;
+    transition: background-color 0.3s;
 }
 
 /* Use subtle hue shifts for even/odd beats */
 .evenBeatHue {
-  background-color: hsla(270, 80%, 30%, 0.746);
+    background-color: hsla(270, 80%, 30%, 0.746);
 }
 
 .oddBeatHue {
-  background-color: hsla(320, 70%, 35%, 0.657);
+    background-color: hsla(320, 70%, 35%, 0.657);
 }
 
 /* Make sure drum grid rows and cells are above */
 .drumGrid {
-  position: relative;
-  z-index: 1;
+    position: relative;
+    z-index: 1;
 }
 
 /* Keep playing outline above backgrounds */
 .playing {
-  outline: 2px solid rgb(255, 0, 242);
-  position: relative; /* make sure outline shows */
-  z-index: 2;
+    outline: 2px solid rgb(255, 0, 242);
+    position: relative; /* make sure outline shows */
+    z-index: 2;
 }
-
