@@ -39,6 +39,7 @@ export default function DrumLoopPlayer({
 
     useEffect(() => {
         gridRef.current = grid;
+		// console.log(gridRef);
     }, [grid]);
 
     useEffect(() => {

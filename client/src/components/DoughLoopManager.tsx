@@ -68,7 +68,7 @@ export default function DoughLoopManager() {
                 currentStep={currentStep}
             />
 
-            <ControlsContainer />
+            <ControlsContainer grid={grid} setGrid={setGrid}/>
 
             {user && (
                 <>

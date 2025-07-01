@@ -6,7 +6,10 @@ import DrumLoopPlayer from './DrumLoopPlayer';
 import * as Tone from 'tone';
 import styles from '../styles/ControlsContainer.module.css';
 
-export default function ControlsContainer() {
+export default function ControlsContainer(opts: {
+	grid: boolean[][];
+	setGrid: (grid: boolean[][]) => void;
+}) {
     const user = useStore((s) => s.user);
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
@@ -26,7 +29,7 @@ export default function ControlsContainer() {
     const emptyGrid = Array(4)
         .fill(null)
         .map(() => Array(numSteps).fill(false));
-    const [grid, setGrid] = useState<boolean[][]>(emptyGrid);
+    // const [grid, setGrid] = useState<boolean[][]>(emptyGrid);
 
     const [name, setName] = useState('');
 
@@ -37,8 +40,8 @@ export default function ControlsContainer() {
 
     // When numBeats changes, reset grid to correct length
     useEffect(() => {
-        setGrid((prev) =>
-            prev.map((row) => {
+        opts.setGrid(
+            opts.grid.map((row) => {
                 const newRow = [...row];
                 newRow.length = numBeats * numSubdivisions;
                 return newRow.fill(false, row.length);
@@ -55,7 +58,7 @@ export default function ControlsContainer() {
 
     return (
         <div className={styles.controlsContainer}>
-            <DrumLoopPlayer grid={grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
+            <DrumLoopPlayer grid={opts.grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
             <div style={{ marginBottom: 16 }}>
                 <label>
                     Beats: {numBeats}
