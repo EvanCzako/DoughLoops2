@@ -16,11 +16,28 @@
 }
 
 .scrollContainer {
-    overflow-x: auto;
-    white-space: nowrap;
-    width: 100%;
-    height: 400px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  width: 100%;
+  scrollbar-width: thick;            /* Firefox */
+  scrollbar-color: #ad10a0 #000;    /* Firefox: thumb color and track */
 }
+
+/* WebKit (Chrome, Safari) scrollbar */
+.scrollContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: #a60f99;               /* Neon green thumb */
+  border-radius: 4px;
+}
+
+.scrollContainer::-webkit-scrollbar-track {
+  background: #000;                  /* Black track (can change as needed) */
+}
+
 
 .innerGridContainer {
     white-space: nowrap;
@@ -133,11 +150,11 @@
 
 /* Use subtle hue shifts for even/odd beats */
 .evenBeatHue {
-    background-color: hsla(270, 80%, 30%, 0.746);
+    background-color: hsla(270, 76%, 31%, 0.895);
 }
 
 .oddBeatHue {
-    background-color: hsla(320, 70%, 35%, 0.657);
+    background-color: hsla(320, 67%, 36%, 0.861);
 }
 
 /* Make sure drum grid rows and cells are above */

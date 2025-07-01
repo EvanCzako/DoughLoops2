@@ -68,12 +68,12 @@ export default function ControlsContainer(opts: {
                         max={8}
                         value={numBeats}
                         onChange={(e) => setNumBeats(Number(e.target.value))}
-                        style={{ width: '100%' }}
+                        className={styles.controlsSlider}
                     />
                 </label>
             </div>
             <div style={{ margin: '10px 0' }}>
-                <label htmlFor="subdivisions">Subdivisions per Beat: {numSubdivisions}</label>
+                <label htmlFor="subdivisions">Subdivisions: {numSubdivisions}</label>
                 <input
                     id="subdivisions"
                     type="range"
@@ -81,6 +81,7 @@ export default function ControlsContainer(opts: {
                     max={8}
                     value={numSubdivisions}
                     onChange={(e) => setNumSubdivisions(Number(e.target.value))}
+					className={styles.controlsSlider}
                 />
             </div>
             <div style={{ margin: '20px 0' }}>
@@ -92,7 +93,7 @@ export default function ControlsContainer(opts: {
                         max="180"
                         value={bpm}
                         onChange={(e) => setBpm(Number(e.target.value))}
-                        style={{ width: '100%' }}
+                        className={styles.controlsSlider}
                     />
                 </label>
             </div>

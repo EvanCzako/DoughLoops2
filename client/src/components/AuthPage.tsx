@@ -38,7 +38,7 @@ export default function AuthPage() {
             <div className={styles.logoutContainer}>
                 {user ? (
                     <>
-                        <h2>Hey, {user.username} 👋</h2>
+                        <h2>Welcome, {user.username}!</h2>
                         <LogoutButton />
                     </>
                 ) : null}
