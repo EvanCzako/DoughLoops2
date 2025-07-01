@@ -4,11 +4,14 @@ import RegisterForm from './RegisterForm';
 import { useStore } from '../store';
 import styles from '../styles/AuthPage.module.css';
 import LogoutButton from './LogoutButton';
+import DoughLoopList from './DoughLoopList';
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
 
     const user = useStore((s) => s.user);
+	const selectedLoop = useStore((s) => s.selectedLoop);
+	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
 
     const loggedOutDisp = (
         <div style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
@@ -43,6 +46,7 @@ export default function AuthPage() {
                     </>
                 ) : null}
             </div>
+			<DoughLoopList selectedLoop={selectedLoop} onSelectLoop={setSelectedLoop} />
         </div>
     );
 

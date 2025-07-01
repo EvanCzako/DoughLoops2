@@ -20,7 +20,11 @@ export default function DrumLoopPlayer({
     const stepRef = useRef(0);
     const playersRef = useRef<Record<string, Tone.Player>>({});
     const [samplesLoaded, setSamplesLoaded] = useState(false);
-	const numSubdivisions = useStore((s) => s.numSubdivisions)
+	const numSubdivisions = useStore((s) => s.numSubdivisions);
+	const currentStep = useStore((s) => s.currentStep);
+	const setCurrentStep = useStore((s) => s.setCurrentStep);
+	const setNumBeats = useStore((s) => s.setNumBeats);
+	const numBeats = useStore((s) => s.numBeats);
 
     // Load samples once
     useEffect(() => {
@@ -55,6 +59,7 @@ export default function DrumLoopPlayer({
 
         const repeat = (time: number) => {
             const step = stepRef.current;
+
             const numSteps = gridRef.current[0]?.length || 16;
 
             if (gridRef.current[0][step]) playersRef.current.kick.start(time);
@@ -62,8 +67,8 @@ export default function DrumLoopPlayer({
             if (gridRef.current[2][step]) playersRef.current.hat.start(time);
             if (gridRef.current[3][step]) playersRef.current.clap.start(time);
 
-            onStep?.(step);
 
+			onStep?.(step);
             stepRef.current = (step + 1) % numSteps;
         };
 

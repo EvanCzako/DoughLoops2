@@ -25,7 +25,9 @@ interface StoreState {
     editingLoopId: number | null;
     isPlaying: boolean;
 	currentStep: number;
+	selectedLoop: DoughLoop | null;
 
+	setSelectedLoop: (loop: DoughLoop) => void;
 	setCurrentStep: (step: number) => void;
     setNumBeats: (numBeats: number) => void;
     setNumSubdivisions: (numSubdivisions: number) => void;
@@ -60,6 +62,9 @@ export const useStore = create<StoreState>((set) => ({
     editingLoopId: null,
     isPlaying: false,
 	currentStep: 0,
+	selectedLoop: null,
+
+	setSelectedLoop: (loop: DoughLoop) => set({ selectedLoop: loop }),
 
     setUser: (user) => set({ user }),
     logout: () => set({ user: null, doughLoops: [] }),

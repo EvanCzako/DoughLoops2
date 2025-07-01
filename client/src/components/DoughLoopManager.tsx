@@ -14,9 +14,9 @@ export default function DoughLoopManager() {
     const user = useStore((s) => s.user);
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
-    const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
+    const selectedLoop = useStore((s) => s.selectedLoop);
+	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
 	const currentStep = useStore((s) => s.currentStep);
-	const setCurrentStep = useStore((s) => s.setCurrentStep);
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
 
@@ -70,12 +70,6 @@ export default function DoughLoopManager() {
 
             <ControlsContainer grid={grid} setGrid={setGrid}/>
 
-            {user && (
-                <>
-                    <hr style={{ margin: '20px 0' }} />
-                    <DoughLoopList selectedLoop={selectedLoop} onSelectLoop={setSelectedLoop} />
-                </>
-            )}
         </div>
     );
 }

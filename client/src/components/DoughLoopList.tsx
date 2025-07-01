@@ -4,7 +4,7 @@ import { DoughLoop } from '../store';
 
 interface Props {
     onSelectLoop: (loop: DoughLoop) => void;
-    selectedLoop?: DoughLoop;
+    selectedLoop: DoughLoop | null;
 }
 
 export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
@@ -16,13 +16,6 @@ export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
     const setDoughLoops = useStore((s) => s.setDoughLoops);
     const setError = useStore((s) => s.setError);
     const doughLoops = useStore((s) => s.doughLoops);
-
-    const handleSelectLoop = (loop: DoughLoop) => {
-        // If the user is editing this loop, and it's now dirty, reset it
-        if (editingLoopId !== loop.id) {
-            onSelectLoop({ ...loop }); // trigger the loading logic again
-        }
-    };
 
     useEffect(() => {
         const fetchLoops = async () => {
@@ -57,7 +50,10 @@ export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
                             cursor: 'pointer',
                             fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
                         }}
-                        onClick={() => onSelectLoop({ ...loop })}
+                        onClick={() => {
+							console.log(loop);
+							onSelectLoop({ ...loop })
+						}}
                     >
                         {loop.name}
                     </li>

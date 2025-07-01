@@ -26,10 +26,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 
     // Calculate beat width in px for each beat group
     const beatWidth = `calc(var(--cell-size) * ${numSubdivisions})`;
-
-	console.log("DrumGrid ReRender");
-
-	console.log(currentStep);
 	
     return (
         <div className={styles.drumGridOuter}>

@@ -14,7 +14,7 @@ export default function ControlsContainer(opts: {
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
     const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
-	const currentStep = useStore((s) => s.currentStep);
+	// const currentStep = useStore((s) => s.currentStep);
 	const setCurrentStep = useStore((s) => s.setCurrentStep);
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
@@ -98,7 +98,7 @@ export default function ControlsContainer(opts: {
                 </label>
             </div>
 
-            <button onClick={handlePlayToggle}>{isPlaying ? 'Stop' : 'Play'}</button>
+            <button className={styles.controlsButton} onClick={handlePlayToggle}>{isPlaying ? 'Stop' : 'Play'}</button>
         </div>
     );
 }
