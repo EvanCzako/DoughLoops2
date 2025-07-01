@@ -10,7 +10,6 @@ interface Props {
 export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-    const editingLoopId = useStore((s) => s.editingLoopId);
     const user = useStore((s) => s.user);
     const setLoading = useStore((s) => s.setLoading);
     const setDoughLoops = useStore((s) => s.setDoughLoops);

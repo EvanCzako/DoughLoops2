@@ -6,13 +6,24 @@ import DoughLoopManager from './components/DoughLoopManager';
 import TitleBox from './components/TitleBox';
 
 export default function App(): JSX.Element {
-    const user = useStore((s) => s.user);
+
+
+	const numBeats = useStore((s) => s.numBeats);
+
+	const numSteps = numBeats * 4;
+
+	const emptyGrid = Array(4)
+        .fill(null)
+        .map(() => Array(numSteps).fill(false));
+	const [grid, setGrid] = useState<boolean[][]>(emptyGrid);
+	const [name, setName] = useState('');
+
 
     return (
         <div>
             <TitleBox />
-            <DoughLoopManager />
-            <AuthPage />
+            <DoughLoopManager grid={grid} setGrid={setGrid} name={name} setName={setName}/>
+            <AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName}/>
         </div>
     );
 }

@@ -10,29 +10,21 @@ import * as Tone from 'tone';
 import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
 
-export default function DoughLoopManager() {
+export default function DoughLoopManager(opts: {
+	grid: any,
+	setGrid: any,
+	name: any,
+	setName: any,
+}) {
     const user = useStore((s) => s.user);
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
     const selectedLoop = useStore((s) => s.selectedLoop);
 	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
 	const currentStep = useStore((s) => s.currentStep);
-    const bpm = useStore((s) => s.bpm);
-    const setBpm = useStore((s) => s.setBpm);
-
     const numBeats = useStore((s) => s.numBeats);
-    const setNumBeats = useStore((s) => s.setNumBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
-    const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
 
-    const numSteps = numBeats * 4;
-
-    const emptyGrid = Array(4)
-        .fill(null)
-        .map(() => Array(numSteps).fill(false));
-    const [grid, setGrid] = useState<boolean[][]>(emptyGrid);
-
-    const [name, setName] = useState('');
 
     const handlePlayToggle = async () => {
         await Tone.start(); // <-- resumes AudioContext
@@ -41,8 +33,8 @@ export default function DoughLoopManager() {
 
     // When numBeats changes, reset grid to correct length
     useEffect(() => {
-        setGrid((prev) =>
-            prev.map((row) => {
+        opts.setGrid((prev: any) =>
+            prev.map((row: any) => {
                 const newRow = [...row];
                 newRow.length = numBeats * numSubdivisions;
                 return newRow.fill(false, row.length);
@@ -50,10 +42,10 @@ export default function DoughLoopManager() {
         );
     }, [numBeats, numSubdivisions]);
 
-    // Reset selected loop on logout
+    // // Reset selected loop on logout
     useEffect(() => {
         if (!user && selectedLoop) {
-            setSelectedLoop(undefined);
+            setSelectedLoop(null);
         }
     }, [user]);
 
@@ -61,14 +53,14 @@ export default function DoughLoopManager() {
         <div className={styles.doughLoopManager}>
             <DrumLoopEditor
                 selectedLoop={selectedLoop}
-                grid={grid}
-                setGrid={setGrid}
-                name={name}
-                setName={setName}
+                grid={opts.grid}
+                setGrid={opts.setGrid}
+                name={opts.name}
+                setName={opts.setName}
                 currentStep={currentStep}
             />
 
-            <ControlsContainer grid={grid} setGrid={setGrid}/>
+            <ControlsContainer grid={opts.grid} setGrid={opts.setGrid}/>
 
         </div>
     );

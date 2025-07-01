@@ -1,34 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from '../store';
+import { DoughLoop } from '../store';
 
-export default function NewDoughLoopForm() {
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const user = useStore((s) => s.user);
-    const addDoughLoop = useStore((s) => s.addDoughLoop);
-    const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
-    const [name, setName] = useState('');
-    const [beatRep, setBeatRep] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+interface Props {
+	onSelectLoop: (loop: DoughLoop) => void;
+	selectedLoop: DoughLoop | null;
+}
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!name.trim() || !beatRep.trim()) {
-            setError('Both fields are required.');
-            return;
-        }
+export default function NewDoughLoopForm(opts: {
+	grid: any,
+	setGrid: any,
+	name: any,
+	setName: any,
+}) {
 
-        setLoading(true);
-        setError(null);
+	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	const user = useStore((s) => s.user);
+	const bpm = useStore((s) => s.bpm);
+
+	const numBeats = useStore((s) => s.numBeats);
+	const numSubdivisions = useStore((s) => s.numSubdivisions);
+
+
+	const addDoughLoop = useStore((s) => s.addDoughLoop);
+	const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
+	const setError = useStore((s) => s.setError);
+
+
+
+    const handleSave = async () => {
+        if (!user) return null;
+
+        const beatRep = encodeDrumGrid(opts.grid, bpm, numBeats, numSubdivisions); // use the new encoding function
 
         try {
             const res = await fetch(`${API_BASE_URL}/doughloops`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: user!.id, name, beatRep }),
+                body: JSON.stringify({ userId: user.id, name: opts.name, beatRep }),
             });
 
-            if (!res.ok) throw new Error('Failed to create DoughLoop');
+            if (!res.ok) throw new Error('Failed to save');
 
             const newLoop = await res.json();
 
@@ -38,36 +50,64 @@ export default function NewDoughLoopForm() {
                 replaceDoughLoop(newLoop);
             }
 
-            setName('');
-            setBeatRep('');
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
+            opts.setName('');
+        } catch (err) {
+            setError('Error saving loop');
         }
     };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <h3>Create a new DoughLoop</h3>
-            <input
-                type="text"
-                placeholder="Loop name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                style={{ width: '100%', marginBottom: 8, padding: 8 }}
-            />
-            <input
-                type="text"
-                placeholder="Beat representation"
-                value={beatRep}
-                onChange={(e) => setBeatRep(e.target.value)}
-                style={{ width: '100%', marginBottom: 8, padding: 8 }}
-            />
-            <button type="submit" disabled={loading} style={{ padding: 8, width: '100%' }}>
-                {loading ? 'Creating...' : 'Add DoughLoop'}
-            </button>
-            {error && <p style={{ color: 'red', marginTop: 8 }}>{error}</p>}
-        </form>
-    );
+
+
+	return (
+		<div>
+			<h3>New Loop</h3>
+			<div>
+				<input
+					type="text"
+					placeholder="Loop name"
+					value={opts.name}
+					onChange={(e) => opts.setName(e.target.value)}
+				/>
+				<button onClick={handleSave}>Save</button>
+			</div>
+		</div>
+
+	);
+}
+
+
+
+function decodeDrumGrid(encoded: string): {
+    bpm: number;
+    numBeats: number;
+    subdivisions: number;
+    grid: boolean[][];
+} | null {
+    try {
+        const [meta, ...rows] = encoded.split('::');
+        const [bpmStr, beatsStr, subsStr] = meta.split(',');
+
+        const bpm = parseInt(bpmStr, 10);
+        const numBeats = parseInt(beatsStr, 10);
+        const subdivisions = parseInt(subsStr, 10);
+        const cols = numBeats * subdivisions;
+
+        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
+
+        const grid = rows.map((row) => [...row].map((char) => char === '1'));
+
+        return { bpm, numBeats, subdivisions, grid };
+    } catch {
+        return null;
+    }
+}
+
+function encodeDrumGrid(
+    grid: boolean[][],
+    bpm: number,
+    numBeats: number,
+    subdivisions: number
+): string {
+    const rows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
+    return `${bpm},${numBeats},${subdivisions}::${rows.join('::')}`;
 }

@@ -9,7 +9,6 @@ interface DrumGridProps {
 }
 
 export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
-    const setEditingLoopId = useStore((s) => s.setEditingLoopId);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const instruments = ['kick', 'snare', 'hat', 'clap'];
 
@@ -18,7 +17,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
             ri === row ? r.map((c, ci) => (ci === col ? !c : c)) : r
         );
         setGrid(updated);
-        setEditingLoopId(null);
     };
 
     const numCols = grid[0]?.length || 0;

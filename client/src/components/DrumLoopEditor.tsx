@@ -6,7 +6,7 @@ import styles from '../styles/DoughLoopManager.module.css';
 import DoughLoopManager from './DoughLoopManager';
 
 interface DrumLoopEditorProps {
-    selectedLoop?: DoughLoop;
+    selectedLoop: DoughLoop | null;
     currentStep?: number;
     grid: boolean[][];
     setGrid: (g: boolean[][]) => void;
@@ -28,7 +28,6 @@ export default function DrumLoopEditor({
     const setBpm = useStore((s) => s.setBpm);
     const setNumBeats = useStore((s) => s.setNumBeats);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-    const setEditingLoopId = useStore((s) => s.setEditingLoopId);
     const addDoughLoop = useStore((s) => s.addDoughLoop);
     const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
     const setError = useStore((s) => s.setError);
@@ -50,7 +49,6 @@ export default function DrumLoopEditor({
         setNumSubdivisions(decoded.subdivisions);
         setName(selectedLoop.name);
 
-        setEditingLoopId(selectedLoop.id); // 👈 track which loop is being edited
     }, [selectedLoop]);
 
     const handleSave = async () => {
@@ -85,7 +83,7 @@ export default function DrumLoopEditor({
         <div className={styles.drumLoopEditor}>
             <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
 
-            {user ? (
+            {/* {user ? (
                 <div>
                     <input
                         type="text"
@@ -95,7 +93,7 @@ export default function DrumLoopEditor({
                     />
                     <button onClick={handleSave}>Save</button>
                 </div>
-            ) : null}
+            ) : null} */}
         </div>
     );
 }

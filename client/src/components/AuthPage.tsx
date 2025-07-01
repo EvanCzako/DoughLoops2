@@ -5,8 +5,14 @@ import { useStore } from '../store';
 import styles from '../styles/AuthPage.module.css';
 import LogoutButton from './LogoutButton';
 import DoughLoopList from './DoughLoopList';
+import NewDoughLoopForm from './NewDoughLoopForm';
 
-export default function AuthPage() {
+export default function AuthPage(opts: {
+	grid: any,
+	setGrid: any,
+	name: any,
+	setName: any,
+}) {
     const [isLogin, setIsLogin] = useState(true);
 
     const user = useStore((s) => s.user);
@@ -46,6 +52,8 @@ export default function AuthPage() {
                     </>
                 ) : null}
             </div>
+
+			<NewDoughLoopForm grid={opts.grid} setGrid={opts.setGrid} name={opts.name} setName={opts.setName}/>
 			<DoughLoopList selectedLoop={selectedLoop} onSelectLoop={setSelectedLoop} />
         </div>
     );

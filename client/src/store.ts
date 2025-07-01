@@ -21,19 +21,15 @@ interface StoreState {
     numBeats: number;
     numSubdivisions: number;
     bpm: number;
-    selectedLoopId: number | null;
-    editingLoopId: number | null;
     isPlaying: boolean;
 	currentStep: number;
 	selectedLoop: DoughLoop | null;
 
-	setSelectedLoop: (loop: DoughLoop) => void;
+	setSelectedLoop: (loop: DoughLoop | null) => void;
 	setCurrentStep: (step: number) => void;
     setNumBeats: (numBeats: number) => void;
     setNumSubdivisions: (numSubdivisions: number) => void;
     setBpm: (bpm: number) => void;
-    setSelectedLoopId: (id: number | null) => void;
-    setEditingLoopId: (id: number | null) => void;
     setIsPlaying: (playing: boolean) => void;
 
     // Auth actions
@@ -58,21 +54,20 @@ export const useStore = create<StoreState>((set) => ({
     numBeats: 4,
     numSubdivisions: 4,
     bpm: 120,
-    selectedLoopId: null,
-    editingLoopId: null,
     isPlaying: false,
 	currentStep: 0,
 	selectedLoop: null,
 
-	setSelectedLoop: (loop: DoughLoop) => set({ selectedLoop: loop }),
+	setSelectedLoop: (loop: DoughLoop | null) => {
+		console.log("Setting selected loop!");
+		set({ selectedLoop: loop });
+	},
 
     setUser: (user) => set({ user }),
-    logout: () => set({ user: null, doughLoops: [] }),
-    setNumBeats: (numBeats: number) => set({ numBeats, editingLoopId: null }),
-    setNumSubdivisions: (numSubdivisions: number) => set({ numSubdivisions, editingLoopId: null }),
-    setBpm: (bpm: number) => set({ bpm, editingLoopId: null }),
-    setSelectedLoopId: (id: number | null) => set({ selectedLoopId: id }),
-    setEditingLoopId: (id: number | null) => set({ editingLoopId: id }),
+    logout: () => set({ user: null, doughLoops: [], selectedLoop: null }),
+    setNumBeats: (numBeats: number) => set({ numBeats}),
+    setNumSubdivisions: (numSubdivisions: number) => set({ numSubdivisions }),
+    setBpm: (bpm: number) => set({ bpm }),
     setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
 	setCurrentStep: (step: number) => set({currentStep: step}),
 
