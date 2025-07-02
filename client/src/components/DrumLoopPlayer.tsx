@@ -44,49 +44,52 @@ export default function DrumLoopPlayer({
     useEffect(() => {
         gridRef.current = grid;
     }, [grid]);
-	useEffect(() => {
-		if (!samplesLoaded || grid.length < 4) return;
 
-		const transport = Tone.getTransport();
-		const stepDuration = 60 / (numSubdivisions * bpm);
-		const numSteps = grid[0].length;
 
-		stepRef.current = 0;
-		gridRef.current = grid;
+useEffect(() => {
+    if (!samplesLoaded || grid.length < 4) return;
 
-		transport.cancel();
-		transport.stop(); // Ensure clean slate before scheduling
+    // Always cancel existing scheduled events before creating new ones
+    Tone.Transport.stop();
+    Tone.Transport.cancel();
 
-		const repeat = (time: number) => {
-			const step = stepRef.current;
+    stepRef.current = 0;
 
-			if (gridRef.current[0][step]) playersRef.current.kick.start(time);
-			if (gridRef.current[1][step]) playersRef.current.snare.start(time);
-			if (gridRef.current[2][step]) playersRef.current.hat.start(time);
-			if (gridRef.current[3][step]) playersRef.current.clap.start(time);
+    const repeat = (time: number) => {
+        const step = stepRef.current;
+        const numSteps = gridRef.current[0]?.length || 16;
 
-			onStep?.(step);
-			stepRef.current = (step + 1) % numSteps;
-		};
+        if (gridRef.current[0][step]) playersRef.current.kick.start(time);
+        if (gridRef.current[1][step]) playersRef.current.snare.start(time);
+        if (gridRef.current[2][step]) playersRef.current.hat.start(time);
+        if (gridRef.current[3][step]) playersRef.current.clap.start(time);
 
-		const repeatId = transport.scheduleRepeat(repeat, stepDuration);
-		transport.bpm.value = bpm;
+        onStep?.(step);
+        stepRef.current = (step + 1) % numSteps;
+    };
 
-		const startIfNeeded = async () => {
-			await Tone.start();
-			if (isPlaying && transport.state !== 'started') {
-				transport.start();
-			}
-		};
+    const secondsPerBeat = 60 / bpm;
+    const stepDuration = secondsPerBeat / numSubdivisions;
 
-		startIfNeeded();
+	// const stepDuration = `${4 * (1 / numSubdivisions)}n`; // e.g. "16n"
+	// Tone.Transport.scheduleRepeat(repeat, stepDuration);
+	// Tone.Transport.bpm.value = bpm;
 
-		return () => {
-			transport.clear(repeatId);
-			transport.stop();
-			console.log("CLEANED!!!!");
-		};
-	}, [isPlaying, bpm, samplesLoaded, numSubdivisions, selectedLoop]);
+
+    Tone.Transport.bpm.value = bpm;
+    const repeatId = Tone.Transport.scheduleRepeat(repeat, stepDuration);
+
+    if (isPlaying) {
+        Tone.start().then(() => {
+            Tone.Transport.start();
+        });
+    }
+
+    return () => {
+        Tone.Transport.clear(repeatId);  // just clears this one repeat
+        Tone.Transport.stop();           // stops the clock
+    };
+}, [isPlaying, bpm, numSubdivisions, grid, samplesLoaded, selectedLoop]);
 
 
     return null; // No UI needed here
