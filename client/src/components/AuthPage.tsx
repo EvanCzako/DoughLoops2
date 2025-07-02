@@ -23,16 +23,16 @@ export default function AuthPage(opts: {
         <div style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
             <div style={{ marginBottom: 16, textAlign: 'center' }}>
                 <button
+					className={styles.loginRegisterButton}
                     onClick={() => setIsLogin(true)}
                     disabled={isLogin}
-                    style={{ marginRight: 8, padding: '8px 16px' }}
                 >
                     Login
                 </button>
                 <button
+					className={styles.loginRegisterButton}
                     onClick={() => setIsLogin(false)}
                     disabled={!isLogin}
-                    style={{ padding: '8px 16px' }}
                 >
                     Register
                 </button>

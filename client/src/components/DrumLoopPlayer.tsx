@@ -71,11 +71,6 @@ useEffect(() => {
     const secondsPerBeat = 60 / bpm;
     const stepDuration = secondsPerBeat / numSubdivisions;
 
-	// const stepDuration = `${4 * (1 / numSubdivisions)}n`; // e.g. "16n"
-	// Tone.Transport.scheduleRepeat(repeat, stepDuration);
-	// Tone.Transport.bpm.value = bpm;
-
-
     Tone.Transport.bpm.value = bpm;
     const repeatId = Tone.Transport.scheduleRepeat(repeat, stepDuration);
 

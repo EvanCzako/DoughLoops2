@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStore } from '../store';
+import styles from '../styles/LoginForm.module.css'
 
 export default function LogoutButton() {
     const logout = useStore((s) => s.logout);
@@ -14,7 +15,7 @@ export default function LogoutButton() {
     };
 
     return (
-        <button onClick={handleLogout} style={{ padding: '8px 16px', cursor: 'pointer' }}>
+        <button onClick={handleLogout} className={styles.loginButton}>
             Logout
         </button>
     );

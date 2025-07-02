@@ -1,10 +1,12 @@
 .controlsContainer {
     background-color: rgb(55, 41, 62);
-    padding: 30px;
+    padding: 10px;
     border-radius: 15px;
-	max-width: 300px;
+	min-width: 200px;
+	max-width: 400px;
 	font-weight: 500;
 	font-size: 20px;
+	height: 200px;
 }
 
 .controlsSlider {
@@ -13,11 +15,35 @@
 }
 
 .controlsButton {
-	background-color: blue;
+	background-color: rgb(8, 177, 10);
 	color: white;
 	border-radius: 5px;
+	margin-bottom: 10px;
+	height: 50px;
+	width: 75px;
+	font-weight: 900;
+	font-size: 20px;
 }
 
 .controlsButton:hover {
 	background-color: rgb(0, 76, 255);
+}
+
+
+/* Play mode */
+.playing:hover {
+    background-color: rgb(255, 70, 70); /* red when playing */
+}
+
+.playing {
+    background-color: rgb(200, 0, 0);
+}
+
+/* Stop mode */
+.stopped:hover {
+    background-color: rgb(8, 177, 10); /* green when stopped */
+}
+
+.stopped {
+    background-color: rgb(12, 132, 46); /* blue on hover */
 }

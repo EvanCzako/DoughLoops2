@@ -1,6 +1,7 @@
 // client/src/components/LoginForm.tsx
 import React, { useState } from 'react';
 import { useStore, User } from '../store';
+import styles from '../styles/LoginForm.module.css';
 
 export default function LoginForm() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -46,7 +47,7 @@ export default function LoginForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} style={{ maxWidth: 320, margin: 'auto' }}>
+        <form className={styles.loginForm} onSubmit={handleSubmit} style={{ maxWidth: 320, margin: 'auto' }}>
             <h2>Login</h2>
 
             <input
@@ -56,7 +57,7 @@ export default function LoginForm() {
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={loading}
                 required
-                style={{ width: '100%', marginBottom: 8, padding: 8 }}
+				className={styles.loginFormInput}
             />
 
             <input
@@ -66,10 +67,10 @@ export default function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
                 required
-                style={{ width: '100%', marginBottom: 8, padding: 8 }}
+				className={styles.loginFormInput}
             />
 
-            <button type="submit" disabled={loading} style={{ width: '100%', padding: 8 }}>
+            <button type="submit" disabled={loading} className={styles.loginButton}>
                 {loading ? 'Logging in...' : 'Login'}
             </button>
 

@@ -50,8 +50,16 @@ export default function ControlsContainer(opts: {
     }, [user]);
 
     return (
+
+		
         <div className={styles.controlsContainer}>
             <DrumLoopPlayer grid={opts.grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
+			<button
+				className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
+				onClick={handlePlayToggle}
+			>
+				{isPlaying ? 'Stop' : 'Play'}
+			</button>
             <div style={{ marginBottom: 16 }}>
                 <label>
                     Beats: {numBeats}
@@ -90,8 +98,6 @@ export default function ControlsContainer(opts: {
                     />
                 </label>
             </div>
-
-            <button className={styles.controlsButton} onClick={handlePlayToggle}>{isPlaying ? 'Stop' : 'Play'}</button>
         </div>
     );
 }

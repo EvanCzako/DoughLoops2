@@ -1,6 +1,8 @@
 // client/src/components/RegisterForm.tsx
 import React, { useState } from 'react';
 
+import styles from '../styles/LoginForm.module.css';
+
 export default function RegisterForm() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const [username, setUsername] = useState('');
@@ -50,7 +52,7 @@ export default function RegisterForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} style={{ maxWidth: 320, margin: 'auto' }}>
+        <form className={styles.loginForm} onSubmit={handleSubmit} style={{ maxWidth: 320, margin: 'auto' }}>
             <h2>Register</h2>
 
             <input
@@ -60,7 +62,7 @@ export default function RegisterForm() {
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={loading}
                 required
-                style={{ width: '100%', marginBottom: 8, padding: 8 }}
+				className={styles.loginFormInput}
             />
 
             <input
@@ -70,10 +72,10 @@ export default function RegisterForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
                 required
-                style={{ width: '100%', marginBottom: 8, padding: 8 }}
+				className={styles.loginFormInput}
             />
 
-            <button type="submit" disabled={loading} style={{ width: '100%', padding: 8 }}>
+            <button type="submit" disabled={loading} className={styles.loginButton}>
                 {loading ? 'Registering...' : 'Register'}
             </button>
 
