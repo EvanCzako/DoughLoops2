@@ -7,20 +7,16 @@ import TitleBox from './components/TitleBox';
 
 export default function App(): JSX.Element {
 
+
 	const grid = useStore((s) => s.grid);
-	
 	const setGrid = useStore((s) => s.setGrid);
 	const name = useStore((s) => s.name);
 	const setName = useStore((s) => s.setName);
 
-	console.log("++++++++");
-	console.log(grid);
-
-
     return (
         <div>
             <TitleBox />
-            <DoughLoopManager grid={grid} setGrid={setGrid} name={name} setName={setName}/>
+            <DoughLoopManager/>
             <AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName}/>
         </div>
     );

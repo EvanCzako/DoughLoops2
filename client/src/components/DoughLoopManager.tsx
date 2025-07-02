@@ -10,31 +10,18 @@ import * as Tone from 'tone';
 import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
 
-export default function DoughLoopManager(opts: {
-	grid: any,
-	setGrid: any,
-	name: any,
-	setName: any,
-}) {
+export default function DoughLoopManager() {
+
     const user = useStore((s) => s.user);
-    const isPlaying = useStore((s) => s.isPlaying);
-    const setIsPlaying = useStore((s) => s.setIsPlaying);
     const selectedLoop = useStore((s) => s.selectedLoop);
 	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
-	const currentStep = useStore((s) => s.currentStep);
-    const numBeats = useStore((s) => s.numBeats);
-    const numSubdivisions = useStore((s) => s.numSubdivisions);
+	const grid = useStore((s) => s.grid);
+	const setGrid = useStore((s) => s.setGrid);
+	const name = useStore((s) => s.name);
+	const setName = useStore((s) => s.setName);
 
-    // // When numBeats changes, reset grid to correct length
-    // useEffect(() => {
-    //     opts.setGrid((prev: any) =>
-    //         prev.map((row: any) => {
-    //             const newRow = [...row];
-    //             newRow.length = numBeats * numSubdivisions;
-    //             return newRow.fill(false, row.length);
-    //         })
-    //     );
-    // }, [numBeats, numSubdivisions]);
+	console.log("DOUGHLOOP MANAGER RENDER");
+	console.log(selectedLoop);
 
     // // Reset selected loop on logout
     useEffect(() => {
@@ -47,14 +34,13 @@ export default function DoughLoopManager(opts: {
         <div className={styles.doughLoopManager}>
             <DrumLoopEditor
                 selectedLoop={selectedLoop}
-                grid={opts.grid}
-                setGrid={opts.setGrid}
-                name={opts.name}
-                setName={opts.setName}
-                currentStep={currentStep}
+                grid={grid}
+                setGrid={setGrid}
+                name={name}
+                setName={setName}
             />
 
-            <ControlsContainer grid={opts.grid} setGrid={opts.setGrid}/>
+            <ControlsContainer grid={grid} setGrid={setGrid}/>
 
         </div>
     );

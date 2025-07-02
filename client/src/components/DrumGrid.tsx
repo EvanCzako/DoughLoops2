@@ -12,8 +12,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const instruments = ['kick', 'snare', 'hat', 'clap'];
 
-	console.log(grid);
-
     const toggle = (row: number, col: number) => {
         const updated = grid.map((r, ri) =>
             ri === row ? r.map((c, ci) => (ci === col ? !c : c)) : r

@@ -19,8 +19,7 @@ export default function DrumLoopEditor({
     grid,
     setGrid,
     name,
-    setName,
-    currentStep,
+    setName
 }: DrumLoopEditorProps) {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,13 +27,7 @@ export default function DrumLoopEditor({
     const setBpm = useStore((s) => s.setBpm);
     const setNumBeats = useStore((s) => s.setNumBeats);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-    const addDoughLoop = useStore((s) => s.addDoughLoop);
-    const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
-    const setError = useStore((s) => s.setError);
-    const user = useStore((s) => s.user);
-    const bpm = useStore((s) => s.bpm);
-    const numBeats = useStore((s) => s.numBeats);
-    const numSubdivisions = useStore((s) => s.numSubdivisions);
+    const currentStep = useStore((s) => s.currentStep);
 
     // Load the selected loop into the grid
     useEffect(() => {

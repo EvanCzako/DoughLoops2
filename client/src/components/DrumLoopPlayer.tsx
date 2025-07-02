@@ -16,9 +16,6 @@ export default function DrumLoopPlayer({
     onStep,
 }: DrumLoopPlayerProps) {
 
-
-	console.log("DRUM PLAYER RERENDER=========================");
-
     const base = import.meta.env.BASE_URL;
 
     const stepRef = useRef(0);
