@@ -44,56 +44,18 @@ export default function DrumLoopEditor({
         if (!decoded) return;
 
         setGrid(decoded.grid);
-        setBpm(decoded.bpm);
         setNumBeats(decoded.numBeats);
         setNumSubdivisions(decoded.subdivisions);
+        setBpm(decoded.bpm);
         setName(selectedLoop.name);
 
     }, [selectedLoop]);
 
-    const handleSave = async () => {
-        if (!user) return null;
 
-        const beatRep = encodeDrumGrid(grid, bpm, numBeats, numSubdivisions); // use the new encoding function
-
-        try {
-            const res = await fetch(`${API_BASE_URL}/doughloops`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: user.id, name, beatRep }),
-            });
-
-            if (!res.ok) throw new Error('Failed to save');
-
-            const newLoop = await res.json();
-
-            if (res.status === 201) {
-                addDoughLoop(newLoop);
-            } else if (res.status === 200) {
-                replaceDoughLoop(newLoop);
-            }
-
-            setName('');
-        } catch (err) {
-            setError('Error saving loop');
-        }
-    };
 
     return (
         <div className={styles.drumLoopEditor}>
             <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
-
-            {/* {user ? (
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Loop name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <button onClick={handleSave}>Save</button>
-                </div>
-            ) : null} */}
         </div>
     );
 }
@@ -121,14 +83,4 @@ function decodeDrumGrid(encoded: string): {
     } catch {
         return null;
     }
-}
-
-function encodeDrumGrid(
-    grid: boolean[][],
-    bpm: number,
-    numBeats: number,
-    subdivisions: number
-): string {
-    const rows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
-    return `${bpm},${numBeats},${subdivisions}::${rows.join('::')}`;
 }

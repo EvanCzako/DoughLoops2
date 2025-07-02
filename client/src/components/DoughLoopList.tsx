@@ -50,7 +50,6 @@ export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
                             fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
                         }}
                         onClick={() => {
-							console.log(loop);
 							onSelectLoop({ ...loop })
 						}}
                     >

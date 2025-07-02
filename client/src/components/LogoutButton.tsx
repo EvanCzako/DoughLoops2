@@ -9,9 +9,7 @@ export default function LogoutButton() {
     if (!user) return null;
 
     const handleLogout = () => {
-		console.log(selectedLoop);
         logout();
-		console.log(selectedLoop);
         // Optionally: redirect or clear other stuff here
     };
 

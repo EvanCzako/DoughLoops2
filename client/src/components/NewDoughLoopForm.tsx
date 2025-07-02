@@ -31,7 +31,12 @@ export default function NewDoughLoopForm(opts: {
     const handleSave = async () => {
         if (!user) return null;
 
-        const beatRep = encodeDrumGrid(opts.grid, bpm, numBeats, numSubdivisions); // use the new encoding function
+        const beatRep = encodeDrumGrid({
+			bpm, 
+			numBeats, 
+			subdivisions: numSubdivisions, 
+			grid: opts.grid}
+		); // use the new encoding function
 
         try {
             const res = await fetch(`${API_BASE_URL}/doughloops`, {
@@ -76,38 +81,18 @@ export default function NewDoughLoopForm(opts: {
 }
 
 
-
-function decodeDrumGrid(encoded: string): {
+function encodeDrumGrid({
+    bpm,
+    numBeats,
+    subdivisions,
+    grid,
+}: {
     bpm: number;
     numBeats: number;
     subdivisions: number;
     grid: boolean[][];
-} | null {
-    try {
-        const [meta, ...rows] = encoded.split('::');
-        const [bpmStr, beatsStr, subsStr] = meta.split(',');
-
-        const bpm = parseInt(bpmStr, 10);
-        const numBeats = parseInt(beatsStr, 10);
-        const subdivisions = parseInt(subsStr, 10);
-        const cols = numBeats * subdivisions;
-
-        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
-
-        const grid = rows.map((row) => [...row].map((char) => char === '1'));
-
-        return { bpm, numBeats, subdivisions, grid };
-    } catch {
-        return null;
-    }
-}
-
-function encodeDrumGrid(
-    grid: boolean[][],
-    bpm: number,
-    numBeats: number,
-    subdivisions: number
-): string {
+}): string {
+    const meta = `${bpm},${numBeats},${subdivisions}`;
     const rows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
-    return `${bpm},${numBeats},${subdivisions}::${rows.join('::')}`;
+    return `${meta}::${rows.join('::')}`;
 }

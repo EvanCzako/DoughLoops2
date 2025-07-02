@@ -26,15 +26,8 @@ export default function ControlsContainer(opts: {
 
     const numSteps = numBeats * 4;
 
-    const emptyGrid = Array(4)
-        .fill(null)
-        .map(() => Array(numSteps).fill(false));
-    // const [grid, setGrid] = useState<boolean[][]>(emptyGrid);
-
-    const [name, setName] = useState('');
-
     const handlePlayToggle = async () => {
-        await Tone.start(); // <-- resumes AudioContext
+        // await Tone.start(); // <-- resumes AudioContext
         setIsPlaying(!isPlaying);
     };
 
@@ -89,8 +82,8 @@ export default function ControlsContainer(opts: {
                     BPM: {bpm}
                     <input
                         type="range"
-                        min="60"
-                        max="180"
+                        min="50"
+                        max="100"
                         value={bpm}
                         onChange={(e) => setBpm(Number(e.target.value))}
                         className={styles.controlsSlider}

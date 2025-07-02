@@ -25,22 +25,16 @@ export default function DoughLoopManager(opts: {
     const numBeats = useStore((s) => s.numBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
 
-
-    const handlePlayToggle = async () => {
-        await Tone.start(); // <-- resumes AudioContext
-        setIsPlaying(!isPlaying);
-    };
-
-    // When numBeats changes, reset grid to correct length
-    useEffect(() => {
-        opts.setGrid((prev: any) =>
-            prev.map((row: any) => {
-                const newRow = [...row];
-                newRow.length = numBeats * numSubdivisions;
-                return newRow.fill(false, row.length);
-            })
-        );
-    }, [numBeats, numSubdivisions]);
+    // // When numBeats changes, reset grid to correct length
+    // useEffect(() => {
+    //     opts.setGrid((prev: any) =>
+    //         prev.map((row: any) => {
+    //             const newRow = [...row];
+    //             newRow.length = numBeats * numSubdivisions;
+    //             return newRow.fill(false, row.length);
+    //         })
+    //     );
+    // }, [numBeats, numSubdivisions]);
 
     // // Reset selected loop on logout
     useEffect(() => {

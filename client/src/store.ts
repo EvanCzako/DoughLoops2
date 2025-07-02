@@ -24,7 +24,11 @@ interface StoreState {
     isPlaying: boolean;
 	currentStep: number;
 	selectedLoop: DoughLoop | null;
+	name: string;
+	grid: boolean[][];
 
+	setName: (name: string) => void;
+	setGrid: (grid: boolean[][]) => void;
 	setSelectedLoop: (loop: DoughLoop | null) => void;
 	setCurrentStep: (step: number) => void;
     setNumBeats: (numBeats: number) => void;
@@ -57,9 +61,13 @@ export const useStore = create<StoreState>((set) => ({
     isPlaying: false,
 	currentStep: 0,
 	selectedLoop: null,
+	name: "",
+	grid: Array(4).fill(null).map(() => Array(16).fill(false)),
+
+	setName: (name: string) => set({ name }),
+	setGrid: (grid: boolean[][]) => set({ grid }),
 
 	setSelectedLoop: (loop: DoughLoop | null) => {
-		console.log("Setting selected loop!");
 		set({ selectedLoop: loop });
 	},
 
@@ -81,3 +89,33 @@ export const useStore = create<StoreState>((set) => ({
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
 }));
+
+
+
+
+
+
+function decodeDrumGrid(encoded: string): {
+    bpm: number;
+    numBeats: number;
+    subdivisions: number;
+    grid: boolean[][];
+} | null {
+    try {
+        const [meta, ...rows] = encoded.split('::');
+        const [bpmStr, beatsStr, subsStr] = meta.split(',');
+
+        const bpm = parseInt(bpmStr, 10);
+        const numBeats = parseInt(beatsStr, 10);
+        const subdivisions = parseInt(subsStr, 10);
+        const cols = numBeats * subdivisions;
+
+        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
+
+        const grid = rows.map((row) => [...row].map((char) => char === '1'));
+
+        return { bpm, numBeats, subdivisions, grid };
+    } catch {
+        return null;
+    }
+}

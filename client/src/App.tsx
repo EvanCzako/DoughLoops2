@@ -7,16 +7,14 @@ import TitleBox from './components/TitleBox';
 
 export default function App(): JSX.Element {
 
+	const grid = useStore((s) => s.grid);
+	
+	const setGrid = useStore((s) => s.setGrid);
+	const name = useStore((s) => s.name);
+	const setName = useStore((s) => s.setName);
 
-	const numBeats = useStore((s) => s.numBeats);
-
-	const numSteps = numBeats * 4;
-
-	const emptyGrid = Array(4)
-        .fill(null)
-        .map(() => Array(numSteps).fill(false));
-	const [grid, setGrid] = useState<boolean[][]>(emptyGrid);
-	const [name, setName] = useState('');
+	console.log("++++++++");
+	console.log(grid);
 
 
     return (
