@@ -47,7 +47,7 @@ export default function DrumLoopPlayer({
 
 
 useEffect(() => {
-    if (!samplesLoaded || grid.length < 4) return;
+    if (!samplesLoaded ) return;
 
     // Always cancel existing scheduled events before creating new ones
     Tone.Transport.stop();
@@ -84,7 +84,7 @@ useEffect(() => {
         Tone.Transport.clear(repeatId);  // just clears this one repeat
         Tone.Transport.stop();           // stops the clock
     };
-}, [isPlaying, bpm, numSubdivisions, grid, samplesLoaded, selectedLoop]);
+}, [isPlaying, bpm, numSubdivisions, samplesLoaded, selectedLoop]);
 
 
     return null; // No UI needed here
