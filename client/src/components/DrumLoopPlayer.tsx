@@ -28,7 +28,7 @@ export default function DrumLoopPlayer({
     const selectedSamples = useStore((s) => s.selectedSamples);
 
     useEffect(() => {
-        const instrumentKeys = ['kick', 'snare', 'hat', 'clap'];
+        const instrumentKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
 
         const loadedPlayers = instrumentKeys.reduce(
             (acc, inst, i) => {
@@ -67,9 +67,14 @@ export default function DrumLoopPlayer({
             const numSteps = gridRef.current[0]?.length || 16;
 
             if (gridRef.current[0][step]) playersRef.current.kick.start(time);
-            if (gridRef.current[1][step]) playersRef.current.snare.start(time);
-            if (gridRef.current[2][step]) playersRef.current.hat.start(time);
-            if (gridRef.current[3][step]) playersRef.current.clap.start(time);
+            if (gridRef.current[1][step]) playersRef.current.clap.start(time);
+            if (gridRef.current[2][step]) playersRef.current.snare.start(time);
+            if (gridRef.current[3][step]) playersRef.current.hat.start(time);
+            if (gridRef.current[4][step]) playersRef.current.rim.start(time);
+            if (gridRef.current[5][step]) playersRef.current.tom.start(time);
+            if (gridRef.current[6][step]) playersRef.current.cymbal.start(time);
+            if (gridRef.current[7][step]) playersRef.current.triangle.start(time);
+
 
             onStep?.(step);
             stepRef.current = (step + 1) % numSteps;

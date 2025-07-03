@@ -64,10 +64,10 @@ export const useStore = create<StoreState>((set) => ({
     currentStep: 0,
     selectedLoop: null,
     name: '',
-    grid: Array(4)
+    grid: Array(8)
         .fill(null)
         .map(() => Array(16).fill(false)),
-    selectedSamples: ['kick1', 'snare1', 'hat1', 'clap1'],
+    selectedSamples: ['kick1', 'clap1', 'snare1', 'hat1', 'rim1', 'tom1', 'cymbal1', 'triangle1'],
 
     setSelectedSample: (index, sample) =>
         set((state) => {

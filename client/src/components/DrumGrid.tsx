@@ -10,7 +10,7 @@ interface DrumGridProps {
 
 export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
     const numSubdivisions = useStore((s) => s.numSubdivisions);
-    const instruments = ['kick', 'snare', 'hat', 'clap'];
+    const instruments = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
     const selectedSamples = useStore((s) => s.selectedSamples);
     const setSelectedSample = useStore((s) => s.setSelectedSample);
 
