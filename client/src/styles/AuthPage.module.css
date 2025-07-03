@@ -1,21 +1,21 @@
 .userAuthSection {
     background-color: rgb(83, 0, 83);
     border-radius: 15px;
-	min-width: 200px;
-	max-width: 400px;
+    min-width: 200px;
+    max-width: 400px;
 }
 
 .loginRegisterButton {
-	font-weight: 900;
-	font-size: 15px;
-	height: 40px;
-	width: 80px;
-	margin: 5px;
-	color: white;
-	background-color: rgb(98, 43, 226);
-	border-radius: 5px;
+    font-weight: 900;
+    font-size: 15px;
+    height: 40px;
+    width: 80px;
+    margin: 5px;
+    color: white;
+    background-color: rgb(98, 43, 226);
+    border-radius: 5px;
 }
 
 .loginRegisterButton:hover {
-	background-color: rgb(126, 94, 223);
+    background-color: rgb(126, 94, 223);
 }

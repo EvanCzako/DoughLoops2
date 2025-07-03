@@ -11,6 +11,8 @@ interface DrumGridProps {
 export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const instruments = ['kick', 'snare', 'hat', 'clap'];
+    const selectedSamples = useStore((s) => s.selectedSamples);
+    const setSelectedSample = useStore((s) => s.setSelectedSample);
 
     const toggle = (row: number, col: number) => {
         const updated = grid.map((r, ri) =>
@@ -24,7 +26,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 
     // Calculate beat width in px for each beat group
     const beatWidth = `calc(var(--cell-size) * ${numSubdivisions})`;
-	
+
     return (
         <div className={styles.drumGridOuter}>
             <div className={styles.scrollContainer} style={{ width: '100%', overflowX: 'auto' }}>
@@ -65,7 +67,25 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                         <div className={styles.drumGrid}>
                             {grid.map((row, rowIndex) => (
                                 <div className={styles.gridRow} key={`row-${rowIndex}`}>
-                                    <span className={styles.label}>{instruments[rowIndex]}</span>
+                                    <span className={styles.label}>
+                                        <select
+                                            value={selectedSamples[rowIndex]}
+                                            onChange={(e) =>
+                                                setSelectedSample(rowIndex, e.target.value)
+                                            }
+                                        >
+                                            {['1', '2', '3'].map((num) => (
+                                                <option
+                                                    key={num}
+                                                    value={`${instruments[rowIndex]}${num}`}
+                                                >
+                                                    {instruments[rowIndex]}
+                                                    {num}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </span>
+
                                     {row.map((checked, colIndex) => (
                                         <div
                                             key={`cell-${rowIndex}-${colIndex}`}

@@ -11,17 +11,16 @@ import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
 
 export default function DoughLoopManager() {
-
     const user = useStore((s) => s.user);
     const selectedLoop = useStore((s) => s.selectedLoop);
-	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
-	const grid = useStore((s) => s.grid);
-	const setGrid = useStore((s) => s.setGrid);
-	const name = useStore((s) => s.name);
-	const setName = useStore((s) => s.setName);
+    const setSelectedLoop = useStore((s) => s.setSelectedLoop);
+    const grid = useStore((s) => s.grid);
+    const setGrid = useStore((s) => s.setGrid);
+    const name = useStore((s) => s.name);
+    const setName = useStore((s) => s.setName);
 
-	console.log("DOUGHLOOP MANAGER RENDER");
-	console.log(selectedLoop);
+    console.log('DOUGHLOOP MANAGER RENDER');
+    console.log(selectedLoop);
 
     // // Reset selected loop on logout
     useEffect(() => {
@@ -40,8 +39,7 @@ export default function DoughLoopManager() {
                 setName={setName}
             />
 
-            <ControlsContainer grid={grid} setGrid={setGrid}/>
-
+            <ControlsContainer grid={grid} setGrid={setGrid} />
         </div>
     );
 }

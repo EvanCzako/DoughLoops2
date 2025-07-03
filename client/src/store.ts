@@ -22,15 +22,17 @@ interface StoreState {
     numSubdivisions: number;
     bpm: number;
     isPlaying: boolean;
-	currentStep: number;
-	selectedLoop: DoughLoop | null;
-	name: string;
-	grid: boolean[][];
+    currentStep: number;
+    selectedLoop: DoughLoop | null;
+    name: string;
+    grid: boolean[][];
+    selectedSamples: string[];
 
-	setName: (name: string) => void;
-	setGrid: (grid: boolean[][]) => void;
-	setSelectedLoop: (loop: DoughLoop | null) => void;
-	setCurrentStep: (step: number) => void;
+    setSelectedSample: (index: number, sample: string) => void;
+    setName: (name: string) => void;
+    setGrid: (grid: boolean[][]) => void;
+    setSelectedLoop: (loop: DoughLoop | null) => void;
+    setCurrentStep: (step: number) => void;
     setNumBeats: (numBeats: number) => void;
     setNumSubdivisions: (numSubdivisions: number) => void;
     setBpm: (bpm: number) => void;
@@ -59,25 +61,35 @@ export const useStore = create<StoreState>((set) => ({
     numSubdivisions: 4,
     bpm: 120,
     isPlaying: false,
-	currentStep: 0,
-	selectedLoop: null,
-	name: "",
-	grid: Array(4).fill(null).map(() => Array(16).fill(false)),
+    currentStep: 0,
+    selectedLoop: null,
+    name: '',
+    grid: Array(4)
+        .fill(null)
+        .map(() => Array(16).fill(false)),
+    selectedSamples: ['kick1', 'snare1', 'hat1', 'clap1'],
 
-	setName: (name: string) => set({ name }),
-	setGrid: (grid: boolean[][]) => set({ grid }),
+    setSelectedSample: (index, sample) =>
+        set((state) => {
+            const updated = [...state.selectedSamples];
+            updated[index] = sample;
+            return { selectedSamples: updated };
+        }),
 
-	setSelectedLoop: (loop: DoughLoop | null) => {
-		set({ selectedLoop: loop });
-	},
+    setName: (name: string) => set({ name }),
+    setGrid: (grid: boolean[][]) => set({ grid }),
+
+    setSelectedLoop: (loop: DoughLoop | null) => {
+        set({ selectedLoop: loop });
+    },
 
     setUser: (user) => set({ user }),
     logout: () => set({ user: null, doughLoops: [], selectedLoop: null }),
-    setNumBeats: (numBeats: number) => set({ numBeats}),
+    setNumBeats: (numBeats: number) => set({ numBeats }),
     setNumSubdivisions: (numSubdivisions: number) => set({ numSubdivisions }),
     setBpm: (bpm: number) => set({ bpm }),
     setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
-	setCurrentStep: (step: number) => set({currentStep: step}),
+    setCurrentStep: (step: number) => set({ currentStep: step }),
 
     setDoughLoops: (loops) => set({ doughLoops: loops }),
     addDoughLoop: (loop) => set((state) => ({ doughLoops: [...state.doughLoops, loop] })),
@@ -89,33 +101,3 @@ export const useStore = create<StoreState>((set) => ({
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
 }));
-
-
-
-
-
-
-function decodeDrumGrid(encoded: string): {
-    bpm: number;
-    numBeats: number;
-    subdivisions: number;
-    grid: boolean[][];
-} | null {
-    try {
-        const [meta, ...rows] = encoded.split('::');
-        const [bpmStr, beatsStr, subsStr] = meta.split(',');
-
-        const bpm = parseInt(bpmStr, 10);
-        const numBeats = parseInt(beatsStr, 10);
-        const subdivisions = parseInt(subsStr, 10);
-        const cols = numBeats * subdivisions;
-
-        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
-
-        const grid = rows.map((row) => [...row].map((char) => char === '1'));
-
-        return { bpm, numBeats, subdivisions, grid };
-    } catch {
-        return null;
-    }
-}

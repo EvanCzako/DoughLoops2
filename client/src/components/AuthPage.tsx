@@ -7,30 +7,25 @@ import LogoutButton from './LogoutButton';
 import DoughLoopList from './DoughLoopList';
 import NewDoughLoopForm from './NewDoughLoopForm';
 
-export default function AuthPage(opts: {
-	grid: any,
-	setGrid: any,
-	name: any,
-	setName: any,
-}) {
+export default function AuthPage(opts: { grid: any; setGrid: any; name: any; setName: any }) {
     const [isLogin, setIsLogin] = useState(true);
 
     const user = useStore((s) => s.user);
-	const selectedLoop = useStore((s) => s.selectedLoop);
-	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
+    const selectedLoop = useStore((s) => s.selectedLoop);
+    const setSelectedLoop = useStore((s) => s.setSelectedLoop);
 
     const loggedOutDisp = (
         <div style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
             <div style={{ marginBottom: 16, textAlign: 'center' }}>
                 <button
-					className={styles.loginRegisterButton}
+                    className={styles.loginRegisterButton}
                     onClick={() => setIsLogin(true)}
                     disabled={isLogin}
                 >
                     Login
                 </button>
                 <button
-					className={styles.loginRegisterButton}
+                    className={styles.loginRegisterButton}
                     onClick={() => setIsLogin(false)}
                     disabled={!isLogin}
                 >
@@ -53,8 +48,13 @@ export default function AuthPage(opts: {
                 ) : null}
             </div>
 
-			<NewDoughLoopForm grid={opts.grid} setGrid={opts.setGrid} name={opts.name} setName={opts.setName}/>
-			<DoughLoopList selectedLoop={selectedLoop} onSelectLoop={setSelectedLoop} />
+            <NewDoughLoopForm
+                grid={opts.grid}
+                setGrid={opts.setGrid}
+                name={opts.name}
+                setName={opts.setName}
+            />
+            <DoughLoopList selectedLoop={selectedLoop} onSelectLoop={setSelectedLoop} />
         </div>
     );
 

@@ -47,7 +47,11 @@ export default function LoginForm() {
     }
 
     return (
-        <form className={styles.loginForm} onSubmit={handleSubmit} style={{ maxWidth: 320, margin: 'auto' }}>
+        <form
+            className={styles.loginForm}
+            onSubmit={handleSubmit}
+            style={{ maxWidth: 320, margin: 'auto' }}
+        >
             <h2>Login</h2>
 
             <input
@@ -57,7 +61,7 @@ export default function LoginForm() {
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={loading}
                 required
-				className={styles.loginFormInput}
+                className={styles.loginFormInput}
             />
 
             <input
@@ -67,7 +71,7 @@ export default function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
                 required
-				className={styles.loginFormInput}
+                className={styles.loginFormInput}
             />
 
             <button type="submit" disabled={loading} className={styles.loginButton}>

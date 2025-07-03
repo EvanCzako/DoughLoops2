@@ -19,7 +19,7 @@ export default function DrumLoopEditor({
     grid,
     setGrid,
     name,
-    setName
+    setName,
 }: DrumLoopEditorProps) {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -41,10 +41,7 @@ export default function DrumLoopEditor({
         setNumSubdivisions(decoded.subdivisions);
         setBpm(decoded.bpm);
         setName(selectedLoop.name);
-
     }, [selectedLoop]);
-
-
 
     return (
         <div className={styles.drumLoopEditor}>

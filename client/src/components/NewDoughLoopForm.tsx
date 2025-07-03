@@ -3,40 +3,36 @@ import { useStore } from '../store';
 import { DoughLoop } from '../store';
 
 interface Props {
-	onSelectLoop: (loop: DoughLoop) => void;
-	selectedLoop: DoughLoop | null;
+    onSelectLoop: (loop: DoughLoop) => void;
+    selectedLoop: DoughLoop | null;
 }
 
 export default function NewDoughLoopForm(opts: {
-	grid: any,
-	setGrid: any,
-	name: any,
-	setName: any,
+    grid: any;
+    setGrid: any;
+    name: any;
+    setName: any;
 }) {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const user = useStore((s) => s.user);
+    const bpm = useStore((s) => s.bpm);
 
-	const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-	const user = useStore((s) => s.user);
-	const bpm = useStore((s) => s.bpm);
+    const numBeats = useStore((s) => s.numBeats);
+    const numSubdivisions = useStore((s) => s.numSubdivisions);
 
-	const numBeats = useStore((s) => s.numBeats);
-	const numSubdivisions = useStore((s) => s.numSubdivisions);
-
-
-	const addDoughLoop = useStore((s) => s.addDoughLoop);
-	const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
-	const setError = useStore((s) => s.setError);
-
-
+    const addDoughLoop = useStore((s) => s.addDoughLoop);
+    const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
+    const setError = useStore((s) => s.setError);
 
     const handleSave = async () => {
         if (!user) return null;
 
         const beatRep = encodeDrumGrid({
-			bpm, 
-			numBeats, 
-			subdivisions: numSubdivisions, 
-			grid: opts.grid}
-		); // use the new encoding function
+            bpm,
+            numBeats,
+            subdivisions: numSubdivisions,
+            grid: opts.grid,
+        }); // use the new encoding function
 
         try {
             const res = await fetch(`${API_BASE_URL}/doughloops`, {
@@ -61,25 +57,21 @@ export default function NewDoughLoopForm(opts: {
         }
     };
 
-
-
-	return (
-		<div>
-			<h3>New Loop</h3>
-			<div>
-				<input
-					type="text"
-					placeholder="Loop name"
-					value={opts.name}
-					onChange={(e) => opts.setName(e.target.value)}
-				/>
-				<button onClick={handleSave}>Save</button>
-			</div>
-		</div>
-
-	);
+    return (
+        <div>
+            <h3>New Loop</h3>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Loop name"
+                    value={opts.name}
+                    onChange={(e) => opts.setName(e.target.value)}
+                />
+                <button onClick={handleSave}>Save</button>
+            </div>
+        </div>
+    );
 }
-
 
 function encodeDrumGrid({
     bpm,

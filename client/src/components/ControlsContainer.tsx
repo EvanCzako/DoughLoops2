@@ -7,15 +7,15 @@ import * as Tone from 'tone';
 import styles from '../styles/ControlsContainer.module.css';
 
 export default function ControlsContainer(opts: {
-	grid: boolean[][];
-	setGrid: (grid: boolean[][]) => void;
+    grid: boolean[][];
+    setGrid: (grid: boolean[][]) => void;
 }) {
     const user = useStore((s) => s.user);
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
     const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
-	// const currentStep = useStore((s) => s.currentStep);
-	const setCurrentStep = useStore((s) => s.setCurrentStep);
+    // const currentStep = useStore((s) => s.currentStep);
+    const setCurrentStep = useStore((s) => s.setCurrentStep);
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
 
@@ -50,16 +50,19 @@ export default function ControlsContainer(opts: {
     }, [user]);
 
     return (
-
-		
         <div className={styles.controlsContainer}>
-            <DrumLoopPlayer grid={opts.grid} isPlaying={isPlaying} onStep={setCurrentStep} bpm={bpm} />
-			<button
-				className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
-				onClick={handlePlayToggle}
-			>
-				{isPlaying ? 'Stop' : 'Play'}
-			</button>
+            <DrumLoopPlayer
+                grid={opts.grid}
+                isPlaying={isPlaying}
+                onStep={setCurrentStep}
+                bpm={bpm}
+            />
+            <button
+                className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
+                onClick={handlePlayToggle}
+            >
+                {isPlaying ? 'Stop' : 'Play'}
+            </button>
             <div style={{ marginBottom: 16 }}>
                 <label>
                     Beats: {numBeats}
@@ -82,7 +85,7 @@ export default function ControlsContainer(opts: {
                     max={8}
                     value={numSubdivisions}
                     onChange={(e) => setNumSubdivisions(Number(e.target.value))}
-					className={styles.controlsSlider}
+                    className={styles.controlsSlider}
                 />
             </div>
             <div style={{ margin: '20px 0' }}>
