@@ -27,7 +27,10 @@ interface StoreState {
     name: string;
     grid: boolean[][];
     selectedSamples: string[];
-
+	volumes: number[]; // from 0 (mute) to 1 (full volume)
+  
+	
+	setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
     setName: (name: string) => void;
     setGrid: (grid: boolean[][]) => void;
@@ -68,6 +71,14 @@ export const useStore = create<StoreState>((set) => ({
         .fill(null)
         .map(() => Array(16).fill(false)),
     selectedSamples: ['kick1', 'clap1', 'snare1', 'hat1', 'rim1', 'tom1', 'cymbal1', 'triangle1'],
+
+	volumes: [1, 1, 1, 1, 1, 1, 1, 1],
+	setVolume: (index, volume) =>
+		set((state) => {
+			const updated = [...state.volumes];
+			updated[index] = volume;
+			return { volumes: updated };
+		}),
 
     setSelectedSample: (index, sample) =>
         set((state) => {

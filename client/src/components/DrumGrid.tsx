@@ -13,6 +13,8 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const instruments = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
     const selectedSamples = useStore((s) => s.selectedSamples);
     const setSelectedSample = useStore((s) => s.setSelectedSample);
+	const volumes = useStore((s) => s.volumes);
+	const setVolume = useStore((s) => s.setVolume);
 
     const toggle = (row: number, col: number) => {
         const updated = grid.map((r, ri) =>
@@ -65,41 +67,50 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 
                         {/* Drum Grid Rows */}
                         <div className={styles.drumGrid}>
-                            {grid.map((row, rowIndex) => (
-                                <div className={styles.gridRow} key={`row-${rowIndex}`}>
-                                    <span className={styles.label}>
-                                        <select
-                                            value={selectedSamples[rowIndex]}
-                                            onChange={(e) =>
-                                                setSelectedSample(rowIndex, e.target.value)
-                                            }
-                                        >
-                                            {['1', '2', '3'].map((num) => (
-                                                <option
-                                                    key={num}
-                                                    value={`${instruments[rowIndex]}${num}`}
-                                                >
-                                                    {instruments[rowIndex]}
-                                                    {num}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </span>
+							{grid.map((row, rowIndex) => (
+							<div className={styles.gridRow} key={`row-${rowIndex}`}>
+								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+								{/* Sample selector */}
+								<select
+									value={selectedSamples[rowIndex]}
+									onChange={(e) => setSelectedSample(rowIndex, e.target.value)}
+									className={styles.dropdown}
+								>
+									{['1', '2', '3'].map((num) => (
+									<option key={num} value={`${instruments[rowIndex]}${num}`}>
+										{instruments[rowIndex]}{num}
+									</option>
+									))}
+								</select>
 
-                                    {row.map((checked, colIndex) => (
-                                        <div
-                                            key={`cell-${rowIndex}-${colIndex}`}
-                                            className={`${styles.cell} ${styles.responsiveCell} ${currentStep === colIndex ? styles.playing : ''}`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={checked}
-                                                onChange={() => toggle(rowIndex, colIndex)}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
+								{/* Volume slider */}
+								<input
+									type="range"
+									min={0}
+									max={1}
+									step={0.01}
+									value={volumes[rowIndex]}
+									onChange={(e) => {
+										setVolume(rowIndex, parseFloat(e.target.value))}
+									}
+									style={{ width: '80px', marginTop: '4px' }}
+								/>
+								</div>
+
+								{row.map((checked, colIndex) => (
+								<div
+									key={`cell-${rowIndex}-${colIndex}`}
+									className={`${styles.cell} ${styles.responsiveCell} ${currentStep === colIndex ? styles.playing : ''}`}
+								>
+									<input
+									type="checkbox"
+									checked={checked}
+									onChange={() => toggle(rowIndex, colIndex)}
+									/>
+								</div>
+								))}
+							</div>
+							))}
                         </div>
                     </div>
                 </div>

@@ -19,9 +19,6 @@ export default function DoughLoopManager() {
     const name = useStore((s) => s.name);
     const setName = useStore((s) => s.setName);
 
-    console.log('DOUGHLOOP MANAGER RENDER');
-    console.log(selectedLoop);
-
     // // Reset selected loop on logout
     useEffect(() => {
         if (!user && selectedLoop) {

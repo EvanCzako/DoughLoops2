@@ -22,9 +22,7 @@ export default function DrumLoopPlayer({
     const [samplesLoaded, setSamplesLoaded] = useState(false);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const selectedLoop = useStore((s) => s.selectedLoop);
-
-    // Load samples once
-
+	const volumes = useStore((s) => s.volumes);
     const selectedSamples = useStore((s) => s.selectedSamples);
 
     useEffect(() => {
@@ -48,10 +46,16 @@ export default function DrumLoopPlayer({
     }, [selectedSamples]);
 
     const gridRef = useRef(grid);
+ 	const volumesRef = useRef(volumes);
+	// const
 
     useEffect(() => {
         gridRef.current = grid;
     }, [grid]);
+
+	useEffect(() => {
+        volumesRef.current = volumes;
+    }, [volumes]);
 
     useEffect(() => {
         if (!samplesLoaded) return;
@@ -66,8 +70,13 @@ export default function DrumLoopPlayer({
             const step = stepRef.current;
             const numSteps = gridRef.current[0]?.length || 16;
 
-            if (gridRef.current[0][step]) playersRef.current.kick.start(time);
-            if (gridRef.current[1][step]) playersRef.current.clap.start(time);
+            if (gridRef.current[0][step]) {
+				playersRef.current.kick.volume.value = Tone.gainToDb(volumesRef.current[0]);
+				playersRef.current.kick.start(time);
+			}
+            if (gridRef.current[1][step]) {
+				playersRef.current.clap.start(time);
+			}
             if (gridRef.current[2][step]) playersRef.current.snare.start(time);
             if (gridRef.current[3][step]) playersRef.current.hat.start(time);
             if (gridRef.current[4][step]) playersRef.current.rim.start(time);
