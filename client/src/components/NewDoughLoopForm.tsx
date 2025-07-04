@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useStore } from '../store';
 import { DoughLoop } from '../store';
 
@@ -8,17 +8,20 @@ interface Props {
 }
 
 export default function NewDoughLoopForm(opts: {
-    grid: any;
-    setGrid: any;
-    name: any;
-    setName: any;
+    grid: boolean[][];
+    setGrid: (grid: boolean[][]) => void;
+    name: string;
+    setName: (name: string) => void;
 }) {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     const user = useStore((s) => s.user);
     const bpm = useStore((s) => s.bpm);
-
     const numBeats = useStore((s) => s.numBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
+
+    const selectedSamples = useStore((s) => s.selectedSamples);
+    const volumes = useStore((s) => s.volumes);
 
     const addDoughLoop = useStore((s) => s.addDoughLoop);
     const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
@@ -32,7 +35,9 @@ export default function NewDoughLoopForm(opts: {
             numBeats,
             subdivisions: numSubdivisions,
             grid: opts.grid,
-        }); // use the new encoding function
+            samples: selectedSamples,
+            volumes,
+        });
 
         try {
             const res = await fetch(`${API_BASE_URL}/doughloops`, {
@@ -78,13 +83,18 @@ function encodeDrumGrid({
     numBeats,
     subdivisions,
     grid,
+    samples,
+    volumes,
 }: {
     bpm: number;
     numBeats: number;
     subdivisions: number;
     grid: boolean[][];
+    samples: string[];
+    volumes: number[];
 }): string {
     const meta = `${bpm},${numBeats},${subdivisions}`;
-    const rows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
-    return `${meta}::${rows.join('::')}`;
+    const config = samples.map((s, i) => `${s}:${volumes[i]}`).join('|');
+    const gridRows = grid.map(row => row.map(cell => (cell ? '1' : '0')).join(''));
+    return `${meta}::${config}::${gridRows.join('::')}`;
 }

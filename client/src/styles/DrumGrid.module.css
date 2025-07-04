@@ -47,6 +47,7 @@
     align-items: center;
     margin-bottom: 8px;
     white-space: nowrap;
+	margin-left: 27px
 }
 
 .ghostCell {
@@ -137,7 +138,7 @@
     pointer-events: none;
     z-index: 0;
     display: flex;
-    margin-left: 58px;
+    margin-left: 85px;
 }
 
 /* Each vertical stripe for a beat */

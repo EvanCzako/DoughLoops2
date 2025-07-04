@@ -75,14 +75,33 @@ export default function DrumLoopPlayer({
 				playersRef.current.kick.start(time);
 			}
             if (gridRef.current[1][step]) {
+				playersRef.current.clap.volume.value = Tone.gainToDb(volumesRef.current[1]);
 				playersRef.current.clap.start(time);
 			}
-            if (gridRef.current[2][step]) playersRef.current.snare.start(time);
-            if (gridRef.current[3][step]) playersRef.current.hat.start(time);
-            if (gridRef.current[4][step]) playersRef.current.rim.start(time);
-            if (gridRef.current[5][step]) playersRef.current.tom.start(time);
-            if (gridRef.current[6][step]) playersRef.current.cymbal.start(time);
-            if (gridRef.current[7][step]) playersRef.current.triangle.start(time);
+            if (gridRef.current[2][step]) {
+				playersRef.current.snare.volume.value = Tone.gainToDb(volumesRef.current[2]);
+				playersRef.current.snare.start(time);
+			};
+            if (gridRef.current[3][step]) {
+				playersRef.current.hat.volume.value = Tone.gainToDb(volumesRef.current[3]);
+				playersRef.current.hat.start(time);
+			};
+            if (gridRef.current[4][step]) {
+				playersRef.current.rim.volume.value = Tone.gainToDb(volumesRef.current[4]);
+				playersRef.current.rim.start(time);
+			};
+            if (gridRef.current[5][step]) {
+				playersRef.current.tom.volume.value = Tone.gainToDb(volumesRef.current[5]);
+				playersRef.current.tom.start(time);
+			};
+            if (gridRef.current[6][step]) {
+				playersRef.current.cymbal.volume.value = Tone.gainToDb(volumesRef.current[6]);
+				playersRef.current.cymbal.start(time);
+			};
+            if (gridRef.current[7][step]) {
+				playersRef.current.triangle.volume.value = Tone.gainToDb(volumesRef.current[7]);
+				playersRef.current.triangle.start(time);
+			};
 
 
             onStep?.(step);

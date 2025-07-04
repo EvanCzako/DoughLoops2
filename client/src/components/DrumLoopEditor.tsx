@@ -27,7 +27,10 @@ export default function DrumLoopEditor({
     const setBpm = useStore((s) => s.setBpm);
     const setNumBeats = useStore((s) => s.setNumBeats);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
+	const setVolume = useStore((s) => s.setVolume);
     const currentStep = useStore((s) => s.currentStep);
+
+    const setSelectedSample = useStore((s) => s.setSelectedSample);
 
     // Load the selected loop into the grid
     useEffect(() => {
@@ -36,10 +39,17 @@ export default function DrumLoopEditor({
         const decoded = decodeDrumGrid(selectedLoop.beatRep);
         if (!decoded) return;
 
-        setGrid(decoded.grid);
-        setNumBeats(decoded.numBeats);
-        setNumSubdivisions(decoded.subdivisions);
-        setBpm(decoded.bpm);
+		setBpm(decoded.bpm);
+		setNumBeats(decoded.numBeats);
+		setNumSubdivisions(decoded.subdivisions);
+		setGrid(decoded.grid);
+
+		// Set instrument sample selections
+		decoded.samples.forEach((sample, i) => setSelectedSample(i, sample));
+
+		// Set instrument volumes
+		decoded.volumes.forEach((v, i) => setVolume(i, v));
+
         setName(selectedLoop.name);
     }, [selectedLoop]);
 
@@ -55,9 +65,11 @@ function decodeDrumGrid(encoded: string): {
     numBeats: number;
     subdivisions: number;
     grid: boolean[][];
+    samples: string[];
+    volumes: number[];
 } | null {
     try {
-        const [meta, ...rows] = encoded.split('::');
+        const [meta, config, ...rows] = encoded.split('::');
         const [bpmStr, beatsStr, subsStr] = meta.split(',');
 
         const bpm = parseInt(bpmStr, 10);
@@ -65,11 +77,15 @@ function decodeDrumGrid(encoded: string): {
         const subdivisions = parseInt(subsStr, 10);
         const cols = numBeats * subdivisions;
 
-        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
+        const sampleData = config.split('|');
+        const samples = sampleData.map(s => s.split(':')[0]);
+        const volumes = sampleData.map(s => parseFloat(s.split(':')[1]));
 
-        const grid = rows.map((row) => [...row].map((char) => char === '1'));
+        if (!bpm || !numBeats || !subdivisions || rows.some(r => r.length !== cols)) return null;
 
-        return { bpm, numBeats, subdivisions, grid };
+        const grid = rows.map(row => [...row].map(char => char === '1'));
+
+        return { bpm, numBeats, subdivisions, grid, samples, volumes };
     } catch {
         return null;
     }
