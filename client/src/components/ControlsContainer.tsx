@@ -94,7 +94,7 @@ export default function ControlsContainer(opts: {
                     <input
                         type="range"
                         min="50"
-                        max="100"
+                        max="180"
                         value={bpm}
                         onChange={(e) => setBpm(Number(e.target.value))}
                         className={styles.controlsSlider}

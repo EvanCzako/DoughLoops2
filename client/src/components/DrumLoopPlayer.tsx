@@ -12,7 +12,7 @@ interface DrumLoopPlayerProps {
 export default function DrumLoopPlayer({
     grid,
     isPlaying,
-    bpm = 120,
+    bpm = 85,
     onStep,
 }: DrumLoopPlayerProps) {
     const base = import.meta.env.BASE_URL;

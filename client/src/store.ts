@@ -63,7 +63,7 @@ export const useStore = create<StoreState>((set) => ({
     error: null,
     numBeats: 4,
     numSubdivisions: 4,
-    bpm: 120,
+    bpm: 85,
     isPlaying: false,
     currentStep: 0,
     selectedLoop: null,
