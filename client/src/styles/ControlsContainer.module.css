@@ -6,11 +6,11 @@
     max-width: 400px;
     font-weight: 500;
     font-size: 20px;
-    height: 200px;
+    /* height: 200px; */
 }
 
 .controlsSlider {
-    width: 50%;
+    width: 40%;
     accent-color: rgb(189, 125, 69);
 }
 
