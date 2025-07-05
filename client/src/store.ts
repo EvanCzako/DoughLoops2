@@ -28,8 +28,10 @@ interface StoreState {
     grid: boolean[][];
     selectedSamples: string[];
 	volumes: number[]; // from 0 (mute) to 1 (full volume)
+	fontSize: number;
+	controlsWidth: number;
   
-	
+	setControlsWidth: (width: number) => void;
 	setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
     setName: (name: string) => void;
@@ -40,6 +42,7 @@ interface StoreState {
     setNumSubdivisions: (numSubdivisions: number) => void;
     setBpm: (bpm: number) => void;
     setIsPlaying: (playing: boolean) => void;
+	updateFontSize: () => void;
 
     // Auth actions
     setUser: (user: User | null) => void;
@@ -73,6 +76,29 @@ export const useStore = create<StoreState>((set) => ({
     selectedSamples: ['kick1', 'clap1', 'snare1', 'hat1', 'rim1', 'tom1', 'cymbal1', 'triangle1'],
 
 	volumes: [1, 1, 1, 1, 1, 1, 1, 1],
+	fontSize: 0,
+	controlsWidth: 80, // default
+	setControlsWidth: (width: number) => set({ controlsWidth: width }),
+
+updateFontSize: () => {
+	const vw = (window.visualViewport?.width ?? window.innerWidth) / 100;
+	const vh = (window.visualViewport?.height ?? window.innerHeight) / 100;
+
+	document.documentElement.style.setProperty('--vh', `${vh}px`);
+	document.documentElement.style.setProperty('--vw', `${vw}px`);
+
+	const product = Math.sqrt(vh ** 2 * Math.min(3, vw / vh));
+	const fontSize = product;
+	set({ fontSize });
+
+	// Clamp width from 60 to 100px
+	const clampedWidth = Math.min(100, Math.max(60, product * 9));
+	// console.log(prod*3)
+	// console.log(clampedWidth);
+	document.documentElement.style.setProperty('--controls-column-width', `${clampedWidth}px`);
+	set({ controlsWidth: clampedWidth });
+},
+
 	setVolume: (index, volume) =>
 		set((state) => {
 			const updated = [...state.volumes];

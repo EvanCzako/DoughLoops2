@@ -1,12 +1,14 @@
 :root {
-    --cell-size: clamp(20px, 3vw, 60px);
+	--cell-size: clamp(20px, 3vw, 60px);
+	--row-height: var(--cell-size); /* This is the shared height */
+	--controls-column-width: 80px; /* default, overwritten dynamically */
 }
 
 .responsiveCell {
-    width: var(--cell-size);
-    height: var(--cell-size);
-    flex-shrink: 0;
-    box-sizing: border-box;
+  width: var(--cell-size);
+  height: var(--row-height);
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .drumGridOuter {
@@ -22,6 +24,7 @@
     width: 100%;
     scrollbar-width: thick; /* Firefox */
     scrollbar-color: #ad10a0 #000; /* Firefox: thumb color and track */
+	flex-grow: 1;
 }
 
 /* WebKit (Chrome, Safari) scrollbar */
@@ -43,11 +46,17 @@
 }
 
 .ghostRow {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    white-space: nowrap;
-	margin-left: 27px
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  /* padding-left: var(--controls-column-width/1);  */
+  left: 0;
+}
+
+
+.ghostRow .labelSpacer {
+	width: 100%;
 }
 
 .ghostCell {
@@ -88,7 +97,7 @@
 
 .cell {
     width: var(--cell-size);
-    height: var(--cell-size);
+    height: calc(var(--cell-size)*1.3) ;
     /* margin: 2px 2px; */
     display: flex;
     align-items: center;
@@ -130,16 +139,16 @@
 
 /* Beat background container positioned behind grid rows */
 .beatBackground {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%; /* cover full width of container */
-    pointer-events: none;
-    z-index: 0;
-    display: flex;
-    margin-left: 85px;
+  position: absolute;
+  top: 0;
+  left: var(--controls-column-width*1); /* ✅ aligns with start of grid */
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
 }
+
 
 /* Each vertical stripe for a beat */
 .beatStripe {
@@ -173,21 +182,28 @@
 
 
 .controlsBox {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-right: 8px;
-    width: 70px; /* enough to hold dropdown + slider */
-    flex-shrink: 0;
-	background-color: rgb(255, 0, 234);
-	border-radius: 5px;
+  height: var(--row-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: rgb(180, 37, 190);
+  border-radius: 5px;
 }
 
 .controlsBox select {
     font-size: 12px;
     margin-bottom: 6px;
     width: 100%;
+	text-overflow: ellipsis;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	margin-right: 4px;
+
 }
 
 .controlsBox input[type="range"] {
@@ -200,8 +216,33 @@
 	color: white;
 	border-radius: 5px;
 	font-weight: 900;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .volumeSlider {
-	accent-color: purple;
+	accent-color: rgb(110, 19, 96);
+}
+
+.controlsColumn {
+  width: calc(var(--controls-column-width)) ;
+  min-width: 60px;
+  max-width: 100px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 8px;
+}
+
+
+.gridArea {
+	position: relative;
+	width: fit-content;
+}
+
+.fixedGridContainer {
+  display: flex;
+  align-items: flex-start;
 }
