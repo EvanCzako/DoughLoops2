@@ -1,6 +1,8 @@
 import React from 'react';
 import { useStore } from '../store';
 import styles from '../styles/DrumGrid.module.css';
+import Knob from './Knob';
+
 
 interface DrumGridProps {
     grid: boolean[][];
@@ -95,6 +97,13 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 									}
 									style={{ width: '80px', marginTop: '4px' }}
 								/>
+									{/* <Knob
+									min={0}
+									max={1}
+									value={volumes[rowIndex]}
+									onChange={(v) => setVolume(rowIndex, v)}
+									/> */}
+
 								</div>
 
 								{row.map((checked, colIndex) => (

@@ -18,32 +18,49 @@ export default function DrumLoopPlayer({
     const base = import.meta.env.BASE_URL;
 
     const stepRef = useRef(0);
-    const playersRef = useRef<Record<string, Tone.Player>>({});
+    const playersRef = useRef<Record<string, Record<string, Tone.Player>>>({});
+
     const [samplesLoaded, setSamplesLoaded] = useState(false);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const selectedLoop = useStore((s) => s.selectedLoop);
 	const volumes = useStore((s) => s.volumes);
     const selectedSamples = useStore((s) => s.selectedSamples);
 
-    useEffect(() => {
-        const instrumentKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
+	const selectedSamplesRef = useRef<string[]>(selectedSamples);
 
-        const loadedPlayers = instrumentKeys.reduce(
-            (acc, inst, i) => {
-                const file = `${base}samples/${selectedSamples[i]}.mp3`;
-                acc[inst] = new Tone.Player(file).toDestination();
-                return acc;
-            },
-            {} as Record<string, Tone.Player>
-        );
+	useEffect(() => {
+		selectedSamplesRef.current = selectedSamples;
+	}, [selectedSamples]);
 
-        playersRef.current = loadedPlayers;
+	useEffect(() => {
+		const instrumentKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
+		const variations = ['1', '2', '3'];
 
-        Promise.all(Object.values(loadedPlayers).map((p) => p.loaded)).then(() => {
-            setSamplesLoaded(true);
-            console.log('Samples loaded 🎉');
-        });
-    }, [selectedSamples]);
+		const allPlayers: Record<string, Record<string, Tone.Player>> = {};
+
+		instrumentKeys.forEach((inst) => {
+			allPlayers[inst] = {};
+
+			variations.forEach((num) => {
+				const sampleName = `${inst}${num}`;
+				const file = `${base}samples/${sampleName}.mp3`;
+				allPlayers[inst][sampleName] = new Tone.Player(file).toDestination();
+			});
+		});
+
+		playersRef.current = allPlayers;
+
+		// Wait for all players to load
+		const allLoadPromises = instrumentKeys.flatMap((inst) =>
+			variations.map((num) => allPlayers[inst][`${inst}${num}`].loaded)
+		);
+
+		Promise.all(allLoadPromises).then(() => {
+			setSamplesLoaded(true);
+			console.log('All samples loaded 🎉');
+		});
+	}, []);
+
 
     const gridRef = useRef(grid);
  	const volumesRef = useRef(volumes);
@@ -70,38 +87,20 @@ export default function DrumLoopPlayer({
             const step = stepRef.current;
             const numSteps = gridRef.current[0]?.length || 16;
 
-            if (gridRef.current[0][step]) {
-				playersRef.current.kick.volume.value = Tone.gainToDb(volumesRef.current[0]);
-				playersRef.current.kick.start(time);
-			}
-            if (gridRef.current[1][step]) {
-				playersRef.current.clap.volume.value = Tone.gainToDb(volumesRef.current[1]);
-				playersRef.current.clap.start(time);
-			}
-            if (gridRef.current[2][step]) {
-				playersRef.current.snare.volume.value = Tone.gainToDb(volumesRef.current[2]);
-				playersRef.current.snare.start(time);
-			};
-            if (gridRef.current[3][step]) {
-				playersRef.current.hat.volume.value = Tone.gainToDb(volumesRef.current[3]);
-				playersRef.current.hat.start(time);
-			};
-            if (gridRef.current[4][step]) {
-				playersRef.current.rim.volume.value = Tone.gainToDb(volumesRef.current[4]);
-				playersRef.current.rim.start(time);
-			};
-            if (gridRef.current[5][step]) {
-				playersRef.current.tom.volume.value = Tone.gainToDb(volumesRef.current[5]);
-				playersRef.current.tom.start(time);
-			};
-            if (gridRef.current[6][step]) {
-				playersRef.current.cymbal.volume.value = Tone.gainToDb(volumesRef.current[6]);
-				playersRef.current.cymbal.start(time);
-			};
-            if (gridRef.current[7][step]) {
-				playersRef.current.triangle.volume.value = Tone.gainToDb(volumesRef.current[7]);
-				playersRef.current.triangle.start(time);
-			};
+
+			const instKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
+
+			instKeys.forEach((inst, i) => {
+				const stepActive = gridRef.current[i]?.[step];
+				if (!stepActive) return;
+
+				const sampleName = selectedSamplesRef.current[i]; // now reads current value!
+				const player = playersRef.current[inst][sampleName];
+
+				player.volume.value = Tone.gainToDb(volumesRef.current[i]);
+				player.start(time);
+			});
+
 
 
             onStep?.(step);
