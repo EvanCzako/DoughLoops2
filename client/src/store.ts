@@ -93,9 +93,8 @@ updateFontSize: () => {
 
 	// Clamp width from 60 to 100px
 	const clampedWidth = Math.min(100, Math.max(60, product * 9));
-	// console.log(prod*3)
-	// console.log(clampedWidth);
 	document.documentElement.style.setProperty('--controls-column-width', `${clampedWidth}px`);
+	console.log(clampedWidth);
 	set({ controlsWidth: clampedWidth });
 },
 

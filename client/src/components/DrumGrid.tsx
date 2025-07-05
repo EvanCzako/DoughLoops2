@@ -39,6 +39,10 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 			
 			{/* Controls column (always visible) */}
 			<div className={styles.controlsColumn}>
+			{/* Spacer for ghost row */}
+			<div className={styles.controlsBoxSpacer} />
+
+			{/* Real controls */}
 			{grid.map((_, rowIndex) => (
 				<div className={styles.controlsBox} key={`controls-${rowIndex}`}>
 				<select
@@ -67,35 +71,40 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 			))}
 			</div>
 
+
 			{/* Scrollable grid */}
 			<div className={styles.scrollContainer}>
 			<div className={styles.innerGridContainer}>
-				{/* Ghost row */}
-				<div className={styles.ghostRow}>
-				<div style={{ height: '100%', width: '100%' }} /> {/* Optional spacer */}
-				<div style={{ display: 'flex' }}>
-					{Array.from({ length: numCols }).map((_, colIndex) => (
-					<div
-						key={`ghost-${colIndex}`}
-						className={`${styles.ghostCell} ${currentStep === colIndex ? styles.active : ''}`}
-					/>
-					))}
-				</div>
-				</div>
 
 				{/* Grid */}
 				<div className={styles.gridContainer}>
-				<div className={styles.beatBackground}>
-					{Array.from({ length: numCols / numSubdivisions }).map((_, beatIndex) => (
-					<div
-						key={`beat-bg-${beatIndex}`}
-						className={`${styles.beatStripe} ${
-						beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
-						}`}
-						style={{ width: beatWidth }}
-					/>
-					))}
-				</div>
+
+					<div className={styles.ghostRowWrapper}>
+						<div className={styles.ghostRow}>
+						<div className={styles.ghostSpacer} /> {/* Left spacer to align ghost row with grid */}
+						<div style={{ display: 'flex' }}>
+							{Array.from({ length: numCols }).map((_, colIndex) => (
+							<div
+								key={`ghost-${colIndex}`}
+								className={`${styles.ghostCell} ${currentStep === colIndex ? styles.active : ''}`}
+							/>
+							))}
+						</div>
+						</div>
+
+					</div>
+
+					<div className={styles.beatBackground}>
+						{Array.from({ length: numCols / numSubdivisions }).map((_, beatIndex) => (
+						<div
+							key={`beat-bg-${beatIndex}`}
+							className={`${styles.beatStripe} ${
+							beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
+							}`}
+							style={{ width: beatWidth }}
+						/>
+						))}
+					</div>
 
 				<div className={styles.drumGrid}>
 					{grid.map((row, rowIndex) => (
