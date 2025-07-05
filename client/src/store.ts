@@ -92,7 +92,7 @@ export const useStore = create<StoreState>((set) => ({
         document.documentElement.style.setProperty('--controls-column-width', `${clampedWidth}px`);
 
 		// Clamp drumGridRowHeight from 25 to 80px
-        const drumGridRowHeight = Math.max(Math.min(product*4,80),25);
+        const drumGridRowHeight = Math.max(Math.min(product*3.5,80),25);
         document.documentElement.style.setProperty('--drum-grid-row-height', `${drumGridRowHeight}px`);
 
     },
