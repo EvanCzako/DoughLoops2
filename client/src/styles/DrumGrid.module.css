@@ -169,3 +169,39 @@
     position: relative; /* make sure outline shows */
     z-index: 2;
 }
+
+
+
+.controlsBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    width: 70px; /* enough to hold dropdown + slider */
+    flex-shrink: 0;
+	background-color: rgb(255, 0, 234);
+	border-radius: 5px;
+}
+
+.controlsBox select {
+    font-size: 12px;
+    margin-bottom: 6px;
+    width: 100%;
+}
+
+.controlsBox input[type="range"] {
+    width: 100%;
+}
+
+
+.sampleComboBox {
+	background-color: rgb(61, 27, 78);
+	color: white;
+	border-radius: 5px;
+	font-weight: 900;
+}
+
+.volumeSlider {
+	accent-color: purple;
+}

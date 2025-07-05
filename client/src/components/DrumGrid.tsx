@@ -71,40 +71,31 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                         <div className={styles.drumGrid}>
 							{grid.map((row, rowIndex) => (
 							<div className={styles.gridRow} key={`row-${rowIndex}`}>
-								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-								{/* Sample selector */}
-								<select
-									value={selectedSamples[rowIndex]}
-									onChange={(e) => setSelectedSample(rowIndex, e.target.value)}
-									className={styles.dropdown}
-								>
-									{['1', '2', '3'].map((num) => (
-									<option key={num} value={`${instruments[rowIndex]}${num}`}>
-										{instruments[rowIndex]}{num}
-									</option>
-									))}
-								</select>
+							
+								<div className={styles.controlsBox}>
+									<select
+										className={styles.sampleComboBox}
+										value={selectedSamples[rowIndex]}
+										onChange={(e) => setSelectedSample(rowIndex, e.target.value)}
+									>
+										{['1', '2', '3'].map((num) => (
+											<option key={num} value={`${instruments[rowIndex]}${num}`}>
+												{instruments[rowIndex]}{num}
+											</option>
+										))}
+									</select>
 
-								{/* Volume slider */}
-								<input
-									type="range"
-									min={0}
-									max={1}
-									step={0.01}
-									value={volumes[rowIndex]}
-									onChange={(e) => {
-										setVolume(rowIndex, parseFloat(e.target.value))}
-									}
-									style={{ width: '80px', marginTop: '4px' }}
-								/>
-									{/* <Knob
-									min={0}
-									max={1}
-									value={volumes[rowIndex]}
-									onChange={(v) => setVolume(rowIndex, v)}
-									/> */}
-
+									<input
+										className={styles.volumeSlider}
+										type="range"
+										min={0}
+										max={1}
+										step={0.01}
+										value={volumes[rowIndex]}
+										onChange={(e) => setVolume(rowIndex, parseFloat(e.target.value))}
+									/>
 								</div>
+
 
 								{row.map((checked, colIndex) => (
 								<div

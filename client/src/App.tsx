@@ -11,6 +11,12 @@ export default function App(): JSX.Element {
     const name = useStore((s) => s.name);
     const setName = useStore((s) => s.setName);
 
+	useEffect(() => {
+	const onScroll = () => console.log('Scroll detected');
+	window.addEventListener('scroll', onScroll);
+	return () => window.removeEventListener('scroll', onScroll);
+		}, []);
+
     return (
         <div>
             <TitleBox />
