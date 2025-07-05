@@ -70,4 +70,3 @@ export default function AuthPage(opts: { grid: any; setGrid: any; name: any; set
 
     return <div className={styles.userAuthSection}>{user ? loggedInDisp : loggedOutDisp}</div>;
 }
-

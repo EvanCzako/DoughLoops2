@@ -27,12 +27,12 @@ interface StoreState {
     name: string;
     grid: boolean[][];
     selectedSamples: string[];
-	volumes: number[]; // from 0 (mute) to 1 (full volume)
-	fontSize: number;
-	controlsWidth: number;
-  
-	setControlsWidth: (width: number) => void;
-	setVolume: (index: number, volume: number) => void;
+    volumes: number[]; // from 0 (mute) to 1 (full volume)
+    fontSize: number;
+    controlsWidth: number;
+
+    setControlsWidth: (width: number) => void;
+    setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
     setName: (name: string) => void;
     setGrid: (grid: boolean[][]) => void;
@@ -42,7 +42,7 @@ interface StoreState {
     setNumSubdivisions: (numSubdivisions: number) => void;
     setBpm: (bpm: number) => void;
     setIsPlaying: (playing: boolean) => void;
-	updateFontSize: () => void;
+    updateFontSize: () => void;
 
     // Auth actions
     setUser: (user: User | null) => void;
@@ -75,35 +75,35 @@ export const useStore = create<StoreState>((set) => ({
         .map(() => Array(16).fill(false)),
     selectedSamples: ['kick1', 'clap1', 'snare1', 'hat1', 'rim1', 'tom1', 'cymbal1', 'triangle1'],
 
-	volumes: [1, 1, 1, 1, 1, 1, 1, 1],
-	fontSize: 0,
-	controlsWidth: 80, // default
-	setControlsWidth: (width: number) => set({ controlsWidth: width }),
+    volumes: [1, 1, 1, 1, 1, 1, 1, 1],
+    fontSize: 0,
+    controlsWidth: 80, // default
+    setControlsWidth: (width: number) => set({ controlsWidth: width }),
 
-updateFontSize: () => {
-	const vw = (window.visualViewport?.width ?? window.innerWidth) / 100;
-	const vh = (window.visualViewport?.height ?? window.innerHeight) / 100;
+    updateFontSize: () => {
+        const vw = (window.visualViewport?.width ?? window.innerWidth) / 100;
+        const vh = (window.visualViewport?.height ?? window.innerHeight) / 100;
 
-	document.documentElement.style.setProperty('--vh', `${vh}px`);
-	document.documentElement.style.setProperty('--vw', `${vw}px`);
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        document.documentElement.style.setProperty('--vw', `${vw}px`);
 
-	const product = Math.sqrt(vh ** 2 * Math.min(3, vw / vh));
-	const fontSize = product;
-	set({ fontSize });
+        const product = Math.sqrt(vh ** 2 * Math.min(3, vw / vh));
+        const fontSize = product;
+        set({ fontSize });
 
-	// Clamp width from 60 to 100px
-	const clampedWidth = Math.min(100, Math.max(60, product * 9));
-	document.documentElement.style.setProperty('--controls-column-width', `${clampedWidth}px`);
-	console.log(clampedWidth);
-	set({ controlsWidth: clampedWidth });
-},
+        // Clamp width from 60 to 100px
+        const clampedWidth = Math.min(100, Math.max(60, product * 9));
+        document.documentElement.style.setProperty('--controls-column-width', `${clampedWidth}px`);
+        console.log(document.documentElement.style.getPropertyValue('--controls-column-width'));
+        set({ controlsWidth: clampedWidth });
+    },
 
-	setVolume: (index, volume) =>
-		set((state) => {
-			const updated = [...state.volumes];
-			updated[index] = volume;
-			return { volumes: updated };
-		}),
+    setVolume: (index, volume) =>
+        set((state) => {
+            const updated = [...state.volumes];
+            updated[index] = volume;
+            return { volumes: updated };
+        }),
 
     setSelectedSample: (index, sample) =>
         set((state) => {

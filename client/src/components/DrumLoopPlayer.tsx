@@ -23,54 +23,53 @@ export default function DrumLoopPlayer({
     const [samplesLoaded, setSamplesLoaded] = useState(false);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const selectedLoop = useStore((s) => s.selectedLoop);
-	const volumes = useStore((s) => s.volumes);
+    const volumes = useStore((s) => s.volumes);
     const selectedSamples = useStore((s) => s.selectedSamples);
 
-	const selectedSamplesRef = useRef<string[]>(selectedSamples);
+    const selectedSamplesRef = useRef<string[]>(selectedSamples);
 
-	useEffect(() => {
-		selectedSamplesRef.current = selectedSamples;
-	}, [selectedSamples]);
+    useEffect(() => {
+        selectedSamplesRef.current = selectedSamples;
+    }, [selectedSamples]);
 
-	useEffect(() => {
-		const instrumentKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
-		const variations = ['1', '2', '3'];
+    useEffect(() => {
+        const instrumentKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
+        const variations = ['1', '2', '3'];
 
-		const allPlayers: Record<string, Record<string, Tone.Player>> = {};
+        const allPlayers: Record<string, Record<string, Tone.Player>> = {};
 
-		instrumentKeys.forEach((inst) => {
-			allPlayers[inst] = {};
+        instrumentKeys.forEach((inst) => {
+            allPlayers[inst] = {};
 
-			variations.forEach((num) => {
-				const sampleName = `${inst}${num}`;
-				const file = `${base}samples/${sampleName}.mp3`;
-				allPlayers[inst][sampleName] = new Tone.Player(file).toDestination();
-			});
-		});
+            variations.forEach((num) => {
+                const sampleName = `${inst}${num}`;
+                const file = `${base}samples/${sampleName}.mp3`;
+                allPlayers[inst][sampleName] = new Tone.Player(file).toDestination();
+            });
+        });
 
-		playersRef.current = allPlayers;
+        playersRef.current = allPlayers;
 
-		// Wait for all players to load
-		const allLoadPromises = instrumentKeys.flatMap((inst) =>
-			variations.map((num) => allPlayers[inst][`${inst}${num}`].loaded)
-		);
+        // Wait for all players to load
+        const allLoadPromises = instrumentKeys.flatMap((inst) =>
+            variations.map((num) => allPlayers[inst][`${inst}${num}`].loaded)
+        );
 
-		Promise.all(allLoadPromises).then(() => {
-			setSamplesLoaded(true);
-			console.log('All samples loaded 🎉');
-		});
-	}, []);
-
+        Promise.all(allLoadPromises).then(() => {
+            setSamplesLoaded(true);
+            console.log('All samples loaded 🎉');
+        });
+    }, []);
 
     const gridRef = useRef(grid);
- 	const volumesRef = useRef(volumes);
-	// const
+    const volumesRef = useRef(volumes);
+    // const
 
     useEffect(() => {
         gridRef.current = grid;
     }, [grid]);
 
-	useEffect(() => {
+    useEffect(() => {
         volumesRef.current = volumes;
     }, [volumes]);
 
@@ -87,21 +86,18 @@ export default function DrumLoopPlayer({
             const step = stepRef.current;
             const numSteps = gridRef.current[0]?.length || 16;
 
+            const instKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
 
-			const instKeys = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
+            instKeys.forEach((inst, i) => {
+                const stepActive = gridRef.current[i]?.[step];
+                if (!stepActive) return;
 
-			instKeys.forEach((inst, i) => {
-				const stepActive = gridRef.current[i]?.[step];
-				if (!stepActive) return;
+                const sampleName = selectedSamplesRef.current[i]; // now reads current value!
+                const player = playersRef.current[inst][sampleName];
 
-				const sampleName = selectedSamplesRef.current[i]; // now reads current value!
-				const player = playersRef.current[inst][sampleName];
-
-				player.volume.value = Tone.gainToDb(volumesRef.current[i]);
-				player.start(time);
-			});
-
-
+                player.volume.value = Tone.gainToDb(volumesRef.current[i]);
+                player.start(time);
+            });
 
             onStep?.(step);
             stepRef.current = (step + 1) % numSteps;

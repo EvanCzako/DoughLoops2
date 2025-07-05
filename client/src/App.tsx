@@ -10,14 +10,14 @@ export default function App(): JSX.Element {
     const setGrid = useStore((s) => s.setGrid);
     const name = useStore((s) => s.name);
     const setName = useStore((s) => s.setName);
-	const updateFontSize = useStore((state) => state.updateFontSize);
+    const updateFontSize = useStore((state) => state.updateFontSize);
 
-	useEffect(() => {
-		updateFontSize(); // run on mount
+    useEffect(() => {
+        updateFontSize(); // run on mount
 
-		window.addEventListener('resize', updateFontSize);
-		return () => window.removeEventListener('resize', updateFontSize);
-	}, [updateFontSize]);
+        window.addEventListener('resize', updateFontSize);
+        return () => window.removeEventListener('resize', updateFontSize);
+    }, [updateFontSize]);
 
     return (
         <div>

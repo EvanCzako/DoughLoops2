@@ -27,7 +27,7 @@ export default function DrumLoopEditor({
     const setBpm = useStore((s) => s.setBpm);
     const setNumBeats = useStore((s) => s.setNumBeats);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-	const setVolume = useStore((s) => s.setVolume);
+    const setVolume = useStore((s) => s.setVolume);
     const currentStep = useStore((s) => s.currentStep);
 
     const setSelectedSample = useStore((s) => s.setSelectedSample);
@@ -39,16 +39,16 @@ export default function DrumLoopEditor({
         const decoded = decodeDrumGrid(selectedLoop.beatRep);
         if (!decoded) return;
 
-		setBpm(decoded.bpm);
-		setNumBeats(decoded.numBeats);
-		setNumSubdivisions(decoded.subdivisions);
-		setGrid(decoded.grid);
+        setBpm(decoded.bpm);
+        setNumBeats(decoded.numBeats);
+        setNumSubdivisions(decoded.subdivisions);
+        setGrid(decoded.grid);
 
-		// Set instrument sample selections
-		decoded.samples.forEach((sample, i) => setSelectedSample(i, sample));
+        // Set instrument sample selections
+        decoded.samples.forEach((sample, i) => setSelectedSample(i, sample));
 
-		// Set instrument volumes
-		decoded.volumes.forEach((v, i) => setVolume(i, v));
+        // Set instrument volumes
+        decoded.volumes.forEach((v, i) => setVolume(i, v));
 
         setName(selectedLoop.name);
     }, [selectedLoop]);
@@ -78,12 +78,12 @@ function decodeDrumGrid(encoded: string): {
         const cols = numBeats * subdivisions;
 
         const sampleData = config.split('|');
-        const samples = sampleData.map(s => s.split(':')[0]);
-        const volumes = sampleData.map(s => parseFloat(s.split(':')[1]));
+        const samples = sampleData.map((s) => s.split(':')[0]);
+        const volumes = sampleData.map((s) => parseFloat(s.split(':')[1]));
 
-        if (!bpm || !numBeats || !subdivisions || rows.some(r => r.length !== cols)) return null;
+        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
 
-        const grid = rows.map(row => [...row].map(char => char === '1'));
+        const grid = rows.map((row) => [...row].map((char) => char === '1'));
 
         return { bpm, numBeats, subdivisions, grid, samples, volumes };
     } catch {

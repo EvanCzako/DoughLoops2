@@ -95,6 +95,6 @@ function encodeDrumGrid({
 }): string {
     const meta = `${bpm},${numBeats},${subdivisions}`;
     const config = samples.map((s, i) => `${s}:${volumes[i]}`).join('|');
-    const gridRows = grid.map(row => row.map(cell => (cell ? '1' : '0')).join(''));
+    const gridRows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
     return `${meta}::${config}::${gridRows.join('::')}`;
 }

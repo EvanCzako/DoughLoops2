@@ -1,14 +1,14 @@
 :root {
-	--cell-size: clamp(20px, 3vw, 60px);
-	--row-height: var(--cell-size); /* This is the shared height */
-	--controls-column-width: 80px; /* default, overwritten dynamically */
+    --cell-size: clamp(20px, 3vw, 60px);
+    --row-height: var(--cell-size); /* This is the shared height */
+    --controls-column-width: 80px; /* default, overwritten dynamically */
 }
 
 .responsiveCell {
-  width: var(--cell-size);
-  height: 100%; /* 🔥 match row */
-  flex-shrink: 0;
-  box-sizing: border-box;
+    width: var(--cell-size);
+    height: 100%; /* 🔥 match row */
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .drumGridOuter {
@@ -24,8 +24,8 @@
     width: 100%;
     scrollbar-width: thick; /* Firefox */
     scrollbar-color: #ad10a0 #000; /* Firefox: thumb color and track */
-	flex-grow: 1;
-	height: 100%;
+    flex-grow: 1;
+    height: 100%;
 }
 
 /* WebKit (Chrome, Safari) scrollbar */
@@ -53,14 +53,13 @@
     margin-bottom: 6px; /* optional gap */
 }
 
-
 .ghostRow .labelSpacer {
-	width: 100%;
+    width: 100%;
 }
 
 .ghostRowWrapper {
-  position: relative;
-  z-index: 2;
+    position: relative;
+    z-index: 2;
 }
 
 .ghostCell {
@@ -74,9 +73,9 @@
 }
 
 .ghostSpacer {
-  width: var(--controls-width);
-  height: 100%;
-  flex-shrink: 0;
+    width: var(--controls-width);
+    height: 100%;
+    flex-shrink: 0;
 }
 
 .active {
@@ -91,9 +90,9 @@
 }
 
 .gridRow {
-  display: flex;
-  height: var(--row-height); /* 🔥 match controlsBox height */
-  align-items: stretch;
+    display: flex;
+    height: var(--row-height); /* 🔥 match controlsBox height */
+    align-items: stretch;
 }
 
 .label {
@@ -105,12 +104,12 @@
 }
 
 .cell {
-  width: var(--cell-size);
-  height: 100%; /* 🔥 stretch to row */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+    width: var(--cell-size);
+    height: 100%; /* 🔥 stretch to row */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .cell input[type='checkbox'] {
@@ -139,23 +138,22 @@
 
 /* New container for the grid */
 .gridContainer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 /* Beat background container positioned behind grid rows */
 .beatBackground {
-  top: var(--row-height); /* 👈 now start background below ghost row */
-  position: absolute;
-  top: 0;
-  left: var(--controls-column-width*1); /* ✅ aligns with start of grid */
-  height: 100%;
-  width: 100%;
-  pointer-events: none;
-  z-index: 0;
-  display: flex;
+    top: var(--row-height); /* 👈 now start background below ghost row */
+    position: absolute;
+    top: 0;
+    left: var(--controls-column-width * 1); /* ✅ aligns with start of grid */
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    z-index: 0;
+    display: flex;
 }
-
 
 /* Each vertical stripe for a beat */
 .beatStripe {
@@ -186,78 +184,71 @@
     z-index: 2;
 }
 
-
-
 .controlsBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(180, 37, 190);
-  border-radius: 5px;
-  height: var(--row-height); /* 🔥 match row height */
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(180, 37, 190);
+    border-radius: 5px;
+    height: var(--row-height); /* 🔥 match row height */
+    box-sizing: border-box;
 }
 
 .controlsBox select {
     font-size: 12px;
     margin-bottom: 6px;
     width: 100%;
-	text-overflow: ellipsis;
+    text-overflow: ellipsis;
 
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 4px;
-	margin-right: 4px;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-right: 4px;
 }
 
-.controlsBox input[type="range"] {
+.controlsBox input[type='range'] {
     width: 100%;
 }
 
-
 .sampleComboBox {
-	background-color: rgb(61, 27, 78);
-	color: white;
-	border-radius: 5px;
-	font-size: calc(var(--row-height) * 0.4); /* scale with row height */
-	max-height: 60%;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+    background-color: rgb(61, 27, 78);
+    color: white;
+    border-radius: 5px;
+    font-size: calc(var(--row-height) * 0.4); /* scale with row height */
+    max-height: 60%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .volumeSlider {
-	accent-color: rgb(110, 19, 96);
-	width: 100%;
-	height: 30%; /* or whatever fits nicely */
+    accent-color: rgb(110, 19, 96);
+    width: 100%;
+    height: 30%; /* or whatever fits nicely */
 }
 
 .controlsColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-right: 8px;
-  min-width: 60px;
-  max-width: 100px;
-  flex-shrink: 0;
-	width: var(--controls-column-width*1);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 8px;
+    flex-shrink: 0;
+    width: var(--controls-column-width);
 }
 
 .controlsBoxSpacer {
-  height: var(--cell-size);
-  flex-shrink: 0;
+    height: var(--cell-size);
+    flex-shrink: 0;
 }
 
 .gridArea {
-	position: relative;
-	width: fit-content;
+    position: relative;
+    width: fit-content;
 }
 
 .fixedGridContainer {
-  display: flex;
-  align-items: flex-start;
+    display: flex;
+    align-items: flex-start;
 }
-
