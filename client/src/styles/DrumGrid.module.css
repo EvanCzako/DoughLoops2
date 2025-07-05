@@ -1,7 +1,8 @@
 :root {
     --cell-size: clamp(20px, 3vw, 60px);
-    --row-height: var(--cell-size); /* This is the shared height */
+    --row-height: calc(var(--cell-size)); /* This is the shared height */
     --controls-column-width: 80px; /* default, overwritten dynamically */
+	--drum-grid-row-height: 80px; /* default, overwritten dynamically */
 }
 
 .responsiveCell {
@@ -91,7 +92,7 @@
 
 .gridRow {
     display: flex;
-    height: var(--row-height); /* 🔥 match controlsBox height */
+    height: var(--drum-grid-row-height); /* 🔥 match controlsBox height */
     align-items: stretch;
 }
 
@@ -191,7 +192,7 @@
     align-items: center;
     background-color: rgb(180, 37, 190);
     border-radius: 5px;
-    height: var(--row-height); /* 🔥 match row height */
+    height: var(--drum-grid-row-height); /* 🔥 match row height */
     box-sizing: border-box;
 }
 
@@ -204,8 +205,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    margin-right: 4px;
+    /* gap: 4px; */
+    /* margin-right: 4px; */
 }
 
 .controlsBox input[type='range'] {

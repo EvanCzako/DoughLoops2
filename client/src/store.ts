@@ -29,9 +29,7 @@ interface StoreState {
     selectedSamples: string[];
     volumes: number[]; // from 0 (mute) to 1 (full volume)
     fontSize: number;
-    controlsWidth: number;
 
-    setControlsWidth: (width: number) => void;
     setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
     setName: (name: string) => void;
@@ -77,8 +75,6 @@ export const useStore = create<StoreState>((set) => ({
 
     volumes: [1, 1, 1, 1, 1, 1, 1, 1],
     fontSize: 0,
-    controlsWidth: 80, // default
-    setControlsWidth: (width: number) => set({ controlsWidth: width }),
 
     updateFontSize: () => {
         const vw = (window.visualViewport?.width ?? window.innerWidth) / 100;
@@ -94,8 +90,11 @@ export const useStore = create<StoreState>((set) => ({
         // Clamp width from 60 to 100px
         const clampedWidth = Math.min(100, Math.max(60, product * 9));
         document.documentElement.style.setProperty('--controls-column-width', `${clampedWidth}px`);
-        console.log(document.documentElement.style.getPropertyValue('--controls-column-width'));
-        set({ controlsWidth: clampedWidth });
+
+		// Clamp drumGridRowHeight from 60 to 100px
+        const drumGridRowHeight = Math.min(100, Math.max(60, product * 9));
+        document.documentElement.style.setProperty('--drum-grid-row-height', `${drumGridRowHeight}px`);
+
     },
 
     setVolume: (index, volume) =>
