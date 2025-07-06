@@ -71,9 +71,8 @@ export default function ControlsContainer(opts: {
 					opts.setGrid(cleared);
 				}}
 				className={styles.controlsButton}
-				style={{ marginTop: 12, backgroundColor: '#ff2e63' }}
 			>
-				Clear All
+				Clear
 			</button>
 			<button
 				onClick={() => {
@@ -81,7 +80,6 @@ export default function ControlsContainer(opts: {
 					stepRef.current = 0;
 				}}
 				className={styles.controlsButton}
-				style={{ marginTop: 12, backgroundColor: '#ff2e63' }}
 			>
 				Reset
 			</button>
