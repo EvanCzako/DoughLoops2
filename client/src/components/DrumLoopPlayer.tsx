@@ -6,18 +6,17 @@ interface DrumLoopPlayerProps {
     grid: boolean[][];
     isPlaying: boolean;
     bpm?: number;
-    onStep?: (step: number) => void; // <-- new prop
+    stepRef: React.RefObject<number>
 }
 
 export default function DrumLoopPlayer({
     grid,
     isPlaying,
     bpm = 85,
-    onStep,
+	stepRef
 }: DrumLoopPlayerProps) {
     const base = import.meta.env.BASE_URL;
 
-    const stepRef = useRef(0);
     const playersRef = useRef<Record<string, Record<string, Tone.Player>>>({});
 
     const [samplesLoaded, setSamplesLoaded] = useState(false);
@@ -25,6 +24,9 @@ export default function DrumLoopPlayer({
     const selectedLoop = useStore((s) => s.selectedLoop);
     const volumes = useStore((s) => s.volumes);
     const selectedSamples = useStore((s) => s.selectedSamples);
+
+	const setCurrentStep = useStore((s) => s.setCurrentStep);
+	const currentStep = useStore((s) => s.currentStep);
 
     const selectedSamplesRef = useRef<string[]>(selectedSamples);
 
@@ -63,7 +65,6 @@ export default function DrumLoopPlayer({
 
     const gridRef = useRef(grid);
     const volumesRef = useRef(volumes);
-    // const
 
     useEffect(() => {
         gridRef.current = grid;
@@ -79,8 +80,6 @@ export default function DrumLoopPlayer({
         // Always cancel existing scheduled events before creating new ones
         Tone.Transport.stop();
         Tone.Transport.cancel();
-
-        stepRef.current = 0;
 
         const repeat = (time: number) => {
             const step = stepRef.current;
@@ -99,7 +98,7 @@ export default function DrumLoopPlayer({
                 player.start(time);
             });
 
-            onStep?.(step);
+            setCurrentStep(step);
             stepRef.current = (step + 1) % numSteps;
         };
 

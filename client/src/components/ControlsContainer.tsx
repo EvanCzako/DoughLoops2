@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useStore } from '../store';
 import type { DoughLoop } from '../store';
 import DrumLoopPlayer from './DrumLoopPlayer';
@@ -14,15 +14,15 @@ export default function ControlsContainer(opts: {
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
     const [selectedLoop, setSelectedLoop] = useState<DoughLoop | undefined>(undefined);
-    // const currentStep = useStore((s) => s.currentStep);
     const setCurrentStep = useStore((s) => s.setCurrentStep);
+    const currentStep = useStore((s) => s.currentStep);
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
-
     const numBeats = useStore((s) => s.numBeats);
     const setNumBeats = useStore((s) => s.setNumBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
+	const stepRef = useRef(currentStep);
 
     const numSteps = numBeats * 4;
 
@@ -54,8 +54,8 @@ export default function ControlsContainer(opts: {
             <DrumLoopPlayer
                 grid={opts.grid}
                 isPlaying={isPlaying}
-                onStep={setCurrentStep}
                 bpm={bpm}
+				stepRef={stepRef}
             />
             <button
                 className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
@@ -63,6 +63,29 @@ export default function ControlsContainer(opts: {
             >
                 {isPlaying ? 'Stop' : 'Play'}
             </button>
+			<button
+				onClick={() => {
+					const numRows = opts.grid.length;
+					const numCols = opts.grid[0]?.length || 0;
+					const cleared = Array.from({ length: numRows }, () => Array(numCols).fill(false));
+					opts.setGrid(cleared);
+				}}
+				className={styles.controlsButton}
+				style={{ marginTop: 12, backgroundColor: '#ff2e63' }}
+			>
+				Clear All
+			</button>
+			<button
+				onClick={() => {
+					setCurrentStep(0);
+					stepRef.current = 0;
+				}}
+				className={styles.controlsButton}
+				style={{ marginTop: 12, backgroundColor: '#ff2e63' }}
+			>
+				Reset
+			</button>
+
             <div style={{ marginBottom: 16 }}>
                 <label>
                     Beats: {numBeats}
