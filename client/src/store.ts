@@ -29,6 +29,7 @@ interface StoreState {
     selectedSamples: string[];
     volumes: number[]; // from 0 (mute) to 1 (full volume)
     fontSize: number;
+	userDropdownOpen: boolean,
 
     setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
@@ -43,6 +44,7 @@ interface StoreState {
     updateFontSize: () => void;
 
     // Auth actions
+	setUserDropdownOpen: (open: boolean) => void;
     setUser: (user: User | null) => void;
     logout: () => void;
 
@@ -75,6 +77,8 @@ export const useStore = create<StoreState>((set) => ({
 
     volumes: [1, 1, 1, 1, 1, 1, 1, 1],
     fontSize: 0,
+	userDropdownOpen: false,
+	setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
 
     updateFontSize: () => {
         const vw = (window.visualViewport?.width ?? window.innerWidth) / 100;

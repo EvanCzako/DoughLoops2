@@ -1,29 +1,36 @@
-import { JSX, useEffect, useState } from 'react';
+import { JSX, useEffect, useRef } from 'react';
 import { useStore } from './store';
 import React from 'react';
-import AuthPage from './components/AuthPage';
 import DoughLoopManager from './components/DoughLoopManager';
 import TitleBox from './components/TitleBox';
+import AuthPage from './components/AuthPage';
+import DropdownWrapper from './components/DropdownWrapper';
 
 export default function App(): JSX.Element {
-    const grid = useStore((s) => s.grid);
-    const setGrid = useStore((s) => s.setGrid);
-    const name = useStore((s) => s.name);
-    const setName = useStore((s) => s.setName);
-    const updateFontSize = useStore((state) => state.updateFontSize);
+	const grid = useStore((s) => s.grid);
+	const setGrid = useStore((s) => s.setGrid);
+	const name = useStore((s) => s.name);
+	const setName = useStore((s) => s.setName);
+	const updateFontSize = useStore((state) => state.updateFontSize);
+	const showDropdown = useStore((s) => s.userDropdownOpen);
 
-    useEffect(() => {
-        updateFontSize(); // run on mount
+	const dropdownAnchorRef = useRef<HTMLButtonElement>(null);
 
-        window.addEventListener('resize', updateFontSize);
-        return () => window.removeEventListener('resize', updateFontSize);
-    }, [updateFontSize]);
+	useEffect(() => {
+		updateFontSize();
+		window.addEventListener('resize', updateFontSize);
+		return () => window.removeEventListener('resize', updateFontSize);
+	}, [updateFontSize]);
 
-    return (
-        <div>
-            <TitleBox />
-            <DoughLoopManager />
-            <AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
-        </div>
-    );
+	return (
+		<>
+			<TitleBox dropdownAnchorRef={dropdownAnchorRef} />
+			{showDropdown && (
+				<DropdownWrapper anchorRef={dropdownAnchorRef}>
+					<AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
+				</DropdownWrapper>
+			)}
+			<DoughLoopManager />
+		</>
+	);
 }
