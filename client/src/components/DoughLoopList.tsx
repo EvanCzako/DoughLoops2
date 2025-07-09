@@ -7,7 +7,7 @@ interface Props {
     selectedLoop: DoughLoop | null;
 }
 
-export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
+export default function DoughLoopList() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const user = useStore((s) => s.user);
@@ -15,6 +15,8 @@ export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
     const setDoughLoops = useStore((s) => s.setDoughLoops);
     const setError = useStore((s) => s.setError);
     const doughLoops = useStore((s) => s.doughLoops);
+	const selectedLoop = useStore((s) => s.selectedLoop);
+	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
 
     useEffect(() => {
         const fetchLoops = async () => {
@@ -50,7 +52,7 @@ export default function DoughLoopList({ onSelectLoop, selectedLoop }: Props) {
                             fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
                         }}
                         onClick={() => {
-                            onSelectLoop({ ...loop });
+                            setSelectedLoop({ ...loop });
                         }}
                     >
                         {loop.name}

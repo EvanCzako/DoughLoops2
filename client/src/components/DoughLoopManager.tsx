@@ -1,14 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useStore } from '../store';
-import DoughLoopList from './DoughLoopList';
-import LogoutButton from './LogoutButton';
+
 import DrumLoopEditor from './DrumLoopEditor';
-import type { DoughLoop } from '../store';
-import DrumLoopPlayer from './DrumLoopPlayer';
-import * as Tone from 'tone';
 import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
+import UserLoopsWrapper from './UserLoopsWrapper';
 
 export default function DoughLoopManager() {
     const user = useStore((s) => s.user);
@@ -35,7 +32,7 @@ export default function DoughLoopManager() {
                 name={name}
                 setName={setName}
             />
-
+			<UserLoopsWrapper/>
             <ControlsContainer grid={grid} setGrid={setGrid} />
         </div>
     );
