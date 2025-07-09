@@ -7,18 +7,17 @@ interface Props {
     selectedLoop: DoughLoop | null;
 }
 
-export default function NewDoughLoopForm(opts: {
-    grid: boolean[][];
-    setGrid: (grid: boolean[][]) => void;
-    name: string;
-    setName: (name: string) => void;
-}) {
+export default function NewDoughLoopForm() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const user = useStore((s) => s.user);
     const bpm = useStore((s) => s.bpm);
     const numBeats = useStore((s) => s.numBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
+	const grid = useStore((s) => s.grid);
+	const setGrid = useStore((s) => s.setGrid);
+	const name = useStore((s) => s.name);
+	const setName = useStore((s) => s.setName);
 
     const selectedSamples = useStore((s) => s.selectedSamples);
     const volumes = useStore((s) => s.volumes);
@@ -34,7 +33,7 @@ export default function NewDoughLoopForm(opts: {
             bpm,
             numBeats,
             subdivisions: numSubdivisions,
-            grid: opts.grid,
+            grid: grid,
             samples: selectedSamples,
             volumes,
         });
@@ -43,7 +42,7 @@ export default function NewDoughLoopForm(opts: {
             const res = await fetch(`${API_BASE_URL}/doughloops`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: user.id, name: opts.name, beatRep }),
+                body: JSON.stringify({ userId: user.id, name: name, beatRep }),
             });
 
             if (!res.ok) throw new Error('Failed to save');
@@ -56,7 +55,7 @@ export default function NewDoughLoopForm(opts: {
                 replaceDoughLoop(newLoop);
             }
 
-            opts.setName('');
+            setName('');
         } catch (err) {
             setError('Error saving loop');
         }
@@ -69,8 +68,8 @@ export default function NewDoughLoopForm(opts: {
                 <input
                     type="text"
                     placeholder="Loop name"
-                    value={opts.name}
-                    onChange={(e) => opts.setName(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
                 <button onClick={handleSave}>Save</button>
             </div>

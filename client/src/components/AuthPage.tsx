@@ -50,7 +50,7 @@ export default function AuthPage(opts: { grid: any; setGrid: any; name: any; set
 
     const loggedInDisp = (
         <div>
-            <div className={styles.logoutContainer}>
+            <div className={styles.logoutContainer} style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
                 {user ? (
                     <>
                         <h2>Welcome, {user.username}!</h2>
@@ -58,14 +58,6 @@ export default function AuthPage(opts: { grid: any; setGrid: any; name: any; set
                     </>
                 ) : null}
             </div>
-
-            <NewDoughLoopForm
-                grid={opts.grid}
-                setGrid={opts.setGrid}
-                name={opts.name}
-                setName={opts.setName}
-            />
-            <DoughLoopList selectedLoop={selectedLoop} onSelectLoop={setSelectedLoop} />
         </div>
     );
 

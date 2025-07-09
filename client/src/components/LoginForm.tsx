@@ -13,6 +13,7 @@ export default function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
+	const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -37,11 +38,11 @@ export default function LoginForm() {
             // Update global user state
             const loggedInUser: User = { id: data.userId, username: data.username };
             setUser(loggedInUser);
-
             setSuccess('Login successful!');
         } catch (err: any) {
             setError(err.message);
         } finally {
+			setUserDropdownOpen(false);
             setLoading(false);
         }
     }
