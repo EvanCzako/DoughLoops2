@@ -31,19 +31,29 @@ export default function DropdownWrapper({ anchorRef, children }: Props) {
 	const top = (anchorRect?.bottom ?? 0) + window.scrollY;
 	const left = (anchorRect?.left ?? 0) + window.scrollX;
 
-	return createPortal(
-		<div
-			ref={panelRef}
-			className={styles.dropdownWrapper}
-			style={{
-				top: `${top}px`,
-				right: '0px',
-				position: 'absolute', // required to enable top/left positioning
-			}}
-		>
-			{children}
-		</div>,
-		document.body
-	);
+return createPortal(
+	<div
+		ref={panelRef}
+		style={{
+			position: 'absolute',
+			top: `${top}px`,
+			// left: `${left}px`,
+			right: '0px',
+			zIndex: 999,
+			background: '#111',
+			color: 'white',
+			border: '1px solid #333',
+			borderRadius: '8px',
+			padding: '16px',
+			boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+			minWidth: '280px',
+			maxWidth: '90vw',
+		}}
+	>
+		{children}
+	</div>,
+	document.body
+);
+
 
 }
