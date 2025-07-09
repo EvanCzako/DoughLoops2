@@ -23,11 +23,10 @@ export default function ControlsContainer(opts: {
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
 	const stepRef = useRef(currentStep);
-
-    const numSteps = numBeats * 4;
+	const fontSize = useStore((s) => s.fontSize);
+	const computedFontSize = Math.max(10, fontSize*2);
 
     const handlePlayToggle = async () => {
-        // await Tone.start(); // <-- resumes AudioContext
         setIsPlaying(!isPlaying);
     };
 
@@ -59,6 +58,7 @@ export default function ControlsContainer(opts: {
             />
             <button
                 className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
+				style={{fontSize: `${computedFontSize}px`}}
                 onClick={handlePlayToggle}
             >
                 {isPlaying ? 'Stop' : 'Play'}
@@ -71,6 +71,7 @@ export default function ControlsContainer(opts: {
 					opts.setGrid(cleared);
 				}}
 				className={styles.controlsButton}
+				style={{fontSize: `${computedFontSize}px`}}
 			>
 				Clear
 			</button>
@@ -80,11 +81,12 @@ export default function ControlsContainer(opts: {
 					stepRef.current = 0;
 				}}
 				className={styles.controlsButton}
+				style={{fontSize: `${computedFontSize}px`}}
 			>
 				Reset
 			</button>
 
-            <div style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 16, fontSize: `${computedFontSize}px` }}>
                 <label>
                     Beats: {numBeats}
                     <input
@@ -97,7 +99,7 @@ export default function ControlsContainer(opts: {
                     />
                 </label>
             </div>
-            <div style={{ margin: '10px 0' }}>
+            <div style={{ margin: '10px 0', fontSize: `${computedFontSize}px` }}>
                 <label htmlFor="subdivisions">Subdivisions: {numSubdivisions}</label>
                 <input
                     id="subdivisions"
@@ -109,7 +111,7 @@ export default function ControlsContainer(opts: {
                     className={styles.controlsSlider}
                 />
             </div>
-            <div style={{ margin: '20px 0' }}>
+            <div style={{ margin: '20px 0', fontSize: `${computedFontSize}px` }}>
                 <label>
                     BPM: {bpm}
                     <input

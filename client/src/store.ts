@@ -92,12 +92,19 @@ export const useStore = create<StoreState>((set) => ({
         set({ fontSize });
 
         // Clamp width from 60 to 100px
-        const clampedWidth = Math.min(100, Math.max(60, product * 9));
-        document.documentElement.style.setProperty('--controls-column-width', `${clampedWidth}px`);
+        const controlsColumnClampedWidth = Math.min(100, Math.max(60, product * 9));
+        document.documentElement.style.setProperty('--controls-column-width', `${controlsColumnClampedWidth}px`);
+
 
 		// Clamp drumGridRowHeight from 25 to 80px
         const drumGridRowHeight = Math.max(Math.min(product*3.5,80),25);
         document.documentElement.style.setProperty('--drum-grid-row-height', `${drumGridRowHeight}px`);
+
+        const controlsContainerWidth = Math.max(Math.min(product*30,500),250);
+        document.documentElement.style.setProperty('--controls-container-width', `${controlsContainerWidth}px`);
+		const controlsContainerHeight = Math.max(Math.min(product*20,200),140);
+
+        document.documentElement.style.setProperty('--controls-container-height', `${controlsContainerHeight}px`);
 
     },
 

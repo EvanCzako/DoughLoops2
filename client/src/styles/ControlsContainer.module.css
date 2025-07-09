@@ -1,12 +1,21 @@
+:root {
+    --controls-container-width: 80px; /* default, overwritten dynamically */
+	--controls-column-width: 80px; /* default, overwritten dynamically */
+	--controls-container-height: 80px;
+}
+
 .controlsContainer {
     background-color: rgb(55, 41, 62);
     padding: 10px;
     border-radius: 15px;
-    min-width: 200px;
-    max-width: 400px;
+    /* min-width: 200px;
+    max-width: 400px; */
+	position: relative;
     font-weight: 500;
     font-size: 20px;
-    /* height: 200px; */
+	width: var(--controls-container-width);
+	height: var(--controls-container-height);
+	left: calc(var(--controls-column-width) + 20px);
 }
 
 .controlsSlider {
@@ -19,8 +28,8 @@
     color: white;
     border-radius: 5px;
     margin-bottom: 10px;
-    height: 50px;
-    width: 75px;
+    height: calc(var(--controls-container-height) * 0.2);
+    width: calc(var(--controls-container-width) * 0.3);
     font-weight: 900;
     font-size: 20px;
 }

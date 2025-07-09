@@ -25,6 +25,7 @@ export default function DoughLoopManager() {
 
     return (
         <div className={styles.doughLoopManager}>
+			<ControlsContainer grid={grid} setGrid={setGrid} />
             <DrumLoopEditor
                 selectedLoop={selectedLoop}
                 grid={grid}
@@ -33,7 +34,6 @@ export default function DoughLoopManager() {
                 setName={setName}
             />
 			<UserLoopsWrapper/>
-            <ControlsContainer grid={grid} setGrid={setGrid} />
         </div>
     );
 }
