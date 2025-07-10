@@ -3,6 +3,9 @@
     color: rgb(223, 223, 223);
     padding: 8px;
     border-radius: 10px;
+	border-style: solid;
+	border-width: 10px;
+	border-color: rgb(76, 14, 135);
 	display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10,11 +13,13 @@
 }
 
 .authToggleButton {
-    background-color: #a60f99;
+    background-color: #c133b5;
     color: white;
     font-weight: bold;
     padding: 8px 12px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+	height: 50px;
+	font-size: medium;
 }

@@ -38,7 +38,7 @@ return createPortal(
 			position: 'absolute',
 			top: `${top}px`,
 			// left: `${left}px`,
-			right: '0px',
+			right: '15px',
 			zIndex: 999,
 			background: '#111',
 			color: 'white',
