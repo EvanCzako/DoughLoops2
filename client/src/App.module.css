@@ -1,0 +1,19 @@
+.gridAndLoopsWrapper {
+  display: flex;
+  flex-direction: column; /* Default = stacked (portrait) */
+  gap: 16px;
+  padding: 16px;
+}
+
+/* Landscape: side-by-side layout */
+@media (orientation: landscape) {
+  .gridAndLoopsWrapper {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .gridAndLoopsWrapper > * {
+    flex: 1;
+    min-width: 0; /* allows shrinking */
+  }
+}

@@ -70,7 +70,7 @@ export default function ControlsContainer(opts: {
 					const cleared = Array.from({ length: numRows }, () => Array(numCols).fill(false));
 					opts.setGrid(cleared);
 				}}
-				className={styles.controlsButton}
+				className={`${styles.controlsButton} ${styles.clearButton}`}
 				style={{fontSize: `${computedFontSize}px`}}
 			>
 				Clear
@@ -80,7 +80,7 @@ export default function ControlsContainer(opts: {
 					setCurrentStep(0);
 					stepRef.current = 0;
 				}}
-				className={styles.controlsButton}
+				className={`${styles.controlsButton} ${styles.resetButton}`}
 				style={{fontSize: `${computedFontSize}px`}}
 			>
 				Reset

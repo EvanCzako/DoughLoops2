@@ -15,3 +15,11 @@
 	padding: 15px;
 	background-color: rgb(83, 18, 118);
 }
+
+@media (orientation: landscape) {
+
+	.userLoopsWrapper {
+		max-width: 30%;
+	}
+
+}

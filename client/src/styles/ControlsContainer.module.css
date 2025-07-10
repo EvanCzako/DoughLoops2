@@ -8,14 +8,12 @@
     background-color: rgb(55, 41, 62);
     padding: 10px;
     border-radius: 15px;
-    /* min-width: 200px;
-    max-width: 400px; */
 	position: relative;
     font-weight: 500;
     font-size: 20px;
 	width: var(--controls-container-width);
 	height: var(--controls-container-height);
-	left: calc(var(--controls-column-width) + 20px);
+	/* left: calc(var(--controls-column-width) + 20px); */
 }
 
 .controlsSlider {
@@ -54,4 +52,20 @@
 
 .stopped {
     background-color: rgb(12, 132, 46); /* blue on hover */
+}
+
+.clearButton {
+	background-color: rgb(165, 30, 30);
+}
+
+.clearButton:hover {
+	background-color: rgb(232, 42, 42);
+}
+
+.resetButton {
+	background-color: rgb(186, 168, 29);
+}
+
+.resetButton:hover {
+	background-color: rgb(246, 218, 8);
 }

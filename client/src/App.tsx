@@ -5,6 +5,8 @@ import DoughLoopManager from './components/DoughLoopManager';
 import TitleBox from './components/TitleBox';
 import AuthPage from './components/AuthPage';
 import DropdownWrapper from './components/DropdownWrapper';
+import UserLoopsWrapper from './components/UserLoopsWrapper';
+import styles from './App.module.css';
 
 export default function App(): JSX.Element {
 	const grid = useStore((s) => s.grid);
@@ -23,14 +25,18 @@ export default function App(): JSX.Element {
 	}, [updateFontSize]);
 
 	return (
-		<>
+		<div className={styles.App}>
 			<TitleBox dropdownAnchorRef={dropdownAnchorRef} />
 			{showDropdown && (
 				<DropdownWrapper anchorRef={dropdownAnchorRef}>
 					<AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
 				</DropdownWrapper>
 			)}
-			<DoughLoopManager />
-		</>
+			<div className={styles.gridAndLoopsWrapper}>
+				<DoughLoopManager /> {/* the grid section */}
+				<UserLoopsWrapper /> {/* saved loops UI */}
+			</div>
+		</div>
+
 	);
 }
