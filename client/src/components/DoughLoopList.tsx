@@ -2,10 +2,7 @@ import React, { useEffect } from 'react';
 import { useStore } from '../store';
 import { DoughLoop } from '../store';
 
-interface Props {
-    onSelectLoop: (loop: DoughLoop) => void;
-    selectedLoop: DoughLoop | null;
-}
+
 
 export default function DoughLoopList() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;

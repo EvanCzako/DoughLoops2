@@ -1,5 +1,6 @@
 // client/src/store.ts
 import { create } from 'zustand';
+import { decodeDrumGrid } from './components/utils'; // adjust path as needed
 
 export interface User {
     id: number;
@@ -125,9 +126,29 @@ export const useStore = create<StoreState>((set) => ({
     setName: (name: string) => set({ name }),
     setGrid: (grid: boolean[][]) => set({ grid }),
 
-    setSelectedLoop: (loop: DoughLoop | null) => {
-        set({ selectedLoop: loop });
-    },
+	setSelectedLoop: (loop: DoughLoop | null) => {
+		set((state) => {
+			if (!loop) {
+				return { selectedLoop: null };
+			}
+
+			const decoded = decodeDrumGrid(loop.beatRep);
+			if (!decoded) return { error: 'Invalid beatRep format', selectedLoop: null };
+
+			const { grid, bpm, numBeats, subdivisions, samples, volumes } = decoded;
+
+			return {
+				selectedLoop: loop,
+				grid,
+				bpm,
+				numBeats,
+				numSubdivisions: subdivisions,
+				selectedSamples: samples,
+				volumes,
+				name: loop.name,
+			};
+		});
+	},
 
     setUser: (user) => set({ user }),
     logout: () => set({ user: null, doughLoops: [], selectedLoop: null }),

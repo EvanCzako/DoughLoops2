@@ -2,6 +2,7 @@ import React from 'react';
 import { useStore } from '../store';
 import { DoughLoop } from '../store';
 import styles from '../styles/NewDoughLoopForm.module.css';
+import { encodeDrumGrid } from './utils';
 
 interface Props {
     onSelectLoop: (loop: DoughLoop) => void;
@@ -77,25 +78,4 @@ export default function NewDoughLoopForm() {
             </div>
         </div>
     );
-}
-
-function encodeDrumGrid({
-    bpm,
-    numBeats,
-    subdivisions,
-    grid,
-    samples,
-    volumes,
-}: {
-    bpm: number;
-    numBeats: number;
-    subdivisions: number;
-    grid: boolean[][];
-    samples: string[];
-    volumes: number[];
-}): string {
-    const meta = `${bpm},${numBeats},${subdivisions}`;
-    const config = samples.map((s, i) => `${s}:${volumes[i]}`).join('|');
-    const gridRows = grid.map((row) => row.map((cell) => (cell ? '1' : '0')).join(''));
-    return `${meta}::${config}::${gridRows.join('::')}`;
 }

@@ -4,6 +4,7 @@ import DrumGrid from './DrumGrid';
 import type { DoughLoop } from '../store';
 import styles from '../styles/DoughLoopManager.module.css';
 import DoughLoopManager from './DoughLoopManager';
+import { decodeDrumGrid } from './utils';
 
 interface DrumLoopEditorProps {
     selectedLoop: DoughLoop | null;
@@ -58,35 +59,4 @@ export default function DrumLoopEditor({
             <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
         </div>
     );
-}
-
-function decodeDrumGrid(encoded: string): {
-    bpm: number;
-    numBeats: number;
-    subdivisions: number;
-    grid: boolean[][];
-    samples: string[];
-    volumes: number[];
-} | null {
-    try {
-        const [meta, config, ...rows] = encoded.split('::');
-        const [bpmStr, beatsStr, subsStr] = meta.split(',');
-
-        const bpm = parseInt(bpmStr, 10);
-        const numBeats = parseInt(beatsStr, 10);
-        const subdivisions = parseInt(subsStr, 10);
-        const cols = numBeats * subdivisions;
-
-        const sampleData = config.split('|');
-        const samples = sampleData.map((s) => s.split(':')[0]);
-        const volumes = sampleData.map((s) => parseFloat(s.split(':')[1]));
-
-        if (!bpm || !numBeats || !subdivisions || rows.some((r) => r.length !== cols)) return null;
-
-        const grid = rows.map((row) => [...row].map((char) => char === '1'));
-
-        return { bpm, numBeats, subdivisions, grid, samples, volumes };
-    } catch {
-        return null;
-    }
 }
