@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useStore } from '../store';
 import { DoughLoop } from '../store';
-
+import styles from '../styles/UserLoopsWrapper.module.css';
 
 
 export default function DoughLoopList() {
@@ -43,10 +43,12 @@ export default function DoughLoopList() {
             <ul>
                 {doughLoops.map((loop) => (
                     <li
+						className={styles.userLoop}
                         key={loop.id}
                         style={{
                             cursor: 'pointer',
                             fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
+							color: selectedLoop?.id === loop.id ? 'orange' : 'white',
                         }}
                         onClick={() => {
                             setSelectedLoop({ ...loop });

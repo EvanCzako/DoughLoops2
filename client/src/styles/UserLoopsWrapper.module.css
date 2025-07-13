@@ -5,6 +5,7 @@
 	border-radius: 10px;
 	background-color: rgb(47, 31, 59);
 	color: white;
+	font-weight: 600;
 }
 
 .userLoopsInternal {
@@ -22,4 +23,8 @@
 		max-width: 30%;
 	}
 
+}
+
+.userLoop:hover {
+	font-size: larger;
 }

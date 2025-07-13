@@ -40,7 +40,9 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 			{/* Controls column (always visible) */}
 			<div className={styles.controlsColumn}>
 			{/* Spacer for ghost row */}
-			<div className={styles.controlsBoxSpacer} />
+			<div className={styles.controlsBoxSpacer}>
+				Sounds
+			</div>
 
 			{/* Real controls */}
 			{grid.map((_, rowIndex) => (
@@ -53,7 +55,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 				>
 					{['1', '2', '3'].map((num) => (
 					<option key={num} value={`${instruments[rowIndex]}${num}`}>
-						{instruments[rowIndex]}{num}
+						{`${instruments[rowIndex].slice(0,1).toUpperCase() + instruments[rowIndex].slice(1)}`} {num}
 					</option>
 					))}
 				</select>

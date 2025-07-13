@@ -1,5 +1,5 @@
 :root {
-    --cell-size: clamp(25px, 3vw, 60px);
+    --cell-size: clamp(35px, 3vw, 60px);
     --controls-column-width: 80px; /* default, overwritten dynamically */
 	--drum-grid-row-height: 80px; /* default, overwritten dynamically */
 }
@@ -67,7 +67,7 @@
     height: calc(var(--drum-grid-row-height) * 0.25); /* shorter for ghost row */
     border-radius: 2px;
     background: #222;
-    transition: background 0.2s;
+    transition: background 0.1s;
     flex-shrink: 0;
     box-sizing: border-box;
 }
@@ -91,7 +91,7 @@
 
 .gridRow {
     display: flex;
-    height: var(--drum-grid-row-height); /* 🔥 match controlsBox height */
+    height: var(--drum-grid-row-height);
     align-items: stretch;
 }
 
@@ -105,7 +105,7 @@
 
 .cell {
     width: var(--cell-size);
-    height: 100%; /* 🔥 stretch to row */
+    height: 100%; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -144,10 +144,10 @@
 }
 /* Beat background container positioned behind grid rows */
 .beatBackground {
-    top: var(--drum-grid-row-height); /* 👈 now start background below ghost row */
+    top: var(--drum-grid-row-height); 
     position: absolute;
     top: 0;
-    left: var(--controls-column-width * 1); /* ✅ aligns with start of grid */
+    left: var(--controls-column-width * 1); 
     height: 100%;
     width: 100%;
     pointer-events: none;
@@ -191,7 +191,7 @@
     align-items: center;
     background-color: rgb(180, 37, 190);
     border-radius: 5px;
-    height: var(--drum-grid-row-height); /* 🔥 match row height */
+    height: var(--drum-grid-row-height); 
     box-sizing: border-box;
 }
 
@@ -219,6 +219,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+	font-weight: 900;
 }
 
 .volumeSlider {
@@ -237,8 +238,14 @@
 }
 
 .controlsBoxSpacer {
-    height: var(--drum-grid-row-height);
+    height: calc(var(--drum-grid-row-height) - 10px);
     flex-shrink: 0;
+	border: 5px solid rgb(36, 27, 42);
+	border-bottom: 5px solid rgb(98, 37, 110);
+ 	display: flex;
+    align-items: center; 
+    justify-content: center; 
+	font-weight: 900;
 }
 
 .gridArea {
@@ -250,5 +257,4 @@
     display: flex;
     align-items: flex-start;
 }
-
 

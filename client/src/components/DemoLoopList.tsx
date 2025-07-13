@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStore } from '../store';
 import type { DoughLoop } from '../store';
+import styles from '../styles/UserLoopsWrapper.module.css';
 
 const demoLoops: DoughLoop[] = [
 	{
@@ -57,10 +58,12 @@ export default function DemoLoopList() {
 			<ul>
 				{demoLoops.map((loop) => (
 					<li
+						className={styles.userLoop}
 						key={loop.id}
 						style={{
 							cursor: 'pointer',
-							fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
+							fontWeight: selectedLoop?.id === loop.id ? 900 : 600,
+							color: selectedLoop?.id === loop.id ? 'orange' : 'white',
 						}}
 						onClick={() => {
 							setSelectedLoop(loop); // triggers decode automatically
