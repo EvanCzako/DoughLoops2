@@ -1,3 +1,5 @@
+@import './variables.module.css';
+
 :root {
     --controls-container-width: 80px; /* default, overwritten dynamically */
 	--controls-column-width: 80px; /* default, overwritten dynamically */
@@ -19,11 +21,11 @@
 .controlsSlider {
     width: 40%;
     accent-color: rgb(189, 125, 69);
+	color: white;
 }
 
 .controlsButton {
     background-color: rgb(8, 177, 10);
-    color: white;
     border-radius: 5px;
     margin-bottom: 10px;
     height: calc(var(--controls-container-height) * 0.2);
@@ -55,11 +57,11 @@
 }
 
 .clearButton {
-	background-color: rgb(165, 30, 30);
+	background-color: rgb(165, 91, 30);
 }
 
 .clearButton:hover {
-	background-color: rgb(232, 42, 42);
+	background-color: rgb(203, 121, 54);
 }
 
 .resetButton {

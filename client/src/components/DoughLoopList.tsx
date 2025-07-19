@@ -48,7 +48,7 @@ export default function DoughLoopList() {
                         style={{
                             cursor: 'pointer',
                             fontWeight: selectedLoop?.id === loop.id ? 'bold' : 'normal',
-							color: selectedLoop?.id === loop.id ? 'orange' : 'white',
+							color: selectedLoop?.id === loop.id ? 'orange' : 'var(--color-off-white-1)',
                         }}
                         onClick={() => {
                             setSelectedLoop({ ...loop });

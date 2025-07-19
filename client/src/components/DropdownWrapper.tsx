@@ -41,7 +41,7 @@ return createPortal(
 			right: '15px',
 			zIndex: 999,
 			background: '#111',
-			color: 'white',
+			color: 'var(--color-off-white-1)',
 			border: '1px solid #333',
 			borderRadius: '8px',
 			padding: '16px',

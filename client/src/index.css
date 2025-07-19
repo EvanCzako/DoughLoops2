@@ -1,3 +1,5 @@
+@import './styles/variables.module.css';
+
 body {
     margin: 0;
     font-family:
@@ -13,9 +15,16 @@ body {
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
     background-color: black;
-    color: white;
+    color: var(--color-off-white-1);
 }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+
+input[type="range"] {
+  /* accent-color: #ff4081; */
+  accent-color: var(--color-warm-pink-1);
+}
+

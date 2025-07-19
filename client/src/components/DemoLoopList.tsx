@@ -63,7 +63,7 @@ export default function DemoLoopList() {
 						style={{
 							cursor: 'pointer',
 							fontWeight: selectedLoop?.id === loop.id ? 900 : 600,
-							color: selectedLoop?.id === loop.id ? 'orange' : 'white',
+							color: selectedLoop?.id === loop.id ? 'orange' : 'var(--color-off-white-1)',
 						}}
 						onClick={() => {
 							setSelectedLoop(loop); // triggers decode automatically

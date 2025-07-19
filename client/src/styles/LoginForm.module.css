@@ -1,3 +1,5 @@
+@import './variables.module.css';
+
 .loginFormInput {
     width: 100%;
     height: 20px;
@@ -5,21 +7,21 @@
     padding: 5px;
     font-size: 15px;
     background-color: rgb(164, 74, 221);
+	/* color: black; */
 }
 
-::placeholder {
-    /* Most modern browsers support this now. */
-    color: rgb(208, 170, 208);
+.loginFormInput::placeholder {
+	color: rgb(60, 60, 60);
+	/* color: black; */
 }
 
 .loginButton {
     width: 50%;
     height: 30px;
     background-color: rgb(9, 9, 208);
-    color: white;
     border-radius: 5px;
     margin-bottom: 10px;
-
+	color: var(--color-off-white-1);
     font-weight: 900;
     font-size: 20px;
 }

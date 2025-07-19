@@ -76,7 +76,7 @@ export default function LoginForm() {
             />
 
             <button type="submit" disabled={loading} className={styles.loginButton}>
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? 'Success...' : 'Login'}
             </button>
 
             {error && <p style={{ color: 'red', marginTop: 8 }}>{error}</p>}

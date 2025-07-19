@@ -1,3 +1,5 @@
+@import './variables.module.css';
+
 :root {
     --cell-size: clamp(35px, 3vw, 60px);
     --controls-column-width: 80px; /* default, overwritten dynamically */
@@ -189,7 +191,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgb(180, 37, 190);
+    background-color: var(--color-dark-purple-1);
     border-radius: 5px;
     height: var(--drum-grid-row-height); 
     box-sizing: border-box;
@@ -200,10 +202,11 @@
     margin-bottom: 6px;
     width: 100%;
     text-overflow: ellipsis;
-
+	background-color: var(--color-dark-gray-1);
     display: flex;
     flex-direction: column;
     align-items: center;
+	color: var(--color-off-white-1);
 }
 
 .controlsBox input[type='range'] {
@@ -212,7 +215,6 @@
 
 .sampleComboBox {
     background-color: rgb(61, 27, 78);
-    color: white;
     border-radius: 5px;
     font-size: calc(var(--drum-grid-row-height) * 0.4); /* scale with row height */
     max-height: 60%;
@@ -238,13 +240,16 @@
 }
 
 .controlsBoxSpacer {
+	color: var(--color-off-white-1);
     height: calc(var(--drum-grid-row-height) - 10px);
     flex-shrink: 0;
+	background-color: var(--color-dark-gray-1);;
 	border: 5px solid rgb(36, 27, 42);
 	border-bottom: 5px solid rgb(98, 37, 110);
  	display: flex;
     align-items: center; 
-    justify-content: center; 
+    justify-content: center;
+	font-size: larger;
 	font-weight: 900;
 }
 
