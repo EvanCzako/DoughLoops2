@@ -83,8 +83,8 @@ export default function RegisterForm() {
                 {loading ? 'Registering...' : 'Register'}
             </button>
 
-            {error && <p style={{ color: 'red', marginTop: 8 }}>{error}</p>}
-            {success && <p style={{ color: 'green', marginTop: 8 }}>{success}</p>}
+            {error && <p style={{ color: 'var(--color-off-red-1)', marginTop: 8 }}>{error}</p>}
+            {success && <p style={{ color: 'var(--color-off-green-1)', marginTop: 8 }}>{success}</p>}
         </form>
     );
 }

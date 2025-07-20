@@ -4,8 +4,6 @@ import RegisterForm from './RegisterForm';
 import { useStore } from '../store';
 import styles from '../styles/AuthPage.module.css';
 import LogoutButton from './LogoutButton';
-import DoughLoopList from './DoughLoopList';
-import NewDoughLoopForm from './NewDoughLoopForm';
 
 
 export default function AuthPage(opts: { grid: any; setGrid: any; name: any; setName: any }) {

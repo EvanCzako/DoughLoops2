@@ -8,8 +8,9 @@
 }
 
 .loginRegisterButton {
+	color: var(--color-off-white-1);
     font-weight: 900;
-    font-size: calc(var(--base-font-size) * 1.6);
+    font-size: calc(var(--base-font-size) * 1.4);
     height: 40px;
     width: 80px;
     margin: 5px;

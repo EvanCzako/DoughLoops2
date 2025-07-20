@@ -8,18 +8,18 @@ import styles from '../styles/UserLoopsWrapper.module.css';
 
 export default function UserLoopsWrapper() {
 	const user = useStore((s) => s.user);
+	const fontSize = useStore((s) => s.fontSize);
 
 	return (
 		<div className={styles.userLoopsWrapper}>
 			<div className={styles.section}>
-				{/* <h3>User Loops</h3> */}
 				{user ? (
 					<>
 						<NewDoughLoopForm />
 						<DoughLoopList/>
 					</>
 				) : (
-					<p>Log in or register to save and edit your loops!</p>
+					<p style={{fontSize: fontSize*2}}>Log in or register to save and edit your loops!</p>
 				)}
 			</div>
 

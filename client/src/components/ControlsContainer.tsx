@@ -87,7 +87,7 @@ export default function ControlsContainer(opts: {
 			</button>
 
             <div style={{ marginBottom: 16, fontSize: `${computedFontSize}px` }}>
-                <label>
+                <label style={{fontWeight: 750}}>
                     Beats: {numBeats}
                     <input
                         type="range"
@@ -100,7 +100,7 @@ export default function ControlsContainer(opts: {
                 </label>
             </div>
             <div style={{ margin: '10px 0', fontSize: `${computedFontSize}px` }}>
-                <label htmlFor="subdivisions">Subdivisions: {numSubdivisions}</label>
+                <label style={{fontWeight: 750}} htmlFor="subdivisions">Subdivisions: {numSubdivisions}</label>
                 <input
                     id="subdivisions"
                     type="range"
@@ -112,12 +112,12 @@ export default function ControlsContainer(opts: {
                 />
             </div>
             <div style={{ margin: '20px 0', fontSize: `${computedFontSize}px` }}>
-                <label style={{fontSize: `${computedFontSize}px`}}>
+                <label style={{fontSize: `${computedFontSize}px`, fontWeight: 750}}>
                     BPM: {bpm}
                     <input
                         type="range"
                         min="50"
-                        max="180"
+                        max="200"
                         value={bpm}
                         onChange={(e) => setBpm(Number(e.target.value))}
                         className={styles.controlsSlider}

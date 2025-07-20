@@ -35,7 +35,6 @@ export default function LoginForm() {
 
 			const data: { userId: number; username: string } = await res.json();
 
-			// ✅ Successful login
 			const loggedInUser: User = { id: data.userId, username: data.username };
 			setUser(loggedInUser);
 			setSuccess('Login successful!');
@@ -81,8 +80,8 @@ export default function LoginForm() {
                 {loading ? 'Waiting...' : 'Login'}
             </button>
 
-            {error && <p style={{ color: 'red', marginTop: 8 }}>{error}</p>}
-            {success && <p style={{ color: 'green', marginTop: 8 }}>{success}</p>}
+            {error && <p style={{ color: 'var(--color-off-red-1)', marginTop: 8 }}>{error}</p>}
+            {success && <p style={{ color: 'var(--color-off-green-1)', marginTop: 8 }}>{success}</p>}
         </form>
     );
 }
