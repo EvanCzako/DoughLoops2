@@ -41,8 +41,8 @@ export default function DoughLoopList() {
 		if (!userId || !loopId) return;
 		setLoading(true);
 		try {
-			const res = await fetch(`http://localhost:3000/doughloops/${loopId}?userId=${userId}`, {
-			method: 'DELETE',
+			const res = await fetch(`${API_BASE_URL}/doughloops/${loopId}?userId=${userId}`, {
+				method: 'DELETE',
 			});
 			if (res.ok) {
 				// Refetch loops after successful delete
