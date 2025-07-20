@@ -107,6 +107,10 @@ export const useStore = create<StoreState>((set) => ({
 
         document.documentElement.style.setProperty('--controls-container-height', `${controlsContainerHeight}px`);
 
+		const logoWidth = Math.min(3, vw/2);
+		console.log(logoWidth);
+		document.documentElement.style.setProperty('--logo-width', `${logoWidth*100}px`);
+
     },
 
     setVolume: (index, volume) =>

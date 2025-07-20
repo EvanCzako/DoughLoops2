@@ -126,7 +126,7 @@
 .cell input[type='checkbox']:checked {
     /* background: rgb(255, 140, 0); */
 	background: var(--color-off-orange-1);
-	border: 3px solid rgb(175, 93, 26);
+	border: 3px solid rgb(145, 72, 12);
 }
 
 .playing {
