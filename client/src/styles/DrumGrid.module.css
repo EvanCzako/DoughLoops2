@@ -1,13 +1,12 @@
 @import './variables.module.css';
 
 :root {
-    --cell-size: clamp(35px, 3vw, 60px);
     --controls-column-width: 80px; /* default, overwritten dynamically */
 	--drum-grid-row-height: 80px; /* default, overwritten dynamically */
 }
 
 .responsiveCell {
-    width: var(--cell-size);
+    width: calc(var(--drum-grid-row-height) * );
     height: 100%; /* 🔥 match row */
     flex-shrink: 0;
     box-sizing: border-box;
@@ -65,7 +64,7 @@
 }
 
 .ghostCell {
-    width: var(--cell-size);
+    width: calc(var(--drum-grid-row-height) * 0.9);
     height: calc(var(--drum-grid-row-height) * 0.25); /* shorter for ghost row */
     border-radius: 2px;
     background: #222;
@@ -106,7 +105,7 @@
 }
 
 .cell {
-    width: var(--cell-size);
+    width: calc(var(--drum-grid-row-height) * 0.9);
     height: 100%; 
     display: flex;
     align-items: center;

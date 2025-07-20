@@ -112,7 +112,7 @@ export default function ControlsContainer(opts: {
                 />
             </div>
             <div style={{ margin: '20px 0', fontSize: `${computedFontSize}px` }}>
-                <label>
+                <label style={{fontSize: `${computedFontSize}px`}}>
                     BPM: {bpm}
                     <input
                         type="range"
