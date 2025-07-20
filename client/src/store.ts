@@ -95,7 +95,7 @@ export const useStore = create<StoreState>((set) => ({
 		document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
 		
 
-        const controlsColumnClampedWidth = Math.min(120, Math.max(75, product * 9));
+        const controlsColumnClampedWidth = Math.min(120, Math.max(90, product * 9));
         document.documentElement.style.setProperty('--controls-column-width', `${controlsColumnClampedWidth}px`);
 
         const drumGridRowHeight = Math.pow(vh*300, 1/2);

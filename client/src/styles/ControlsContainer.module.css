@@ -26,6 +26,7 @@
 
 .controlsButton {
     background-color: rgb(8, 177, 10);
+	color: black;
     border-radius: 5px;
     margin-bottom: 10px;
     height: calc(var(--controls-container-height) * 0.2);

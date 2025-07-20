@@ -28,3 +28,7 @@ input[type="range"] {
   accent-color: var(--color-warm-pink-1);
 }
 
+button {
+  -webkit-appearance: none;
+  color: inherit;
+}
