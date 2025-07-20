@@ -12,9 +12,9 @@ export async function initDB() {
     );
   `);
 
-    // Create `doughLoops` table
+    // Create `doughloops` table
     await db.exec(`
-    CREATE TABLE IF NOT EXISTS doughLoops (
+    CREATE TABLE IF NOT EXISTS doughloops (
       id INTEGER PRIMARY KEY,
       userId INTEGER NOT NULL,
       name TEXT NOT NULL,

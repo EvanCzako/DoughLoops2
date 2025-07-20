@@ -51,10 +51,13 @@ const demoLoops: DoughLoop[] = [
 export default function DemoLoopList() {
 	const selectedLoop = useStore((s) => s.selectedLoop);
 	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
+	const fontSize = useStore((s) => s.fontSize);
+	const computedFontSize = Math.max(10, fontSize*2);
+	const computedFontSize2 = Math.max(10, fontSize*2.5);
 
 	return (
-		<div>
-			<h3>Demo Loops</h3>
+		<div >
+			<h3 style={{textDecoration: "underline", fontSize: computedFontSize2}}>Demo Loops</h3>
 			<ul>
 				{demoLoops.map((loop) => (
 					<li

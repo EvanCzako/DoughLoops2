@@ -1,17 +1,18 @@
 @import './variables.module.css';
 
 .saveButton {
-    background-color: rgb(0, 76, 255);
+    background-color: rgb(30, 75, 179);
     border-radius: 5px;
     margin-bottom: 10px;
     height: calc(var(--controls-container-height) * 0.2);
     width: calc(var(--controls-container-width) * 0.3);
     font-weight: 900;
     font-size: 20px;
+	color: var(--color-off-white-1);
 }
 
 .saveButton:hover {
-    background-color: rgb(51, 102, 220);
+    background-color: rgb(55, 110, 238);
 }
 
 .loopNameEntry {

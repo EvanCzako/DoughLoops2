@@ -15,37 +15,39 @@ export default function LoginForm() {
     const [success, setSuccess] = useState<string | null>(null);
 	const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
 
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        setSuccess(null);
+	async function handleSubmit(e: React.FormEvent) {
+		e.preventDefault();
+		setLoading(true);
+		setError(null);
+		setSuccess(null);
 
-        try {
-            const res = await fetch(`${API_BASE_URL}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
-            });
+		try {
+			const res = await fetch(`${API_BASE_URL}/login`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ username, password }),
+			});
 
-            if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.error || 'Login failed');
-            }
+			if (!res.ok) {
+				const errData = await res.json();
+				throw new Error(errData.error || 'Login failed');
+			}
 
-            const data: { userId: number; username: string } = await res.json();
+			const data: { userId: number; username: string } = await res.json();
 
-            // Update global user state
-            const loggedInUser: User = { id: data.userId, username: data.username };
-            setUser(loggedInUser);
-            setSuccess('Login successful!');
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-			setUserDropdownOpen(false);
-            setLoading(false);
-        }
-    }
+			// ✅ Successful login
+			const loggedInUser: User = { id: data.userId, username: data.username };
+			setUser(loggedInUser);
+			setSuccess('Login successful!');
+			setUserDropdownOpen(false); // ✅ Only close dropdown here
+		} catch (err: any) {
+			console.error(err.message);
+			setError(err.message);
+		} finally {
+			setLoading(false);
+		}
+	}
+
 
     return (
         <form
@@ -76,7 +78,7 @@ export default function LoginForm() {
             />
 
             <button type="submit" disabled={loading} className={styles.loginButton}>
-                {loading ? 'Success...' : 'Login'}
+                {loading ? 'Waiting...' : 'Login'}
             </button>
 
             {error && <p style={{ color: 'red', marginTop: 8 }}>{error}</p>}

@@ -3,19 +3,34 @@
 .userLoopsWrapper {
 	border-width: 10px;
 	border-style: solid;
-	border-color: rgb(47, 31, 59);
+	border-color: var(--color-dark-gray-1);
 	border-radius: 10px;
-	background-color: rgb(47, 31, 59);
+	background-color: var(--color-dark-purple-2);
 	font-weight: 600;
+	padding: 10px;
 }
 
 .userLoopsInternal {
 	border-radius: 10px;
 	border-width: 10px;
-	border-color: rgb(83, 18, 118);
 	border-style: solid;
 	padding: 15px;
-	background-color: rgb(83, 18, 118);
+}
+
+.userLoopWrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+.deleteButton {
+	background-color: rgb(199, 29, 29);
+	border-radius: 5px;
+	padding: 5px;
+	margin-left: 5px;
+}
+
+.deleteButton:hover {
+	background-color: rgb(226, 80, 80);
 }
 
 @media (orientation: landscape) {
@@ -26,6 +41,10 @@
 
 }
 
+.userLoop {
+	font-size: calc(var(--base-font-size) * 2);
+}
+
 .userLoop:hover {
-	font-size: larger;
+	font-size: calc(var(--base-font-size) * 2.5);
 }

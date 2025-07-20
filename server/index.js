@@ -129,5 +129,42 @@ app.get('/doughloops', async (req, res) => {
     }
 });
 
+// Delete DoughLoop by ID, verifying userId
+app.delete('/doughloops/:id', async (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.query; // assumes userId is passed as a query param
+
+    if (!id || !userId) {
+        return res.status(400).json({ error: 'Missing loop ID or userId' });
+    }
+
+    try {
+        const db = await getDB();
+        const loop = await db.get('SELECT * FROM doughloops WHERE id = ?', [id]);
+
+        if (!loop) {
+            return res.status(404).json({ error: 'Loop not found' });
+        }
+
+        if (loop.userId !== parseInt(userId)) {
+            return res.status(403).json({ error: 'Unauthorized: userId does not match' });
+        }
+
+        await db.run('DELETE FROM doughloops WHERE id = ?', [id]);
+        res.status(200).json({ message: 'Loop deleted successfully', id });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to delete loop' });
+    }
+});
+
+
+
+
+
+
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));
+

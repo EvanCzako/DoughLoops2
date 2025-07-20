@@ -6,7 +6,7 @@
 }
 
 .responsiveCell {
-    width: calc(var(--drum-grid-row-height) * );
+    width: calc(var(--drum-grid-row-height) * 0.9);
     height: 100%; /* 🔥 match row */
     flex-shrink: 0;
     box-sizing: border-box;
@@ -124,7 +124,8 @@
 }
 
 .cell input[type='checkbox']:checked {
-    background: rgb(255, 140, 0);
+    /* background: rgb(255, 140, 0); */
+	background: var(--color-off-orange-1);
 }
 
 .playing {
