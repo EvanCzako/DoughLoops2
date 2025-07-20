@@ -21,5 +21,9 @@
     border-radius: 6px;
     cursor: pointer;
 	height: 50px;
-	font-size: medium;
+	font-size: calc(var(--base-font-size) * 1.8);
+}
+
+.authToggleButton:hover {
+    background-color: rgb(229, 116, 255);
 }

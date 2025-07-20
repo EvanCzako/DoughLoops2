@@ -61,7 +61,7 @@ export default function DoughLoopList() {
 
 
     if (doughLoops.length === 0) {
-        return <p>No DoughLoops yet. Start by adding one above!</p>;
+        return <p style={{fontSize: computedFontSize}}>No DoughLoops yet. Start by adding one above!</p>;
     }
 
     return (
