@@ -34,7 +34,7 @@
 	background-color: rgb(226, 80, 80);
 }
 
-@media (orientation: landscape) {
+@media (orientation: landscape) and (min-width: 900px) {
 
 	.userLoopsWrapper {
 		max-width: 30%;
