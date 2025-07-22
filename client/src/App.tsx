@@ -7,6 +7,7 @@ import AuthPage from './components/AuthPage';
 import DropdownWrapper from './components/DropdownWrapper';
 import UserLoopsWrapper from './components/UserLoopsWrapper';
 import styles from './App.module.css';
+import Footer from './components/Footer';
 
 export default function App(): JSX.Element {
 	const grid = useStore((s) => s.grid);
@@ -27,15 +28,18 @@ export default function App(): JSX.Element {
 	return (
 		<div className={styles.App}>
 			<TitleBox dropdownAnchorRef={dropdownAnchorRef} />
-			{showDropdown && (
-				<DropdownWrapper anchorRef={dropdownAnchorRef}>
-					<AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
-				</DropdownWrapper>
-			)}
-			<div className={styles.gridAndLoopsWrapper}>
-				<DoughLoopManager />
-				<UserLoopsWrapper />
+			<div className={styles.mainContent}>
+				{showDropdown && (
+					<DropdownWrapper anchorRef={dropdownAnchorRef}>
+						<AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
+					</DropdownWrapper>
+				)}
+				<div className={styles.gridAndLoopsWrapper}>
+					<DoughLoopManager />
+					<UserLoopsWrapper />
+				</div>
 			</div>
+			<Footer/>
 		</div>
 
 	);

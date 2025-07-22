@@ -1,0 +1,23 @@
+@import './variables.module.css';
+
+.footerWrapper {
+	border-width: 10px;
+	border-style: solid;
+	border-color: var(--color-dark-gray-1);
+	border-radius: 10px;
+	background-color: var(--color-dark-purple-2);
+	font-weight: 600;
+	padding: 10px;
+	margin-bottom: 0px;
+	text-align: center;
+}
+
+.footerWrapper a {
+	color: var(--color-warm-pink-1);
+	text-decoration: none;
+	
+}
+
+.footerWrapper a:hover {
+	color: var(--color-bright-warm-pink-1);
+}

@@ -17,3 +17,13 @@
     min-width: 0; /* allows shrinking */
   }
 }
+
+.App {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.mainContent {
+  flex: 1; /* This fills the remaining vertical space */
+}
