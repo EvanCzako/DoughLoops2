@@ -6,7 +6,7 @@
 }
 
 /* Landscape: side-by-side layout */
-@media (orientation: landscape) {
+@media (orientation: landscape) and (min-width: 900px) {
   .gridAndLoopsWrapper {
     flex-direction: row;
     align-items: flex-start;
