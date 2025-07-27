@@ -86,9 +86,8 @@ export default function ControlsContainer(opts: {
 				Reset
 			</button>
 
-            <div style={{ marginBottom: 16, fontSize: `${computedFontSize}px` }}>
-                <label style={{fontWeight: 750}}>
-                    Beats: {numBeats}
+            <div className={styles.sliderContainer} style={{ marginBottom: 16, fontSize: `${computedFontSize}px` }}>
+					Beats: {numBeats}
                     <input
                         type="range"
                         min={1}
@@ -97,10 +96,9 @@ export default function ControlsContainer(opts: {
                         onChange={(e) => setNumBeats(Number(e.target.value))}
                         className={styles.controlsSlider}
                     />
-                </label>
             </div>
-            <div style={{ margin: '10px 0', fontSize: `${computedFontSize}px` }}>
-                <label style={{fontWeight: 750}} htmlFor="subdivisions">Subdivisions: {numSubdivisions}</label>
+            <div className={styles.sliderContainer} style={{ margin: '10px 0', fontSize: `${computedFontSize}px` }}>
+				Subdivisions: {numSubdivisions}
                 <input
                     id="subdivisions"
                     type="range"
@@ -111,8 +109,7 @@ export default function ControlsContainer(opts: {
                     className={styles.controlsSlider}
                 />
             </div>
-            <div style={{ margin: '20px 0', fontSize: `${computedFontSize}px` }}>
-                <label style={{fontSize: `${computedFontSize}px`, fontWeight: 750}}>
+            <div className={styles.sliderContainer} style={{ margin: '20px 0', fontSize: `${computedFontSize}px` }}>
                     BPM: {bpm}
                     <input
                         type="range"
@@ -122,7 +119,6 @@ export default function ControlsContainer(opts: {
                         onChange={(e) => setBpm(Number(e.target.value))}
                         className={styles.controlsSlider}
                     />
-                </label>
             </div>
         </div>
     );

@@ -22,6 +22,14 @@
     width: 40%;
     accent-color: rgb(189, 125, 69);
 	color: white;
+	left: 50px;
+}
+
+.sliderContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	font-weight: 750;
 }
 
 .controlsButton {
