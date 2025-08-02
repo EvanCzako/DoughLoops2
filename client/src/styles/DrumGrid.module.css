@@ -129,6 +129,11 @@
 	border: 3px solid rgb(145, 72, 12);
 }
 
+.cell input[type='checkbox']:hover {
+	background: rgb(50, 42, 35);
+	border: 3px solid rgb(71, 44, 22);
+}
+
 .playing {
     outline: 2px solid rgb(255, 0, 242);
 }
