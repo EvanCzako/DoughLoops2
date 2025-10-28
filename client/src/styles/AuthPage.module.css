@@ -1,23 +1,35 @@
 @import './variables.module.css';
 
 .userAuthSection {
-    background-color: rgb(83, 0, 83);
-    border-radius: 15px;
+    background: var(--ui-surface);
+    border-radius: 12px;
     min-width: 200px;
-    max-width: 300px;
+    max-width: 280px;
+    border: 1px solid var(--ui-border);
+    box-shadow: var(--shadow-md);
+    padding: 15px;
 }
 
 .loginRegisterButton {
-	color: var(--color-off-white-1);
-    font-weight: 900;
-    font-size: calc(var(--base-font-size) * 1.4);
-    height: 40px;
+    color: var(--ui-text-primary);
+    font-weight: 600;
+    font-size: calc(var(--base-font-size) * 1.3);
+    height: 36px;
     width: 80px;
     margin: 5px;
-    background-color: rgb(98, 43, 226);
-    border-radius: 5px;
+    background: var(--ui-accent-2);
+    border: 1px solid var(--ui-border);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .loginRegisterButton:hover {
-    background-color: rgb(126, 94, 223);
+    background: var(--ui-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.loginRegisterButton:active {
+    transform: translateY(0);
 }

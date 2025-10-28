@@ -39,8 +39,9 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     margin-bottom: 10px;
+    margin-right: 4px;
     height: calc(var(--controls-container-height) * 0.2);
-    width: calc(var(--controls-container-width) * 0.3);
+    width: calc(var(--controls-container-width) * 0.28);
     font-weight: 600;
     color: var(--grid-background);
     transition: all 0.2s ease;

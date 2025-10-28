@@ -125,6 +125,12 @@
     transition: all 0.2s ease;
 }
 
+.cell input[type='checkbox']:not(:checked):hover {
+    background: color-mix(in srgb, var(--grid-cell-inactive) 85%, var(--ui-accent));
+    border-color: var(--ui-accent);
+    box-shadow: 0 0 12px rgba(187, 154, 247, 0.15);
+}
+
 .cell input[type='checkbox']:checked {
     background: var(--grid-cell-active);
     border: 2px solid var(--grid-cell-border);
@@ -216,6 +222,20 @@
     border: 1px solid var(--ui-border);
     border-radius: 4px;
     padding: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.controlsBox select:hover {
+    background-color: color-mix(in srgb, var(--ui-surface-light) 90%, var(--ui-accent));
+    border-color: var(--ui-accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.controlsBox select:focus {
+    outline: none;
+    border-color: var(--ui-accent);
+    box-shadow: 0 0 0 1px var(--ui-accent);
 }
 
 .controlsBox input[type='range'] {
