@@ -13,9 +13,10 @@
 }
 
 .drumGridOuter {
-    background: #000;
+    background: var(--grid-background);
     padding: 16px;
-	border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-lg);
 }
 
 .scrollContainer {
@@ -117,16 +118,17 @@
     appearance: none;
     width: 100%;
     height: 100%;
-    background: #111;
-    border: 1px solid #333;
+    background: var(--grid-cell-inactive);
+    border: 1px solid var(--grid-cell-border);
     border-radius: 4px;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .cell input[type='checkbox']:checked {
-    /* background: rgb(255, 140, 0); */
-	background: var(--color-off-orange-1);
-	border: 3px solid rgb(145, 72, 12);
+    background: var(--grid-cell-active);
+    border: 2px solid var(--grid-cell-border);
+    box-shadow: 0 0 8px rgba(255, 158, 100, 0.3);
 }
 
 .playing {
@@ -167,11 +169,11 @@
 
 /* Use subtle hue shifts for even/odd beats */
 .evenBeatHue {
-    background-color: hsla(270, 76%, 31%, 0.895);
+    background-color: var(--grid-beat-even);
 }
 
 .oddBeatHue {
-    background-color: hsla(320, 67%, 36%, 0.861);
+    background-color: var(--grid-beat-odd);
 }
 
 /* Make sure drum grid rows and cells are above */
@@ -182,9 +184,10 @@
 
 /* Keep playing outline above backgrounds */
 .playing {
-    outline: 2px solid rgb(255, 0, 242);
-    position: relative; /* make sure outline shows */
+    outline: 2px solid var(--grid-playing);
+    position: relative;
     z-index: 2;
+    box-shadow: 0 0 8px var(--grid-playing);
 }
 
 .controlsBox {
@@ -192,10 +195,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-dark-purple-1);
+    background-color: var(--ui-surface);
+    border: 1px solid var(--ui-border);
     border-radius: 5px;
     height: var(--drum-grid-row-height); 
     box-sizing: border-box;
+    box-shadow: var(--shadow-sm);
 }
 
 .controlsBox select {
@@ -203,11 +208,14 @@
     margin-bottom: 6px;
     width: 100%;
     text-overflow: ellipsis;
-	background-color: var(--color-dark-gray-1);
+    background-color: var(--ui-surface-light);
     display: flex;
     flex-direction: column;
     align-items: center;
-	color: var(--color-off-white-1);
+    color: var(--ui-text-primary);
+    border: 1px solid var(--ui-border);
+    border-radius: 4px;
+    padding: 2px;
 }
 
 .controlsBox input[type='range'] {
@@ -241,17 +249,19 @@
 }
 
 .controlsBoxSpacer {
-	color: var(--color-off-white-1);
+    color: var(--ui-text-primary);
     height: calc(var(--drum-grid-row-height) - 10px);
     flex-shrink: 0;
-	background-color: var(--color-dark-gray-1);;
-	border: 5px solid rgb(36, 27, 42);
-	border-bottom: 5px solid rgb(98, 37, 110);
- 	display: flex;
+    background-color: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-bottom: 2px solid var(--ui-accent);
+    display: flex;
     align-items: center; 
     justify-content: center;
-	font-size: larger;
-	font-weight: 900;
+    font-size: larger;
+    font-weight: 700;
+    border-radius: 6px;
+    box-shadow: var(--shadow-sm);
 }
 
 .gridArea {
