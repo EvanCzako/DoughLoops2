@@ -1,31 +1,34 @@
 @import './variables.module.css';
 
 .titleBox {
-    background-color: var(--color-dark-purple-2);
+    background-color: var(--ui-surface);
     padding: 8px;
-    border-radius: 10px;
-	border-style: solid;
-	border-width: 10px;
-	border-color: var(--color-dark-gray-1);
-	display: flex;
+    border-radius: 12px;
+    border: 1px solid var(--ui-border);
+    display: flex;
     justify-content: space-between;
     align-items: center;
-	height: 70px
+    height: 70px;
+    box-shadow: var(--shadow-md);
 }
 
 .authToggleButton {
-    background-color: var(--color-off-pink-1);
-    font-weight: bold;
+    background-color: var(--ui-accent-2);
+    font-weight: 600;
     padding: 8px 12px;
-    border: none;
+    border: 1px solid var(--ui-border);
     border-radius: 6px;
     cursor: pointer;
-	height: 50px;
-	font-size: calc(var(--base-font-size) * 1.8);
+    height: 50px;
+    font-size: calc(var(--base-font-size) * 1.6);
+    color: var(--ui-text-primary);
+    transition: all 0.2s ease;
 }
 
 .authToggleButton:hover {
-    background-color: rgb(229, 116, 255);
+    background-color: var(--ui-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .logoImage {

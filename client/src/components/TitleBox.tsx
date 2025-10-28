@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStore } from '../store';
 import styles from '../styles/TitleBox.module.css';
-import DoughLoopsLogo from "../assets/DoughLoops2.png";
+import DoughLoopsLogo from "../assets/DoughLoops2-downSaturated.png";
 
 export default function TitleBox({
 	dropdownAnchorRef,

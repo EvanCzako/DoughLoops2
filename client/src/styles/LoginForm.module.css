@@ -6,7 +6,7 @@
     margin-bottom: 6px;
     padding: 5px;
     font-size: calc(var(--base-font-size) * 2);
-    background-color: rgb(164, 74, 221);
+    background-color: var(--ui-accent-3);
 }
 
 .loginFormInput::placeholder {
@@ -16,7 +16,7 @@
 .loginButton {
     width: 50%;
     height: 30px;
-    background-color: rgb(9, 9, 208);
+    background-color: var(--ui-accent-2);
     border-radius: 5px;
     margin-bottom: 10px;
 	color: var(--color-off-white-1);
@@ -25,7 +25,7 @@
 }
 
 .loginButton:hover {
-    background-color: rgb(0, 76, 255);
+    background-color: var(--ui-accent);
 }
 
 .loginForm {

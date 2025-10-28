@@ -13,11 +13,11 @@
 }
 
 .footerWrapper a {
-	color: var(--color-warm-pink-1);
+	color: var(--ui-accent-2);
 	text-decoration: none;
 	
 }
 
 .footerWrapper a:hover {
-	color: var(--color-bright-warm-pink-1);
+	color: var(--ui-accent);
 }

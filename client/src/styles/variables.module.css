@@ -1,12 +1,61 @@
 :root {
-	--color-dark-purple-1: #42115e;
-	--color-dark-purple-2: #382045;
-	--color-dark-gray-1: #1a1a1a;
-	--color-off-white-1: rgb(190, 190, 190);
-	--color-off-pink-1: rgb(176, 73, 180);
-	--color-warm-pink-1: rgb(248, 77, 171);
-	--color-bright-warm-pink-1: rgb(255, 134, 201);
-	--color-off-orange-1: rgb(225, 123, 21);
-	--color-off-red-1: rgb(255, 72, 22);
-	--color-off-green-1: rgb(12, 225, 16);
+    /* Main UI Theme - Softer, Modern Palette */
+    --ui-background: #1A1B26;
+    --ui-surface: #24283B;
+    --ui-surface-light: #2F3449;
+    --ui-accent: #BB9AF7;
+	--ui-accent-2: #9273cb;
+	--ui-accent-3: #9573ac;
+    --ui-text-primary: #C0CAF5;
+    --ui-text-secondary: #9AA5CE;
+    --ui-border: #414868;
+
+    /* Interactive States */
+    --ui-hover: #394077;
+    --ui-active: #9D7CD8;
+    
+    /* Drum Grid Specific - Higher Contrast But Modern */
+    --grid-background: #16161E;
+    --grid-cell-inactive: #1F2335;
+    --grid-cell-active: #FF9E64;
+    --grid-cell-border: #565F89;
+    --grid-beat-even: rgba(99, 110, 255, 0.3);
+    --grid-beat-odd: rgba(255, 121, 198, 0.3);
+    --grid-playing: #F7768E;
+    
+    /* Legacy Color Support */
+    --color-dark-purple-1: #41416E;      /* Modernized */
+    --color-dark-purple-2: #32344A;      /* Modernized */
+    --color-dark-gray-1: var(--ui-surface);
+    --color-off-white-1: var(--ui-text-primary);
+    --color-off-pink-1: #F7768E;         /* Modernized */
+    --color-warm-pink-1: #FF79C6;        /* Modernized */
+    --color-bright-warm-pink-1: #FF9EC4; /* Modernized */
+    --color-off-orange-1: #FF9E64;       /* Modernized */
+    --color-off-red-1: #F7768E;          /* Modernized */
+    --color-off-green-1: #73DACA;        /* Modernized */
+
+    /* Control Button Colors */
+    --button-play: #9ece6a;      /* Soft green for play */
+    --button-stop: #f7768e;      /* Soft red for stop */
+    --button-clear: #7dcfff;     /* Soft blue for clear */
+    --button-reset: #bb9af7;     /* Soft purple for reset */
+    
+    /* Button Hover States */
+    --button-play-hover: #b9f27c;
+    --button-stop-hover: #ff8c9e;
+    --button-clear-hover: #8edcff;
+    --button-reset-hover: #cfb1ff;
+
+    /* Effects */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 12px rgba(0, 0, 0, 0.2);
+    
+    /* Enhanced Effects */
+    --glow-sm: 0 0 15px rgba(255, 255, 255, 0.1);
+    --glow-md: 0 0 20px rgba(255, 255, 255, 0.15);
+    --inner-highlight: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    --surface-gradient: linear-gradient(145deg, var(--ui-surface-light), var(--ui-surface));
+    --button-highlight: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
 }
