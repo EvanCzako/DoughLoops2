@@ -53,34 +53,34 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
         return (
             <div className={styles.drumGridOuter} data-orientation="portrait">
                 <div className={styles.portraitContainer}>
-                    {/* Controls row at top */}
-                    <div className={styles.controlsRowPortrait}>
-                        {/* Instrument controls in horizontal row */}
-                        {grid.map((_, instrumentIndex) => (
-                            <div className={styles.controlsBoxPortrait} key={`controls-${instrumentIndex}`}>
-                                <div
-                                    className={styles.instrumentEmojiPortrait}
-                                    title={instruments[instrumentIndex]}
-                                >
-                                    {instrumentEmojis[instruments[instrumentIndex]]}
-                                </div>
-
-                                <input
-                                    className={styles.volumeSliderPortrait}
-                                    type="range"
-                                    min={0}
-                                    max={1}
-                                    step={0.01}
-                                    value={volumes[instrumentIndex]}
-                                    onChange={(e) => setVolume(instrumentIndex, parseFloat(e.target.value))}
-                                />
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Scrollable grid area */}
+                    {/* Scrollable grid area containing controls and grid */}
                     <div className={styles.scrollContainerPortrait}>
                         <div className={styles.innerGridContainerPortrait}>
+                            {/* Controls row at top */}
+                            <div className={styles.controlsRowPortrait}>
+                                {/* Instrument controls in horizontal row */}
+                                {grid.map((_, instrumentIndex) => (
+                                    <div className={styles.controlsBoxPortrait} key={`controls-${instrumentIndex}`}>
+                                        <div
+                                            className={styles.instrumentEmojiPortrait}
+                                            title={instruments[instrumentIndex]}
+                                        >
+                                            {instrumentEmojis[instruments[instrumentIndex]]}
+                                        </div>
+
+                                        <input
+                                            className={styles.volumeSliderPortrait}
+                                            type="range"
+                                            min={0}
+                                            max={1}
+                                            step={0.01}
+                                            value={volumes[instrumentIndex]}
+                                            onChange={(e) => setVolume(instrumentIndex, parseFloat(e.target.value))}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
                             {/* Grid: rows = steps, columns = instruments */}
                             <div className={styles.drumGridPortrait}>
                                 {/* Beat background - horizontally striped behind grid */}

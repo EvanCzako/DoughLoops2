@@ -23,6 +23,13 @@
     min-height: 400px;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+}
+
+@media (orientation: portrait) {
+    .drumGridOuter[data-orientation="portrait"] {
+        padding: 8px;
+    }
 }
 
 .scrollContainer {
@@ -314,18 +321,23 @@
     height: 100%;
     max-width: 100%;
     overflow: hidden;
+    gap: 0;
 }
 
 /* Portrait controls row - at the top, horizontal layout */
 .controlsRowPortrait {
     display: flex;
     gap: 6px;
-    padding-bottom: 8px;
+    padding-bottom: 0px;
     flex-shrink: 0;
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
     scrollbar-width: thin;
     scrollbar-color: #ad10a0 #000;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--grid-background);
 }
 
 .controlsRowPortrait::-webkit-scrollbar {
@@ -355,6 +367,7 @@
     width: var(--grid-cell-size);
     aspect-ratio: 1;
     box-shadow: var(--shadow-sm);
+    box-sizing: border-box;
 }
 
 .instrumentEmojiPortrait {
@@ -401,6 +414,8 @@
     scrollbar-color: #ad10a0 #000;
     flex-grow: 1;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .scrollContainerPortrait::-webkit-scrollbar {
@@ -418,6 +433,7 @@
 
 .innerGridContainerPortrait {
     display: flex;
+    flex-direction: column;
     white-space: normal;
 }
 
@@ -520,3 +536,26 @@
     box-shadow: 0 0 8px var(--grid-playing);
 }
 
+/* Portrait mode: shrink columns to fit viewport */
+@media (orientation: portrait) {
+    .cellPortrait {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .controlsBoxPortrait {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .gridRowPortrait {
+        height: clamp(28px, 7vw, 45px);
+        min-height: unset;
+    }
+
+    .volumeSliderPortrait {
+        display: none;
+    }
+}
