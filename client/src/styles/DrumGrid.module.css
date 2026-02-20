@@ -17,6 +17,10 @@
     padding: 16px;
     border-radius: 10px;
     box-shadow: var(--shadow-lg);
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
 .scrollContainer {
@@ -204,9 +208,20 @@
     background-color: var(--ui-surface);
     border: 1px solid var(--ui-border);
     border-radius: 5px;
-    height: var(--drum-grid-row-height); 
+    height: var(--drum-grid-row-height);
     box-sizing: border-box;
     box-shadow: var(--shadow-sm);
+    gap: 4px;
+    padding: 4px;
+}
+
+.instrumentEmoji {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    height: 25%;
 }
 
 .controlsBox select {
@@ -303,6 +318,8 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 /* Portrait controls row - at the top, horizontal layout */
@@ -330,24 +347,6 @@
     background: #000;
 }
 
-/* Portrait spacer for ghost column label */
-.controlsSpacerPortrait {
-    color: var(--ui-text-primary);
-    width: calc(var(--drum-grid-row-height) * 0.9 * 0.95);
-    flex-shrink: 0;
-    background-color: var(--ui-surface);
-    border: 1px solid var(--ui-border);
-    border-bottom: 2px solid var(--ui-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    border-radius: 6px;
-    box-shadow: var(--shadow-sm);
-    aspect-ratio: 1;
-}
-
-/* Portrait instrument control box - in top row */
 .controlsBoxPortrait {
     display: flex;
     flex-direction: column;
@@ -359,15 +358,24 @@
     border-radius: 5px;
     padding: 4px;
     flex-shrink: 0;
-    width: calc(var(--drum-grid-row-height) * 0.9 * 0.95);
+    width: calc(var(--drum-grid-row-height) * 0.9);
     aspect-ratio: 1;
     box-shadow: var(--shadow-sm);
+}
+
+.instrumentEmojiPortrait {
+    font-size: 24px;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
 }
 
 .controlsBoxPortrait select {
     font-size: 10px;
     width: 100%;
-    height: 50%;
+    height: 45%;
     text-overflow: ellipsis;
     background-color: var(--ui-surface-light);
     color: var(--ui-text-primary);

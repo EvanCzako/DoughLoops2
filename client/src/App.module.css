@@ -3,6 +3,8 @@
   flex-direction: column; /* Default = stacked (portrait) */
   gap: 16px;
   padding: 16px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 /* Landscape: side-by-side layout */
@@ -10,6 +12,7 @@
   .gridAndLoopsWrapper {
     flex-direction: row;
     align-items: flex-start;
+    max-width: 100%;
   }
 
   .gridAndLoopsWrapper > * {
@@ -18,12 +21,22 @@
   }
 }
 
+/* Extra wide screens: constrain for better UX */
+@media (min-width: 1400px) {
+  .gridAndLoopsWrapper {
+    max-width: 95vw;
+  }
+}
+
 .App {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
+	overflow-x: hidden;
 }
 
 .mainContent {
   flex: 1; /* This fills the remaining vertical space */
+  width: 100%;
+  overflow-x: hidden;
 }

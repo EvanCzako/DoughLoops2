@@ -8,6 +8,17 @@ interface DrumGridProps {
     currentStep?: number;
 }
 
+const instrumentEmojis: Record<string, string> = {
+    kick: '🔊',
+    clap: '👏',
+    snare: '🥁',
+    hat: '🎩',
+    rim: '🔔',
+    tom: '🎯',
+    cymbal: '✨',
+    triangle: '🔺',
+};
+
 export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const orientation = useStore((s) => s.orientation);
@@ -44,27 +55,15 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                 <div className={styles.portraitContainer}>
                     {/* Controls row at top */}
                     <div className={styles.controlsRowPortrait}>
-                        {/* Ghost column spacer */}
-                        <div className={styles.controlsSpacerPortrait} style={{ fontSize: fontSize * 1.8 }}>
-                            Time
-                        </div>
-
                         {/* Instrument controls in horizontal row */}
                         {grid.map((_, instrumentIndex) => (
                             <div className={styles.controlsBoxPortrait} key={`controls-${instrumentIndex}`}>
-                                <select
-                                    className={styles.sampleComboBox}
-                                    value={selectedSamples[instrumentIndex]}
-                                    onChange={(e) => setSelectedSample(instrumentIndex, e.target.value)}
-                                    style={{ fontSize: `${computedFontSize * 0.7}px` }}
+                                <div
+                                    className={styles.instrumentEmojiPortrait}
                                     title={instruments[instrumentIndex]}
                                 >
-                                    {['1', '2', '3'].map((num) => (
-                                        <option key={num} value={`${instruments[instrumentIndex]}${num}`}>
-                                            {instruments[instrumentIndex].slice(0, 3).toUpperCase()} {num}
-                                        </option>
-                                    ))}
-                                </select>
+                                    {instrumentEmojis[instruments[instrumentIndex]]}
+                                </div>
 
                                 <input
                                     className={styles.volumeSliderPortrait}
@@ -82,19 +81,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                     {/* Scrollable grid area */}
                     <div className={styles.scrollContainerPortrait}>
                         <div className={styles.innerGridContainerPortrait}>
-                            {/* Ghost column on left (shows current step) */}
-                            <div className={styles.ghostColumnWrapper}>
-                                <div className={styles.ghostColumnSpacer} />
-                                {Array.from({ length: numCols }).map((_, stepIndex) => (
-                                    <div
-                                        key={`ghost-${stepIndex}`}
-                                        className={`${styles.ghostCellPortrait} ${
-                                            currentStep === stepIndex ? styles.active : ''
-                                        }`}
-                                    />
-                                ))}
-                            </div>
-
                             {/* Grid: rows = steps, columns = instruments */}
                             <div className={styles.drumGridPortrait}>
                                 {/* Beat background - horizontally striped behind grid */}
@@ -149,19 +135,12 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
 
                     {grid.map((_, rowIndex) => (
                         <div className={styles.controlsBox} key={`controls-${rowIndex}`}>
-                            <select
-                                className={styles.sampleComboBox}
-                                value={selectedSamples[rowIndex]}
-                                onChange={(e) => setSelectedSample(rowIndex, e.target.value)}
-                                style={{ fontSize: `${computedFontSize}px` }}
+                            <div
+                                className={styles.instrumentEmoji}
+                                title={instruments[rowIndex]}
                             >
-                                {['1', '2', '3'].map((num) => (
-                                    <option key={num} value={`${instruments[rowIndex]}${num}`}>
-                                        {`${instruments[rowIndex].slice(0, 1).toUpperCase() + instruments[rowIndex].slice(1)}`}{' '}
-                                        {num}
-                                    </option>
-                                ))}
-                            </select>
+                                {instrumentEmojis[instruments[rowIndex]]}
+                            </div>
 
                             <input
                                 className={styles.volumeSlider}
