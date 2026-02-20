@@ -41,10 +41,10 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const numRows = grid.length;
 
     // Calculate beat dimensions for grid background (different for each orientation)
-    // Portrait: steps flow vertically, account for row gaps
-    const beatSizePortrait = `calc(var(--drum-grid-row-height) * 0.9 * ${numSubdivisions} + 6px * ${numSubdivisions})`;
-    // Landscape: steps flow horizontally, no gap accounting needed
-    const beatSizeLandscape = `calc(var(--drum-grid-row-height) * 0.9 * ${numSubdivisions})`;
+    // Portrait: steps flow vertically, account for row gaps (cell-size + gap per cell)
+    const beatSizePortrait = `calc(var(--grid-cell-size) * ${numSubdivisions} + 6px * ${numSubdivisions})`;
+    // Landscape: steps flow horizontally, cell-size per cell, no extra gap accounting
+    const beatSizeLandscape = `calc(var(--grid-cell-size) * ${numSubdivisions})`;
 
     const isPortrait = orientation === 'portrait';
 
