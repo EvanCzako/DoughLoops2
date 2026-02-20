@@ -85,41 +85,6 @@ export default function ControlsContainer(opts: {
 			>
 				Reset
 			</button>
-
-            <div className={styles.sliderContainer} style={{ marginBottom: 16, fontSize: `${computedFontSize}px` }}>
-					Beats: {numBeats}
-                    <input
-                        type="range"
-                        min={1}
-                        max={8}
-                        value={numBeats}
-                        onChange={(e) => setNumBeats(Number(e.target.value))}
-                        className={styles.controlsSlider}
-                    />
-            </div>
-            <div className={styles.sliderContainer} style={{ margin: '10px 0', fontSize: `${computedFontSize}px` }}>
-				Subdivisions: {numSubdivisions}
-                <input
-                    id="subdivisions"
-                    type="range"
-                    min={1}
-                    max={8}
-                    value={numSubdivisions}
-                    onChange={(e) => setNumSubdivisions(Number(e.target.value))}
-                    className={styles.controlsSlider}
-                />
-            </div>
-            <div className={styles.sliderContainer} style={{ margin: '20px 0', fontSize: `${computedFontSize}px` }}>
-                    BPM: {bpm}
-                    <input
-                        type="range"
-                        min="50"
-                        max="200"
-                        value={bpm}
-                        onChange={(e) => setBpm(Number(e.target.value))}
-                        className={styles.controlsSlider}
-                    />
-            </div>
         </div>
     );
 }
