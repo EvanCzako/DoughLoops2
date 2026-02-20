@@ -27,7 +27,7 @@ export default function App(): JSX.Element {
 
 	return (
 		<div className={styles.App}>
-			{/* <TitleBox dropdownAnchorRef={dropdownAnchorRef} /> */}
+			<TitleBox dropdownAnchorRef={dropdownAnchorRef} />
 			<div className={styles.mainContent}>
 				{showDropdown && (
 					<DropdownWrapper anchorRef={dropdownAnchorRef}>

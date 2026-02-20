@@ -21,15 +21,7 @@ export default function TitleBox({
 
 	return (
 		<div className={styles.titleBox}>
-			{/* <h1>DoughLoops</h1> */}
-			<img className={styles.logoImage} src={DoughLoopsLogo} alt="" />
-			<button
-				ref={dropdownAnchorRef}
-				onClick={dropdownClickedHandler}
-				className={styles.authToggleButton}
-			>
-				{user ? `Account (${user.username})` : 'Login / Register'}
-			</button>
+			<img className={styles.logoImage} src={DoughLoopsLogo} alt="DoughLoops" />
 		</div>
 	);
 }

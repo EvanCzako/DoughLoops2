@@ -2,13 +2,14 @@
 
 .titleBox {
     background-color: var(--ui-surface);
-    padding: 8px;
-    border-radius: 12px;
+    padding: 4px 8px;
+    border-radius: 0 0 12px 12px;
     border: 1px solid var(--ui-border);
+    border-top: none;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    height: 70px;
+    height: 40px;
     box-shadow: var(--shadow-md);
 }
 
@@ -32,6 +33,6 @@
 }
 
 .logoImage {
-	width: var(--logo-width);
-	border-radius: 10px;
+    width: calc(var(--logo-width) * 0.75);
+    border-radius: 8px;
 }
