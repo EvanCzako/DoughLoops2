@@ -219,11 +219,7 @@
     border: 1px solid var(--ui-border);
     border-radius: 5px;
     height: var(--grid-cell-size);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: default;
-    height: 25%;
 }
 
 .controlsBox select {
@@ -234,23 +230,6 @@
     background-color: var(--ui-surface-light);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    color: var(--ui-text-primary);
-    border: 1px solid var(--ui-border);
-    border-radius: 4px;
-    padding: 2px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.controlsBox select:hover {
-    background-color: color-mix(in srgb, var(--ui-surface-light) 90%, var(--ui-accent));
-    border-color: var(--ui-accent);
-    box-shadow: var(--shadow-sm);
-}
-
-.controlsBox select:focus {
-    outline: none;
     border-color: var(--ui-accent);
     box-shadow: 0 0 0 1px var(--ui-accent);
 }

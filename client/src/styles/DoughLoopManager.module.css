@@ -22,8 +22,14 @@
 
 .bottomControlsRow {
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	gap: 8px;
-	padding: 0 4px 4px 4px;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 4px 4px 4px;
+}
+
+@media (orientation: landscape) {
+    .bottomControlsRow {
+        display: none;
+    }
 }

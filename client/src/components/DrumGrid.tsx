@@ -129,10 +129,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
             <div className={styles.fixedGridContainer}>
                 {/* Controls column on left */}
                 <div className={styles.controlsColumn}>
-                    <div className={styles.controlsBoxSpacer} style={{ fontSize: fontSize * 1.8 }}>
-                        Sounds
-                    </div>
-
                     {grid.map((_, rowIndex) => (
                         <div className={styles.controlsBox} key={`controls-${rowIndex}`}>
                             <div
@@ -141,16 +137,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                             >
                                 {instrumentEmojis[instruments[rowIndex]]}
                             </div>
-
-                            <input
-                                className={styles.volumeSlider}
-                                type="range"
-                                min={0}
-                                max={1}
-                                step={0.01}
-                                value={volumes[rowIndex]}
-                                onChange={(e) => setVolume(rowIndex, parseFloat(e.target.value))}
-                            />
                         </div>
                     ))}
                 </div>
@@ -159,20 +145,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                 <div className={styles.scrollContainer}>
                     <div className={styles.innerGridContainer}>
                         <div className={styles.gridContainer}>
-                            <div className={styles.ghostRowWrapper}>
-                                <div className={styles.ghostRow}>
-                                    <div className={styles.ghostSpacer} />
-                                    <div style={{ display: 'flex' }}>
-                                        {Array.from({ length: numCols }).map((_, colIndex) => (
-                                            <div
-                                                key={`ghost-${colIndex}`}
-                                                className={`${styles.ghostCell} ${currentStep === colIndex ? styles.active : ''}`}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
                             <div className={styles.beatBackground}>
                                 {Array.from({ length: numCols / numSubdivisions }).map((_, beatIndex) => (
                                     <div

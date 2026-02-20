@@ -16,6 +16,7 @@ export default function DoughLoopManager() {
     const setGrid = useStore((s) => s.setGrid);
     const name = useStore((s) => s.name);
     const setName = useStore((s) => s.setName);
+    const orientation = useStore((s) => s.orientation);
 
     // // Reset selected loop on logout
     useEffect(() => {
@@ -33,10 +34,12 @@ export default function DoughLoopManager() {
                 name={name}
                 setName={setName}
             />
-            <div className={styles.bottomControlsRow}>
-                <ControlsContainer grid={grid} setGrid={setGrid} />
-                <BeatSubdivControls />
-            </div>
+            {orientation === 'portrait' && (
+				<div className={styles.bottomControlsRow}>
+					<ControlsContainer grid={grid} setGrid={setGrid} />
+					<BeatSubdivControls />
+				</div>
+			)}
         </div>
     );
 }

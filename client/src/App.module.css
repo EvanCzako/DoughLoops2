@@ -3,15 +3,16 @@
   flex-direction: column; /* Default = stacked (portrait) */
   gap: 16px;
   padding: 4px;
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   flex: 1;
   min-height: 0;
   overflow: hidden;
 }
 
-/* Landscape: side-by-side layout */
-@media (orientation: landscape) and (min-width: 900px) {
+/* Landscape: side-by-side layout at all widths */
+@media (orientation: landscape) {
   .gridAndLoopsWrapper {
     flex-direction: row;
     align-items: flex-start;
@@ -21,6 +22,20 @@
   .gridAndLoopsWrapper > * {
     flex: 1;
     min-width: 0; /* allows shrinking */
+  }
+}
+
+.sideControlsPanel {
+  display: none;
+}
+
+@media (orientation: landscape) {
+  .sideControlsPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 0 0 auto;
+    margin-left: 8px;
   }
 }
 
@@ -36,12 +51,7 @@
   }
 }
 
-/* Extra wide screens: constrain for better UX */
-@media (min-width: 1400px) {
-  .gridAndLoopsWrapper {
-    max-width: 95vw;
-  }
-}
+/* Extra wide screens: no additional constraints (full-width behavior) */
 
 .App {
 	display: flex;

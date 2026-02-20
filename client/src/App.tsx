@@ -8,6 +8,8 @@ import DropdownWrapper from './components/DropdownWrapper';
 import UserLoopsWrapper from './components/UserLoopsWrapper';
 import styles from './App.module.css';
 import Footer from './components/Footer';
+import ControlsContainer from './components/ControlsContainer';
+import BeatSubdivControls from './components/BeatSubdivControls';
 
 export default function App(): JSX.Element {
 	const grid = useStore((s) => s.grid);
@@ -16,6 +18,7 @@ export default function App(): JSX.Element {
 	const setName = useStore((s) => s.setName);
 	const updateFontSize = useStore((s) => s.updateFontSize);
 	const showDropdown = useStore((s) => s.userDropdownOpen);
+	const orientation = useStore((s) => s.orientation);
 
 	const dropdownAnchorRef = useRef<HTMLButtonElement>(null);
 
@@ -36,6 +39,12 @@ export default function App(): JSX.Element {
 				)}
 				<div className={styles.gridAndLoopsWrapper}>
 					<DoughLoopManager />
+					{orientation === 'landscape' && (
+						<div className={styles.sideControlsPanel}>
+							<ControlsContainer grid={grid} setGrid={setGrid} />
+							<BeatSubdivControls />
+						</div>
+					)}
 					{/* <UserLoopsWrapper /> */}
 				</div>
 			</div>
