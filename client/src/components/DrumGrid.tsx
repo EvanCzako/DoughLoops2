@@ -29,9 +29,11 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const numCols = grid[0]?.length || 0;
     const numRows = grid.length;
 
-    // Calculate beat dimensions for grid background
-    // Each beat spans numSubdivisions rows plus the gaps between them
-    const beatSize = `calc(var(--drum-grid-row-height) * 0.9 * ${numSubdivisions} + 6px * ${numSubdivisions - 1})`;
+    // Calculate beat dimensions for grid background (different for each orientation)
+    // Portrait: steps flow vertically, account for row gaps
+    const beatSizePortrait = `calc(var(--drum-grid-row-height) * 0.9 * ${numSubdivisions} + 6px * ${numSubdivisions})`;
+    // Landscape: steps flow horizontally, no gap accounting needed
+    const beatSizeLandscape = `calc(var(--drum-grid-row-height) * 0.9 * ${numSubdivisions})`;
 
     const isPortrait = orientation === 'portrait';
 
@@ -103,7 +105,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                             className={`${styles.beatStripePortrait} ${
                                                 beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
                                             }`}
-                                            style={{ height: beatSize }}
+                                            style={{ height: beatSizePortrait }}
                                         />
                                     ))}
                                 </div>
@@ -199,7 +201,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                         className={`${styles.beatStripe} ${
                                             beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
                                         }`}
-                                        style={{ width: beatSize }}
+                                        style={{ width: beatSizeLandscape }}
                                     />
                                 ))}
                             </div>
