@@ -294,3 +294,228 @@
     align-items: flex-start;
 }
 
+/* ============================================================================
+   PORTRAIT MODE STYLES (Steps as rows, Instruments as columns)
+   ============================================================================ */
+
+.portraitContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+/* Portrait controls row - at the top, horizontal layout */
+.controlsRowPortrait {
+    display: flex;
+    gap: 6px;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #ad10a0 #000;
+}
+
+.controlsRowPortrait::-webkit-scrollbar {
+    height: 4px;
+}
+
+.controlsRowPortrait::-webkit-scrollbar-thumb {
+    background: #a60f99;
+    border-radius: 2px;
+}
+
+.controlsRowPortrait::-webkit-scrollbar-track {
+    background: #000;
+}
+
+/* Portrait spacer for ghost column label */
+.controlsSpacerPortrait {
+    color: var(--ui-text-primary);
+    width: calc(var(--drum-grid-row-height) * 0.9 * 0.95);
+    flex-shrink: 0;
+    background-color: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-bottom: 2px solid var(--ui-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    border-radius: 6px;
+    box-shadow: var(--shadow-sm);
+    aspect-ratio: 1;
+}
+
+/* Portrait instrument control box - in top row */
+.controlsBoxPortrait {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    background-color: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-radius: 5px;
+    padding: 4px;
+    flex-shrink: 0;
+    width: calc(var(--drum-grid-row-height) * 0.9 * 0.95);
+    aspect-ratio: 1;
+    box-shadow: var(--shadow-sm);
+}
+
+.controlsBoxPortrait select {
+    font-size: 10px;
+    width: 100%;
+    height: 50%;
+    text-overflow: ellipsis;
+    background-color: var(--ui-surface-light);
+    color: var(--ui-text-primary);
+    border: 1px solid var(--ui-border);
+    border-radius: 3px;
+    padding: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.controlsBoxPortrait select:hover {
+    background-color: color-mix(in srgb, var(--ui-surface-light) 90%, var(--ui-accent));
+    border-color: var(--ui-accent);
+}
+
+.volumeSliderPortrait {
+    width: 80%;
+    height: 40%;
+    accent-color: rgb(110, 19, 96);
+}
+
+/* Portrait scrollable grid - vertical scrolling */
+.scrollContainerPortrait {
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: normal;
+    width: 100%;
+    scrollbar-width: thick;
+    scrollbar-color: #ad10a0 #000;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.scrollContainerPortrait::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollContainerPortrait::-webkit-scrollbar-thumb {
+    background: #a60f99;
+    border-radius: 4px;
+}
+
+.scrollContainerPortrait::-webkit-scrollbar-track {
+    background: #000;
+}
+
+.innerGridContainerPortrait {
+    display: flex;
+    white-space: normal;
+}
+
+/* Ghost column wrapper - left side, shows current step */
+.ghostColumnWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 8px;
+    flex-shrink: 0;
+}
+
+.ghostColumnSpacer {
+    width: calc(var(--drum-grid-row-height) * 0.9 * 0.95);
+    height: calc(var(--drum-grid-row-height) * 0.9 * 0.95);
+    flex-shrink: 0;
+}
+
+.ghostCellPortrait {
+    width: calc(var(--drum-grid-row-height) * 0.9 * 0.95);
+    height: calc(var(--drum-grid-row-height) * 0.25);
+    border-radius: 2px;
+    background: #222;
+    transition: background 0.1s;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+/* Portrait grid - rows = steps, columns = instruments */
+.drumGridPortrait {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    z-index: 3;
+}
+
+/* Beat background for portrait - horizontal stripes behind grid */
+.beatBackgroundPortrait {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.beatStripePortrait {
+    width: 100%;
+    flex-shrink: 0;
+    transition: background-color 0.3s;
+}
+
+.gridRowPortrait {
+    display: flex;
+    height: calc(var(--drum-grid-row-height) * 0.9);
+    align-items: stretch;
+    gap: 6px;
+}
+
+.cellPortrait {
+    width: calc(var(--drum-grid-row-height) * 0.9);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.cellPortrait input[type='checkbox'] {
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    background: var(--grid-cell-inactive);
+    border: 1px solid var(--grid-cell-border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cellPortrait input[type='checkbox']:not(:checked):hover {
+    background: color-mix(in srgb, var(--grid-cell-inactive) 85%, var(--ui-accent));
+    border-color: var(--ui-accent);
+    box-shadow: 0 0 12px rgba(187, 154, 247, 0.15);
+}
+
+.cellPortrait input[type='checkbox']:checked {
+    background: var(--grid-cell-active);
+    border: 2px solid var(--grid-cell-border);
+    box-shadow: 0 0 8px rgba(255, 158, 100, 0.3);
+}
+
+.gridRowPortrait .playing {
+    outline: 2px solid var(--grid-playing);
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 8px var(--grid-playing);
+}
+

@@ -30,7 +30,8 @@ interface StoreState {
     selectedSamples: string[];
     volumes: number[]; // from 0 (mute) to 1 (full volume)
     fontSize: number;
-	userDropdownOpen: boolean,
+	userDropdownOpen: boolean;
+    orientation: 'portrait' | 'landscape';
 
     setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
@@ -43,6 +44,7 @@ interface StoreState {
     setBpm: (bpm: number) => void;
     setIsPlaying: (playing: boolean) => void;
     updateFontSize: () => void;
+    setOrientation: (orientation: 'portrait' | 'landscape') => void;
 
     // Auth actions
 	setUserDropdownOpen: (open: boolean) => void;
@@ -79,15 +81,23 @@ export const useStore = create<StoreState>((set) => ({
     volumes: [1, 1, 1, 1, 1, 1, 1, 1],
     fontSize: 0,
 	userDropdownOpen: false,
+    orientation: 'landscape',
 	setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
+    setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
     updateFontSize: () => {
         const vw = (window.visualViewport?.width ?? window.innerWidth) / 100;
         const vh = (window.visualViewport?.height ?? window.innerHeight) / 100;
+        const width = window.visualViewport?.width ?? window.innerWidth;
+        const height = window.visualViewport?.height ?? window.innerHeight;
 
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         document.documentElement.style.setProperty('--vw', `${vw}px`);
 
+        // Detect orientation: portrait if height > width
+        const newOrientation = height > width ? 'portrait' : 'landscape';
+        set({ orientation: newOrientation });
+        document.documentElement.setAttribute('data-orientation', newOrientation);
         
 		const product = Math.max(8,Math.pow(vh*80, 1/3));
         const fontSize = product*1.1;
