@@ -2,8 +2,8 @@
 
 :root {
     --controls-container-width: 80px; /* default, overwritten dynamically */
-	--controls-column-width: 80px; /* default, overwritten dynamically */
-	--controls-container-height: 80px;
+    --controls-column-width: 80px;    /* default, overwritten dynamically */
+    --controls-container-height: 80px;
 }
 
 .controlsContainer {
@@ -19,29 +19,29 @@
     box-shadow: var(--shadow-md),
                 inset 0 1px 1px rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
+    box-sizing: border-box;
 }
 
 .controlsSlider {
     width: 40%;
     accent-color: rgb(189, 125, 69);
-	color: white;
-	left: 50px;
+    color: white;
+    left: 50px;
 }
 
 .sliderContainer {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	font-weight: 750;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: 750;
 }
 
 .controlsButton {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    margin-bottom: 8px;
-    margin-right: 4px;
-    height: calc(var(--controls-container-height) * 0.22);
-    width: calc(var(--controls-container-width) * 0.3);
+    margin: 0;
+    height: 40px;
+    width: 100%;
     font-weight: 600;
     color: var(--grid-background);
     transition: all 0.2s ease;
@@ -63,8 +63,8 @@
     left: 0;
     right: 0;
     height: 50%;
-    background: linear-gradient(180deg, 
-                rgba(255, 255, 255, 0.15) 0%, 
+    background: linear-gradient(180deg,
+                rgba(255, 255, 255, 0.15) 0%,
                 rgba(255, 255, 255, 0) 100%);
     border-radius: 7px 7px 0 0;
 }
@@ -81,19 +81,26 @@
     box-shadow: var(--shadow-sm);
 }
 
-.buttonRow {
-    display: flex;
-    flex-direction: column;
+.controlsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(32px, 1fr);
     gap: 6px;
     width: 100%;
+    margin-top: 6px;
 }
 
 .buttonIcon {
     line-height: 1;
 }
 
-.buttonLabel {
-    white-space: nowrap;
+.bpmLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--ui-text-primary);
 }
 
 /* Play/Stop Button States */
@@ -131,25 +138,17 @@
     background: linear-gradient(135deg, var(--button-reset-hover), var(--button-reset));
 }
 
+/* Optional: slightly tweak tempo buttons if needed */
+.tempoButton {
+    font-size: 0.9em;
+}
+
 @media (orientation: portrait) {
     .controlsContainer {
-        width: auto;
-        max-width: 100%;
-        margin: 8px auto 0 auto;
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .buttonRow {
-        flex-direction: row;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .controlsButton {
-        flex: 0 0 auto;
-        width: clamp(52px, 16vw, 68px);
-        margin-right: 0;
-        margin-bottom: 0;
+        width: 50%;
+        max-width: 50%;
+        margin: 8px 0 0 0; /* span from left edge to center */
+        padding-left: 8px;
+        padding-right: 8px;
     }
 }
