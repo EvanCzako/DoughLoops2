@@ -19,3 +19,11 @@
     display: flex;
     flex-direction: column;
 }
+
+.bottomControlsRow {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 0 4px 4px 4px;
+}

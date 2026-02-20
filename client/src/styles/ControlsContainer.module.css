@@ -94,7 +94,9 @@
     line-height: 1;
 }
 
-.bpmLabel {
+.bpmLabel,
+.beatsLabel,
+.subdivLabel {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -145,9 +147,9 @@
 
 @media (orientation: portrait) {
     .controlsContainer {
-        width: 50%;
-        max-width: 50%;
-        margin: 8px 0 0 0; /* span from left edge to center */
+        width: 100%;
+        max-width: 100%;
+        margin: 8px 0 0 0;
         padding-left: 8px;
         padding-right: 8px;
     }

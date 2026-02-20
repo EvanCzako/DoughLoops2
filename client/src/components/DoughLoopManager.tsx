@@ -6,6 +6,7 @@ import DrumLoopEditor from './DrumLoopEditor';
 import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
 import UserLoopsWrapper from './UserLoopsWrapper';
+import BeatSubdivControls from './BeatSubdivControls';
 
 export default function DoughLoopManager() {
     const user = useStore((s) => s.user);
@@ -24,15 +25,18 @@ export default function DoughLoopManager() {
     }, [user]);
 
     return (
-		<div className={styles.doughLoopManager}>
-			<DrumLoopEditor
+        <div className={styles.doughLoopManager}>
+            <DrumLoopEditor
                 selectedLoop={selectedLoop}
                 grid={grid}
                 setGrid={setGrid}
                 name={name}
                 setName={setName}
             />
-			<ControlsContainer grid={grid} setGrid={setGrid} />
+            <div className={styles.bottomControlsRow}>
+                <ControlsContainer grid={grid} setGrid={setGrid} />
+                <BeatSubdivControls />
+            </div>
         </div>
     );
 }
