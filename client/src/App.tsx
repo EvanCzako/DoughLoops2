@@ -41,8 +41,8 @@ export default function App(): JSX.Element {
 					<DoughLoopManager />
 					{orientation === 'landscape' && (
 						<div className={styles.sideControlsPanel}>
-							<ControlsContainer grid={grid} setGrid={setGrid} />
 							<BeatSubdivControls />
+							<ControlsContainer grid={grid} setGrid={setGrid} />
 						</div>
 					)}
 					{/* <UserLoopsWrapper /> */}
