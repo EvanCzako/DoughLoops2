@@ -56,35 +56,39 @@ export default function ControlsContainer(opts: {
                 bpm={bpm}
 				stepRef={stepRef}
             />
-            <button
-                className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
-				style={{fontSize: `${computedFontSize}px`}}
-                onClick={handlePlayToggle}
-            >
-                {isPlaying ? 'Stop' : 'Play'}
-            </button>
-			<button
-				onClick={() => {
-					const numRows = opts.grid.length;
-					const numCols = opts.grid[0]?.length || 0;
-					const cleared = Array.from({ length: numRows }, () => Array(numCols).fill(false));
-					opts.setGrid(cleared);
-				}}
-				className={`${styles.controlsButton} ${styles.clearButton}`}
-				style={{fontSize: `${computedFontSize}px`}}
-			>
-				Clear
-			</button>
-			<button
-				onClick={() => {
-					setCurrentStep(0);
-					stepRef.current = 0;
-				}}
-				className={`${styles.controlsButton} ${styles.resetButton}`}
-				style={{fontSize: `${computedFontSize}px`}}
-			>
-				Reset
-			</button>
+            <div className={styles.buttonRow}>
+                <button
+                    className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                    onClick={handlePlayToggle}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        {isPlaying ? '⏹️' : '▶️'}
+                    </span>
+                </button>
+                <button
+                    onClick={() => {
+                        const numRows = opts.grid.length;
+                        const numCols = opts.grid[0]?.length || 0;
+                        const cleared = Array.from({ length: numRows }, () => Array(numCols).fill(false));
+                        opts.setGrid(cleared);
+                    }}
+                    className={`${styles.controlsButton} ${styles.clearButton}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">🧹</span>
+                </button>
+                <button
+                    onClick={() => {
+                        setCurrentStep(0);
+                        stepRef.current = 0;
+                    }}
+                    className={`${styles.controlsButton} ${styles.resetButton}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">↩️</span>
+                </button>
+            </div>
         </div>
     );
 }

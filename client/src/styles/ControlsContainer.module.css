@@ -38,10 +38,10 @@
 .controlsButton {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     margin-right: 4px;
-    height: calc(var(--controls-container-height) * 0.2);
-    width: calc(var(--controls-container-width) * 0.28);
+    height: calc(var(--controls-container-height) * 0.22);
+    width: calc(var(--controls-container-width) * 0.3);
     font-weight: 600;
     color: var(--grid-background);
     transition: all 0.2s ease;
@@ -49,6 +49,11 @@
                 inset 0 1px 1px rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
 }
 
 .controlsButton::before {
@@ -74,6 +79,21 @@
 .controlsButton:active {
     transform: translateY(1px);
     box-shadow: var(--shadow-sm);
+}
+
+.buttonRow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.buttonIcon {
+    line-height: 1;
+}
+
+.buttonLabel {
+    white-space: nowrap;
 }
 
 /* Play/Stop Button States */
@@ -109,4 +129,27 @@
 
 .resetButton:hover {
     background: linear-gradient(135deg, var(--button-reset-hover), var(--button-reset));
+}
+
+@media (orientation: portrait) {
+    .controlsContainer {
+        width: auto;
+        max-width: 100%;
+        margin: 8px auto 0 auto;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .buttonRow {
+        flex-direction: row;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .controlsButton {
+        flex: 0 0 auto;
+        width: clamp(52px, 16vw, 68px);
+        margin-right: 0;
+        margin-bottom: 0;
+    }
 }

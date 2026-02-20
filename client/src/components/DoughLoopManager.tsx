@@ -24,15 +24,15 @@ export default function DoughLoopManager() {
     }, [user]);
 
     return (
-        <div className={styles.doughLoopManager}>
-			<ControlsContainer grid={grid} setGrid={setGrid} />
-            <DrumLoopEditor
+		<div className={styles.doughLoopManager}>
+			<DrumLoopEditor
                 selectedLoop={selectedLoop}
                 grid={grid}
                 setGrid={setGrid}
                 name={name}
                 setName={setName}
             />
+			<ControlsContainer grid={grid} setGrid={setGrid} />
         </div>
     );
 }
