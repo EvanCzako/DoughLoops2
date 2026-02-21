@@ -237,6 +237,14 @@
     height: var(--grid-cell-size);
     cursor: default;
     box-sizing: border-box; /* ensure total height matches grid rows */
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.controlsBox:hover {
+    background-color: color-mix(in srgb, var(--ui-surface) 85%, var(--ui-accent));
+    border-color: var(--ui-accent);
+    transform: scale(1.05);
 }
 
 .instrumentEmoji {
@@ -247,7 +255,10 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    pointer-events: none;
+    user-select: none;
+    transition: filter 0.3s ease;
+    border-radius: 4px;
+    padding: 4px;
 }
 
 .controlsBox select {
@@ -287,17 +298,16 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding-right: 8px;
+    padding-right: 4px;
     flex-shrink: 0;
     width: var(--controls-column-width);
-    height: 100%;
     margin-left: 0;
 }
 
 @media (orientation: landscape) {
     .controlsColumn {
-        padding-right: 0;
-        margin-left: -4px;
+        height: auto;
+        padding-right: 8px;
     }
 }
 
@@ -355,7 +365,7 @@
 .controlsRowPortrait {
     display: flex;
     gap: 6px;
-    padding-bottom: 0px;
+    padding-bottom: 4px;
     flex-shrink: 0;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -395,6 +405,14 @@
     aspect-ratio: 1;
     box-shadow: var(--shadow-sm);
     box-sizing: border-box;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.controlsBoxPortrait:hover {
+    background-color: color-mix(in srgb, var(--ui-surface) 85%, var(--ui-accent));
+    border-color: var(--ui-accent);
+    transform: scale(1.05);
 }
 
 .instrumentEmojiPortrait {
@@ -403,7 +421,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: default;
+    user-select: none;
+    transition: filter 0.3s ease;
+    border-radius: 4px;
+    padding: 4px;
 }
 
 .controlsBoxPortrait select {

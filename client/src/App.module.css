@@ -48,8 +48,8 @@
     margin-left: 0;
 		margin-right: 4px; /* match overall app padding on right */
 		width: min(210px, 24vw);
-		justify-content: space-between;
-		align-self: stretch; /* match DoughLoopManager height */
+		justify-content: flex-start;
+		align-self: flex-start; /* align at top instead of stretch */
   }
 
   .sideControlsPanel > * {

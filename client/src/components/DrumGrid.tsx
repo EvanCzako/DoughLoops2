@@ -28,7 +28,31 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const volumes = useStore((s) => s.volumes);
     const setVolume = useStore((s) => s.setVolume);
     const fontSize = useStore((s) => s.fontSize);
+    const instrumentVariants = useStore((s) => s.instrumentVariants);
+    const setInstrumentVariant = useStore((s) => s.setInstrumentVariant);
     const computedFontSize = Math.max(10, fontSize * 1.4);
+
+    const cycleVariant = (index: number) => {
+        const currentVariant = instrumentVariants[index];
+        const nextVariant = currentVariant === 3 ? 1 : currentVariant + 1;
+        setInstrumentVariant(index, nextVariant);
+        // Update the selected sample to match the new variant
+        const newSample = `${instruments[index]}${nextVariant}`;
+        setSelectedSample(index, newSample);
+    };
+
+    const getHueRotation = (variant: number): number => {
+        switch (variant) {
+            case 1:
+                return 0;
+            case 2:
+                return 120;
+            case 3:
+                return 240;
+            default:
+                return 0;
+        }
+    };
 
     const toggle = (row: number, col: number) => {
         const updated = grid.map((r, ri) =>
@@ -60,10 +84,22 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                             <div className={styles.controlsRowPortrait}>
                                 {/* Instrument controls in horizontal row */}
                                 {grid.map((_, instrumentIndex) => (
-                                    <div className={styles.controlsBoxPortrait} key={`controls-${instrumentIndex}`}>
+                                    <div
+                                        className={styles.controlsBoxPortrait}
+                                        key={`controls-${instrumentIndex}`}
+                                        onClick={() => cycleVariant(instrumentIndex)}
+                                        style={{
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s ease',
+                                        }}
+                                    >
                                         <div
                                             className={styles.instrumentEmojiPortrait}
-                                            title={instruments[instrumentIndex]}
+                                            title={`${instruments[instrumentIndex]} (Variant ${instrumentVariants[instrumentIndex]})`}
+                                            style={{
+                                                filter: `hue-rotate(${getHueRotation(instrumentVariants[instrumentIndex])}deg)`,
+                                                transition: 'filter 0.3s ease',
+                                            }}
                                         >
                                             {instrumentEmojis[instruments[instrumentIndex]]}
                                         </div>
@@ -130,10 +166,22 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                 {/* Controls column on left */}
                 <div className={styles.controlsColumn}>
                     {grid.map((_, rowIndex) => (
-                        <div className={styles.controlsBox} key={`controls-${rowIndex}`}>
+                        <div
+                            className={styles.controlsBox}
+                            key={`controls-${rowIndex}`}
+                            onClick={() => cycleVariant(rowIndex)}
+                            style={{
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease',
+                            }}
+                        >
                             <div
                                 className={styles.instrumentEmoji}
-                                title={instruments[rowIndex]}
+                                title={`${instruments[rowIndex]} (Variant ${instrumentVariants[rowIndex]})`}
+                                style={{
+                                    filter: `hue-rotate(${getHueRotation(instrumentVariants[rowIndex])}deg)`,
+                                    transition: 'filter 0.3s ease',
+                                }}
                             >
                                 {instrumentEmojis[instruments[rowIndex]]}
                             </div>

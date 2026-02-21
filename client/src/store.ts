@@ -32,9 +32,11 @@ interface StoreState {
     fontSize: number;
 	userDropdownOpen: boolean;
     orientation: 'portrait' | 'landscape';
+    instrumentVariants: number[];
 
     setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
+    setInstrumentVariant: (index: number, variant: number) => void;
     setName: (name: string) => void;
     setGrid: (grid: boolean[][]) => void;
     setSelectedLoop: (loop: DoughLoop | null) => void;
@@ -82,6 +84,7 @@ export const useStore = create<StoreState>((set) => ({
     fontSize: 0,
 	userDropdownOpen: false,
     orientation: 'landscape',
+    instrumentVariants: [1, 1, 1, 1, 1, 1, 1, 1],
 	setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
     setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
@@ -135,6 +138,13 @@ export const useStore = create<StoreState>((set) => ({
             const updated = [...state.selectedSamples];
             updated[index] = sample;
             return { selectedSamples: updated };
+        }),
+
+    setInstrumentVariant: (index, variant) =>
+        set((state) => {
+            const updated = [...state.instrumentVariants];
+            updated[index] = variant;
+            return { instrumentVariants: updated };
         }),
 
     setName: (name: string) => set({ name }),
