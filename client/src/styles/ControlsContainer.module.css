@@ -44,7 +44,7 @@
     width: 100%;
     font-weight: 600;
     color: var(--grid-background);
-    transition: all 0.2s ease;
+    /* transition: all 0.2s ease; */
     box-shadow: var(--shadow-sm),
                 inset 0 1px 1px rgba(255, 255, 255, 0.2);
     position: relative;

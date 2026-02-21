@@ -90,7 +90,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                         onClick={() => cycleVariant(instrumentIndex)}
                                         style={{
                                             cursor: 'pointer',
-                                            transition: 'all 0.2s ease',
                                         }}
                                     >
                                         <div
@@ -98,7 +97,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                             title={`${instruments[instrumentIndex]} (Variant ${instrumentVariants[instrumentIndex]})`}
                                             style={{
                                                 filter: `hue-rotate(${getHueRotation(instrumentVariants[instrumentIndex])}deg)`,
-                                                transition: 'filter 0.3s ease',
                                             }}
                                         >
                                             {instrumentEmojis[instruments[instrumentIndex]]}
@@ -172,7 +170,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                             onClick={() => cycleVariant(rowIndex)}
                             style={{
                                 cursor: 'pointer',
-                                transition: 'all 0.2s ease',
                             }}
                         >
                             <div
@@ -180,7 +177,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                 title={`${instruments[rowIndex]} (Variant ${instrumentVariants[rowIndex]})`}
                                 style={{
                                     filter: `hue-rotate(${getHueRotation(instrumentVariants[rowIndex])}deg)`,
-                                    transition: 'filter 0.3s ease',
                                 }}
                             >
                                 {instrumentEmojis[instruments[rowIndex]]}

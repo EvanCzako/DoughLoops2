@@ -1,8 +1,6 @@
-@import './variables.module.css';
-
 .titleBox {
     background-color: var(--ui-surface);
-    padding: 4px 8px;
+    padding: 0 8px;
     border-radius: 12px;
     border: 1px solid var(--ui-border);
     margin: 5px;
@@ -11,6 +9,20 @@
     align-items: center;
     height: 40px;
     box-shadow: var(--shadow-md);
+}
+
+.titleBox a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+    padding: 0;
+    height: 70%;
+    width: auto;
+}
+
+.titleBox a:hover {
+    transform: scale(1.05);
 }
 
 .authToggleButton {
@@ -33,6 +45,9 @@
 }
 
 .logoImage {
-    width: calc(var(--logo-width) * 0.75);
+    height: 100%;
+    width: auto;
     border-radius: 8px;
+    flex-shrink: 0;
+    cursor: pointer;
 }
