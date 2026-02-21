@@ -36,6 +36,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const instrumentVariants = useStore((s) => s.instrumentVariants);
     const setInstrumentVariant = useStore((s) => s.setInstrumentVariant);
     const computedFontSize = Math.max(10, fontSize * 1.4);
+    const isPortrait = orientation === 'portrait';
 
     // Calculate popup positions when opened or window resizes
     useEffect(() => {
@@ -46,10 +47,19 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                     const button = volumeButtonRefs.current[instrumentIndex];
                     if (button) {
                         const rect = button.getBoundingClientRect();
-                        newPositions[instrumentIndex] = {
-                            top: rect.bottom + 4,
-                            left: rect.left + rect.width / 2,
-                        };
+                        if (isPortrait) {
+                            // Portrait: popup below the button, centered
+                            newPositions[instrumentIndex] = {
+                                top: rect.bottom + 4,
+                                left: rect.left + rect.width / 2,
+                            };
+                        } else {
+                            // Landscape: popup to the right of the button
+                            newPositions[instrumentIndex] = {
+                                top: rect.top + rect.height / 2,
+                                left: rect.right + 4,
+                            };
+                        }
                     }
                 }
             });
@@ -67,7 +77,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                 window.removeEventListener('resize', updatePositions);
             };
         }
-    }, [volumeSliderOpen]);
+    }, [volumeSliderOpen, isPortrait]);
 
     // Close volume slider when clicking outside
     useEffect(() => {
@@ -130,8 +140,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const beatSizePortrait = `${(numSubdivisions / numCols) * 100}%`;
     // Landscape: steps flow horizontally, cell-size per cell, no extra gap accounting
     const beatSizeLandscape = `calc(var(--grid-cell-size) * ${numSubdivisions})`;
-
-    const isPortrait = orientation === 'portrait';
 
     // PORTRAIT MODE: Render grid with steps as rows, instruments as columns
     if (isPortrait) {
@@ -273,25 +281,80 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                 <div className={styles.controlsColumn}>
                     {grid.map((_, rowIndex) => (
                         <div
-                            className={styles.controlsBox}
+                            className={styles.controlsItemLandscape}
                             key={`controls-${rowIndex}`}
-                            onClick={() => cycleVariant(rowIndex)}
-                            style={{
-                                cursor: 'pointer',
+                            ref={(el) => {
+                                if (el) controlItemRefs.current[rowIndex] = el;
                             }}
                         >
                             <div
-                                className={styles.instrumentEmoji}
-                                title={`${instruments[rowIndex]} (Variant ${instrumentVariants[rowIndex]})`}
+                                className={styles.controlsBox}
+                                onClick={() => cycleVariant(rowIndex)}
                                 style={{
-                                    filter: `hue-rotate(${getHueRotation(instrumentVariants[rowIndex])}deg)`,
+                                    cursor: 'pointer',
                                 }}
                             >
-                                {instrumentEmojis[instruments[rowIndex]]}
+                                <div
+                                    className={styles.instrumentEmoji}
+                                    title={`${instruments[rowIndex]} (Variant ${instrumentVariants[rowIndex]})`}
+                                    style={{
+                                        filter: `hue-rotate(${getHueRotation(instrumentVariants[rowIndex])}deg)`,
+                                    }}
+                                >
+                                    {instrumentEmojis[instruments[rowIndex]]}
+                                </div>
                             </div>
+
+                            {/* Volume button on the right - landscape mode */}
+                            <button
+                                className={styles.volumeButtonLandscape}
+                                ref={(el) => {
+                                    if (el) volumeButtonRefs.current[rowIndex] = el;
+                                }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const newSet = new Set(volumeSliderOpen);
+                                    if (newSet.has(rowIndex)) {
+                                        newSet.delete(rowIndex);
+                                    } else {
+                                        newSet.add(rowIndex);
+                                    }
+                                    setVolumeSliderOpen(newSet);
+                                }}
+                                title="Adjust volume"
+                            >
+                                V
+                            </button>
                         </div>
                     ))}
                 </div>
+
+                {/* Volume slider popups - fixed positioning */}
+                {Array.from(volumeSliderOpen).map((rowIndex) => (
+                    <div
+                        key={`volume-popup-${rowIndex}`}
+                        className={styles.volumeSliderPopupLandscape}
+                        ref={(el) => {
+                            if (el) volumeSliderRefs.current[rowIndex] = el;
+                        }}
+                        style={{
+                            top: `${popupPositions[rowIndex]?.top || 0}px`,
+                            left: `${popupPositions[rowIndex]?.left || 0}px`,
+                            height: `calc(${controlItemRefs.current[rowIndex]?.offsetHeight || 32}px - 4px)`,
+                            visibility: popupPositions[rowIndex] ? 'visible' : 'hidden',
+                        }}
+                    >
+                        <input
+                            className={styles.volumeSliderPopupInputLandscape}
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={volumes[rowIndex]}
+                            onChange={(e) => setVolume(rowIndex, parseFloat(e.target.value))}
+                        />
+                    </div>
+                ))}
 
                 {/* Scrollable grid */}
                 <div className={styles.scrollContainer}>

@@ -50,7 +50,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    width: 100%;
+    min-width: 0;
     scrollbar-width: thick; /* Firefox */
     scrollbar-color: #ad10a0 #000; /* Firefox: thumb color and track */
     flex-grow: 1;
@@ -252,6 +252,15 @@
     user-select: none;
     transition: none;
     will-change: height;
+    flex-shrink: 0;
+}
+
+@media (orientation: landscape) {
+    .controlsBox {
+        height: 100%;
+        aspect-ratio: 1;
+        flex-shrink: 0;
+    }
 }
 
 .controlsBox:hover {
@@ -342,18 +351,16 @@
 
 @media (orientation: landscape) {
     .controlsColumn {
-        height: auto;
-        padding-right: 8px;
+        height: 100%;
+        width: fit-content;
+        padding-right: 4px;
+        overflow-y: auto;
+        flex-shrink: 0;
         transition: none !important;
         display: flex;
         flex-direction: column;
         gap: 4px;
         max-height: min(420px, calc(100dvh - 80px));
-    }
-
-    .controlsColumn > * {
-        flex: 0 0 calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
-        max-height: calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
     }
 }
 
@@ -542,7 +549,7 @@
     background: var(--ui-surface);
     border: 1px solid var(--ui-accent);
     border-radius: 6px;
-    padding: 4px;
+    padding: 4px 0;
     z-index: 9999;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -735,4 +742,73 @@
     .volumeSliderPortrait {
         display: none;
     }
+}
+
+/* ============================================================================
+   LANDSCAPE MODE: Volume controls
+   ============================================================================ */
+
+.controlsItemLandscape {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
+    height: calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
+}
+
+.volumeButtonLandscape {
+    background: #D9A974;
+    color: #000;
+    border: 1px solid #C99A5F;
+    border-radius: 2px;
+    padding: 0;
+    font-size: 7px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 11;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    width: 16px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    line-height: 1;
+}
+
+.volumeButtonLandscape:hover {
+    background: #E8BF8F;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.volumeButtonLandscape:active {
+    transform: scale(0.95);
+}
+
+.volumeSliderPopupLandscape {
+    position: fixed;
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-accent);
+    border-radius: 6px;
+    padding: 0 6px;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    pointer-events: auto;
+    transform: translateY(-50%);
+}
+
+.volumeSliderPopupInputLandscape {
+    width: 90px;
+    height: 80%;
+    accent-color: rgb(110, 19, 96);
+    cursor: pointer;
+    -webkit-appearance: slider-horizontal;
+    appearance: slider-horizontal;
 }
