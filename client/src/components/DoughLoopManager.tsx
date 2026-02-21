@@ -6,6 +6,7 @@ import DrumLoopEditor from './DrumLoopEditor';
 import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
 import UserLoopsWrapper from './UserLoopsWrapper';
+import BeatSubdivControls from './BeatSubdivControls';
 
 export default function DoughLoopManager() {
     const user = useStore((s) => s.user);
@@ -15,6 +16,7 @@ export default function DoughLoopManager() {
     const setGrid = useStore((s) => s.setGrid);
     const name = useStore((s) => s.name);
     const setName = useStore((s) => s.setName);
+    const orientation = useStore((s) => s.orientation);
 
     // // Reset selected loop on logout
     useEffect(() => {
@@ -25,7 +27,6 @@ export default function DoughLoopManager() {
 
     return (
         <div className={styles.doughLoopManager}>
-			<ControlsContainer grid={grid} setGrid={setGrid} />
             <DrumLoopEditor
                 selectedLoop={selectedLoop}
                 grid={grid}
@@ -33,6 +34,12 @@ export default function DoughLoopManager() {
                 name={name}
                 setName={setName}
             />
+            {orientation === 'portrait' && (
+				<div className={styles.bottomControlsRow}>
+					<ControlsContainer grid={grid} setGrid={setGrid} />
+					<BeatSubdivControls />
+				</div>
+			)}
         </div>
     );
 }

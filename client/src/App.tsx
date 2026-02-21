@@ -8,6 +8,8 @@ import DropdownWrapper from './components/DropdownWrapper';
 import UserLoopsWrapper from './components/UserLoopsWrapper';
 import styles from './App.module.css';
 import Footer from './components/Footer';
+import ControlsContainer from './components/ControlsContainer';
+import BeatSubdivControls from './components/BeatSubdivControls';
 
 export default function App(): JSX.Element {
 	const grid = useStore((s) => s.grid);
@@ -16,8 +18,13 @@ export default function App(): JSX.Element {
 	const setName = useStore((s) => s.setName);
 	const updateFontSize = useStore((s) => s.updateFontSize);
 	const showDropdown = useStore((s) => s.userDropdownOpen);
+	const showDemoDropdown = useStore((s) => s.demoDropdownOpen);
+	const orientation = useStore((s) => s.orientation);
+
+	const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);
 
 	const dropdownAnchorRef = useRef<HTMLButtonElement>(null);
+	const demoDropdownAnchorRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		updateFontSize();
@@ -27,19 +34,30 @@ export default function App(): JSX.Element {
 
 	return (
 		<div className={styles.App}>
-			<TitleBox dropdownAnchorRef={dropdownAnchorRef} />
+			<TitleBox dropdownAnchorRef={dropdownAnchorRef} demoDropdownAnchorRef={demoDropdownAnchorRef} />
 			<div className={styles.mainContent}>
 				{showDropdown && (
 					<DropdownWrapper anchorRef={dropdownAnchorRef}>
 						<AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
 					</DropdownWrapper>
 				)}
+				{showDemoDropdown && (
+					<DropdownWrapper anchorRef={demoDropdownAnchorRef} compact={true} onClose={() => setDemoDropdownOpen(false)}>
+						<UserLoopsWrapper isDemoLoops={true} />
+					</DropdownWrapper>
+				)}
 				<div className={styles.gridAndLoopsWrapper}>
 					<DoughLoopManager />
-					<UserLoopsWrapper />
+					{orientation === 'landscape' && (
+						<div className={styles.sideControlsPanel}>
+							<BeatSubdivControls />
+							<ControlsContainer grid={grid} setGrid={setGrid} />
+						</div>
+					)}
+					{/* <UserLoopsWrapper /> */}
 				</div>
 			</div>
-			<Footer/>
+			{/* <Footer/> */}
 		</div>
 
 	);

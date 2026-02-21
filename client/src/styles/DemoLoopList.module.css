@@ -1,0 +1,38 @@
+.demoDropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    min-width: auto;
+    width: fit-content;
+}
+
+.loopItem {
+    padding: 10px 14px;
+    cursor: pointer;
+    color: var(--color-off-white-1);
+    font-weight: 500;
+    font-size: calc(var(--base-font-size) * 1.4);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.loopItem:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--ui-border);
+}
+
+.loopItem.active {
+    background-color: var(--ui-accent);
+    color: var(--ui-surface);
+    font-weight: 700;
+    border-color: var(--ui-accent);
+}
+
+.loopItem.active:hover {
+    background-color: var(--ui-accent);
+    filter: brightness(1.1);
+}

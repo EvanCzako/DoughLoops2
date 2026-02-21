@@ -2,10 +2,34 @@
 
 .doughLoopManager {
     background-color: rgb(0, 0, 0);
-    padding: 15px;
-    border-radius: 15px;
-	background-color: rgb(30, 30, 30);
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgb(30, 30, 30);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .drumLoopEditor {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.bottomControlsRow {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 4px 4px 4px;
+}
+
+@media (orientation: landscape) {
+    .bottomControlsRow {
+        display: none;
+    }
 }

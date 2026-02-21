@@ -1,15 +1,25 @@
 .gridAndLoopsWrapper {
   display: flex;
   flex-direction: column; /* Default = stacked (portrait) */
-  gap: 16px;
-  padding: 16px;
+  gap: 0;
+  padding: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* Landscape: side-by-side layout */
-@media (orientation: landscape) and (min-width: 900px) {
+/* Landscape: side-by-side layout at all widths */
+@media (orientation: landscape) {
   .gridAndLoopsWrapper {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
+    max-width: 100%;
+    gap: 16px;
+    padding: 4px;
   }
 
   .gridAndLoopsWrapper > * {
@@ -18,12 +28,60 @@
   }
 }
 
+.sideControlsPanel {
+  display: none;
+}
+
+@media (orientation: portrait) {
+  .sideControlsPanel {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (orientation: landscape) {
+  .sideControlsPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 0 0 auto;
+    margin-left: 0;
+		margin-right: 4px; /* match overall app padding on right */
+		width: min(210px, 24vw);
+		justify-content: flex-start;
+		align-self: flex-start; /* align at top instead of stretch */
+  }
+
+  .sideControlsPanel > * {
+	width: 100%;
+  }
+}
+
+/* Portrait: ensure full height and edge-to-edge width */
+@media (orientation: portrait) {
+  .gridAndLoopsWrapper {
+    height: 100%;
+    padding: 0;
+    gap: 0;
+    margin: 0;
+    border: 5px solid black;
+    box-sizing: border-box;
+  }
+}
+
+/* Extra wide screens: no additional constraints (full-width behavior) */
+
 .App {
 	display: flex;
 	flex-direction: column;
-	min-height: 100vh;
+	height: 100vh;
+	overflow: hidden;
 }
 
 .mainContent {
   flex: 1; /* This fills the remaining vertical space */
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }

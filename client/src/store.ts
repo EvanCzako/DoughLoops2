@@ -30,10 +30,14 @@ interface StoreState {
     selectedSamples: string[];
     volumes: number[]; // from 0 (mute) to 1 (full volume)
     fontSize: number;
-	userDropdownOpen: boolean,
+	userDropdownOpen: boolean;
+	demoDropdownOpen: boolean;
+    orientation: 'portrait' | 'landscape';
+    instrumentVariants: number[];
 
     setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
+    setInstrumentVariant: (index: number, variant: number) => void;
     setName: (name: string) => void;
     setGrid: (grid: boolean[][]) => void;
     setSelectedLoop: (loop: DoughLoop | null) => void;
@@ -43,9 +47,11 @@ interface StoreState {
     setBpm: (bpm: number) => void;
     setIsPlaying: (playing: boolean) => void;
     updateFontSize: () => void;
+    setOrientation: (orientation: 'portrait' | 'landscape') => void;
 
     // Auth actions
 	setUserDropdownOpen: (open: boolean) => void;
+	setDemoDropdownOpen: (open: boolean) => void;
     setUser: (user: User | null) => void;
     logout: () => void;
 
@@ -79,38 +85,49 @@ export const useStore = create<StoreState>((set) => ({
     volumes: [1, 1, 1, 1, 1, 1, 1, 1],
     fontSize: 0,
 	userDropdownOpen: false,
+	demoDropdownOpen: false,
+    orientation: 'landscape',
+    instrumentVariants: [1, 1, 1, 1, 1, 1, 1, 1],
 	setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
+	setDemoDropdownOpen: (val: boolean) => set({ demoDropdownOpen: val }),
+    setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
     updateFontSize: () => {
-        const vw = (window.visualViewport?.width ?? window.innerWidth) / 100;
-        const vh = (window.visualViewport?.height ?? window.innerHeight) / 100;
+        const width = window.visualViewport?.width ?? window.innerWidth;
+        const height = window.visualViewport?.height ?? window.innerHeight;
 
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-        document.documentElement.style.setProperty('--vw', `${vw}px`);
+        // Detect orientation: portrait if height > width
+        const newOrientation = height > width ? 'portrait' : 'landscape';
+        set({ orientation: newOrientation });
+        document.documentElement.setAttribute('data-orientation', newOrientation);
 
+        // Set viewport unit root values
+        document.documentElement.style.setProperty('--vw-unit', `${width / 100}px`);
+        document.documentElement.style.setProperty('--vh-unit', `${height / 100}px`);
         
-		const product = Math.max(8,Math.pow(vh*80, 1/3));
-        const fontSize = product*1.1;
+        // Calculate base font size from viewport height (preserve original formula)
+        const product = Math.max(8, Math.pow(height * 0.8, 1 / 3));
+        const fontSize = product * 1.1;
         set({ fontSize });
-		document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
-		
+        document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
 
-        const controlsColumnClampedWidth = Math.min(120, Math.max(90, product * 9));
-        document.documentElement.style.setProperty('--controls-column-width', `${controlsColumnClampedWidth}px`);
+        // Grid scaling: use width-aware calculation in portrait
+        if (newOrientation === 'portrait') {
+            // Portrait: fit 8 columns across with 6px gaps
+            // Available width = viewport - padding - gaps
+            const gridPadding = 16 * 2; // padding on drum grid
+            const totalGaps = 6 * 7; // 7 gaps between 8 columns
+            const cellSize = Math.max(40, (width - gridPadding - totalGaps) / 8);
+            document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
+        } else {
+            // Landscape: base on height (original formula: sqrt(height * 3) * 0.9)
+            const cellSize = Math.sqrt(height * 3) * 0.9;
+            document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
+        }
 
-        const drumGridRowHeight = Math.pow(vh*300, 1/2);
-        document.documentElement.style.setProperty('--drum-grid-row-height', `${drumGridRowHeight}px`);
-
-        const controlsContainerWidth = Math.max(Math.min(product*30,500),250);
-        document.documentElement.style.setProperty('--controls-container-width', `${controlsContainerWidth}px`);
-		const controlsContainerHeight = Math.max(Math.min(product*20,200),140);
-
-        document.documentElement.style.setProperty('--controls-container-height', `${controlsContainerHeight}px`);
-
-		const logoWidth = Math.min(3, vw/2);
-		console.log(logoWidth);
-		document.documentElement.style.setProperty('--logo-width', `${logoWidth*100}px`);
-
+        // Logo sizing
+        const logoWidth = Math.min(300, width * 0.5);
+        document.documentElement.style.setProperty('--logo-width', `${logoWidth}px`);
     },
 
     setVolume: (index, volume) =>
@@ -125,6 +142,13 @@ export const useStore = create<StoreState>((set) => ({
             const updated = [...state.selectedSamples];
             updated[index] = sample;
             return { selectedSamples: updated };
+        }),
+
+    setInstrumentVariant: (index, variant) =>
+        set((state) => {
+            const updated = [...state.instrumentVariants];
+            updated[index] = variant;
+            return { instrumentVariants: updated };
         }),
 
     setName: (name: string) => set({ name }),

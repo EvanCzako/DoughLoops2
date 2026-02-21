@@ -1,11 +1,11 @@
 import React from 'react';
 import { useStore } from '../store';
 import type { DoughLoop } from '../store';
-import styles from '../styles/UserLoopsWrapper.module.css';
+import styles from '../styles/DemoLoopList.module.css';
 
 const demoLoops: DoughLoop[] = [
 	{
-		id: -1, // Use negative IDs to avoid collisions with real user loop IDs
+		id: -1,
 		userId: -1,
 		name: 'Bossa',
 		beatRep:
@@ -51,31 +51,24 @@ const demoLoops: DoughLoop[] = [
 export default function DemoLoopList() {
 	const selectedLoop = useStore((s) => s.selectedLoop);
 	const setSelectedLoop = useStore((s) => s.setSelectedLoop);
-	const fontSize = useStore((s) => s.fontSize);
-	const computedFontSize = Math.max(10, fontSize*2);
-	const computedFontSize2 = Math.max(10, fontSize*2.5);
+	const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);
+
+	const handleSelectLoop = (loop: DoughLoop) => {
+		setSelectedLoop(loop);
+		setDemoDropdownOpen(false);
+	};
 
 	return (
-		<div >
-			<h3 style={{textDecoration: "underline", fontSize: computedFontSize2}}>Demo Loops</h3>
-			<ul>
-				{demoLoops.map((loop) => (
-					<li
-						className={styles.userLoop}
-						key={loop.id}
-						style={{
-							cursor: 'pointer',
-							fontWeight: selectedLoop?.id === loop.id ? 900 : 600,
-							color: selectedLoop?.id === loop.id ? 'orange' : 'var(--color-off-white-1)',
-						}}
-						onClick={() => {
-							setSelectedLoop(loop); // triggers decode automatically
-						}}
-					>
-						{loop.name}
-					</li>
-				))}
-			</ul>
+		<div className={styles.demoDropdown}>
+			{demoLoops.map((loop) => (
+				<div
+					key={loop.id}
+					className={`${styles.loopItem} ${selectedLoop?.id === loop.id ? styles.active : ''}`}
+					onClick={() => handleSelectLoop(loop)}
+				>
+					{loop.name}
+				</div>
+			))}
 		</div>
 	);
 }

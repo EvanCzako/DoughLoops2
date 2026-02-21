@@ -19,8 +19,9 @@
     --grid-cell-inactive: #1F2335;
     --grid-cell-active: #FF9E64;
     --grid-cell-border: #565F89;
-    --grid-beat-even: rgba(99, 110, 255, 0.3);
-    --grid-beat-odd: rgba(255, 121, 198, 0.3);
+    /* Slightly subtler beat stripes so cell interiors read as solid */
+    --grid-beat-even: rgba(99, 110, 255, 0.2);
+    --grid-beat-odd: rgba(255, 121, 198, 0.2);
     --grid-playing: #F7768E;
     
     /* Legacy Color Support */

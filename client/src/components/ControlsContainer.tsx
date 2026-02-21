@@ -56,69 +56,57 @@ export default function ControlsContainer(opts: {
                 bpm={bpm}
 				stepRef={stepRef}
             />
-            <button
-                className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
-				style={{fontSize: `${computedFontSize}px`}}
-                onClick={handlePlayToggle}
-            >
-                {isPlaying ? 'Stop' : 'Play'}
-            </button>
-			<button
-				onClick={() => {
-					const numRows = opts.grid.length;
-					const numCols = opts.grid[0]?.length || 0;
-					const cleared = Array.from({ length: numRows }, () => Array(numCols).fill(false));
-					opts.setGrid(cleared);
-				}}
-				className={`${styles.controlsButton} ${styles.clearButton}`}
-				style={{fontSize: `${computedFontSize}px`}}
-			>
-				Clear
-			</button>
-			<button
-				onClick={() => {
-					setCurrentStep(0);
-					stepRef.current = 0;
-				}}
-				className={`${styles.controlsButton} ${styles.resetButton}`}
-				style={{fontSize: `${computedFontSize}px`}}
-			>
-				Reset
-			</button>
-
-            <div className={styles.sliderContainer} style={{ marginBottom: 16, fontSize: `${computedFontSize}px` }}>
-					Beats: {numBeats}
-                    <input
-                        type="range"
-                        min={1}
-                        max={8}
-                        value={numBeats}
-                        onChange={(e) => setNumBeats(Number(e.target.value))}
-                        className={styles.controlsSlider}
-                    />
-            </div>
-            <div className={styles.sliderContainer} style={{ margin: '10px 0', fontSize: `${computedFontSize}px` }}>
-				Subdivisions: {numSubdivisions}
-                <input
-                    id="subdivisions"
-                    type="range"
-                    min={1}
-                    max={8}
-                    value={numSubdivisions}
-                    onChange={(e) => setNumSubdivisions(Number(e.target.value))}
-                    className={styles.controlsSlider}
-                />
-            </div>
-            <div className={styles.sliderContainer} style={{ margin: '20px 0', fontSize: `${computedFontSize}px` }}>
-                    BPM: {bpm}
-                    <input
-                        type="range"
-                        min="50"
-                        max="200"
-                        value={bpm}
-                        onChange={(e) => setBpm(Number(e.target.value))}
-                        className={styles.controlsSlider}
-                    />
+            <div className={styles.controlsGrid}>
+                {/* Row 1: tempo -, BPM label, tempo + */}
+                <button
+                    className={`${styles.controlsButton} ${styles.tempoButton}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                    onClick={() => setBpm(Math.max(20, bpm - 5))}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">➖</span>
+                </button>
+                <div className={styles.bpmLabel}>
+                    {Math.round(bpm)}
+                </div>
+                <button
+                    className={`${styles.controlsButton} ${styles.tempoButton}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                    onClick={() => setBpm(Math.min(300, bpm + 5))}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">➕</span>
+                </button>
+                {/* Row 2: reset, play/stop, clear */}
+                <button
+                    onClick={() => {
+                        setCurrentStep(0);
+                        stepRef.current = 0;
+                    }}
+                    className={`${styles.controlsButton} ${styles.resetButton}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">↩️</span>
+                </button>
+                <button
+                    className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                    onClick={handlePlayToggle}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        {isPlaying ? '⏹️' : '▶️'}
+                    </span>
+                </button>
+                <button
+                    onClick={() => {
+                        const numRows = opts.grid.length;
+                        const numCols = opts.grid[0]?.length || 0;
+                        const cleared = Array.from({ length: numRows }, () => Array(numCols).fill(false));
+                        opts.setGrid(cleared);
+                    }}
+                    className={`${styles.controlsButton} ${styles.clearButton}`}
+                    style={{ fontSize: `${computedFontSize}px` }}
+                >
+                    <span className={styles.buttonIcon} aria-hidden="true">🧹</span>
+                </button>
             </div>
         </div>
     );
