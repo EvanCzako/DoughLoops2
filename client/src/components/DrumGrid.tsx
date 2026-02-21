@@ -9,12 +9,12 @@ interface DrumGridProps {
 }
 
 const instrumentEmojis: Record<string, string> = {
-    kick: '🔊',
+    kick: '🥾',
     clap: '👏',
     snare: '🥁',
-    hat: '🎩',
+    hat: '📀',
     rim: '🔔',
-    tom: '🎯',
+    tom: '🪘',
     cymbal: '✨',
     triangle: '🔺',
 };

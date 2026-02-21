@@ -39,6 +39,12 @@
     }
 }
 
+@media (orientation: landscape) {
+    .drumGridOuter[data-orientation="landscape"] {
+        padding: 4px;
+    }
+}
+
 .scrollContainer {
     overflow-x: auto;
     overflow-y: hidden;
@@ -46,6 +52,8 @@
     width: 100%;
     scrollbar-width: thick; /* Firefox */
     scrollbar-color: #ad10a0 #000; /* Firefox: thumb color and track */
+    flex-grow: 1;
+    height: 100%;
 }
 
 /* WebKit (Chrome, Safari) scrollbar */
@@ -172,7 +180,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    height: auto;
+    height: 100%;
+    width: 100%;
 }
 /* Beat background container positioned behind grid rows */
 .beatBackground {
@@ -281,6 +290,15 @@
     padding-right: 8px;
     flex-shrink: 0;
     width: var(--controls-column-width);
+    height: 100%;
+    margin-left: 0;
+}
+
+@media (orientation: landscape) {
+    .controlsColumn {
+        padding-right: 0;
+        margin-left: -4px;
+    }
 }
 
 .controlsBoxSpacer {
@@ -307,6 +325,16 @@
 .fixedGridContainer {
     display: flex;
     align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+}
+
+@media (orientation: landscape) {
+    .fixedGridContainer {
+        height: 100%;
+        gap: 0;
+    }
 }
 
 /* ============================================================================
