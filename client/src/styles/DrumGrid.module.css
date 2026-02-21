@@ -121,6 +121,18 @@
     white-space: nowrap;
 }
 
+@media (orientation: landscape) {
+    .drumGrid {
+        max-height: min(420px, calc(100dvh - 80px));
+        gap: 4px;
+    }
+
+    .drumGrid > .gridRow {
+        flex: 0 0 calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
+        height: calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
+    }
+}
+
 .gridRow {
     display: flex;
     height: var(--grid-cell-size);
@@ -236,7 +248,7 @@
     border-radius: 5px;
     height: var(--grid-cell-size);
     cursor: default;
-    box-sizing: border-box; /* ensure total height matches grid rows */
+    box-sizing: border-box;
     user-select: none;
     transition: none;
     will-change: height;
@@ -262,6 +274,13 @@
     padding: 4px;
 }
 
+@media (orientation: landscape) {
+    .instrumentEmoji {
+        font-size: clamp(14px, calc(var(--grid-cell-size) * 0.35), 32px);
+        padding: 2px;
+    }
+}
+
 .controlsBox select {
     font-size: 12px;
     margin-bottom: 6px;
@@ -272,6 +291,13 @@
     flex-direction: column;
     border-color: var(--ui-accent);
     box-shadow: 0 0 0 1px var(--ui-accent);
+}
+
+@media (orientation: landscape) {
+    .controlsBox select {
+        font-size: 11px;
+        margin-bottom: 3px;
+    }
 }
 
 .controlsBox input[type='range'] {
@@ -295,10 +321,16 @@
     height: 30%; /* or whatever fits nicely */
 }
 
+@media (orientation: landscape) {
+    .volumeSlider {
+        height: 20%;
+    }
+}
+
 .controlsColumn {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     padding-right: 4px;
     flex-shrink: 0;
     width: var(--controls-column-width);
@@ -313,6 +345,15 @@
         height: auto;
         padding-right: 8px;
         transition: none !important;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-height: min(420px, calc(100dvh - 80px));
+    }
+
+    .controlsColumn > * {
+        flex: 0 0 calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
+        max-height: calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
     }
 }
 
