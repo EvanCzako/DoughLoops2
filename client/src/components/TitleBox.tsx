@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStore } from '../store';
+import { encodeDrumGrid } from './utils';
 import styles from '../styles/TitleBox.module.css';
 import DoughLoopsLogo from "../assets/DoughLoops2-downSaturated.png";
 
@@ -15,6 +16,12 @@ export default function TitleBox({
 	const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
 	const demoDropdownOpen = useStore((s) => s.demoDropdownOpen);
 	const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);
+	const bpm = useStore((s) => s.bpm);
+	const numBeats = useStore((s) => s.numBeats);
+	const numSubdivisions = useStore((s) => s.numSubdivisions);
+	const grid = useStore((s) => s.grid);
+	const selectedSamples = useStore((s) => s.selectedSamples);
+	const volumes = useStore((s) => s.volumes);
 	
 	const dropdownClickedHandler = () => {
 		if (userDropdownOpen) {
@@ -25,6 +32,15 @@ export default function TitleBox({
 	}
 
 	const demoDropdownClickedHandler = () => {
+		const currentBeatRep = encodeDrumGrid({
+			bpm,
+			numBeats,
+			subdivisions: numSubdivisions,
+			grid,
+			samples: selectedSamples,
+			volumes,
+		});
+		console.log('Current doughloop:', currentBeatRep);
 		if (demoDropdownOpen) {
 			setDemoDropdownOpen(false);
 		} else {

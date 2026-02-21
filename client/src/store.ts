@@ -14,6 +14,15 @@ export interface DoughLoop {
     beatRep: string;
 }
 
+// Default Funk loop
+const DEFAULT_FUNK_LOOP: DoughLoop = {
+    id: -7,
+    userId: -1,
+    name: 'Funk',
+    beatRep:
+        '95,4,4::kick1:1|clap1:1|snare2:1|hat1:0.48|rim3:1|tom3:0.54|cymbal1:1|triangle1:1::1000100110011000::0000100000000000::0000000000001000::1000000110001001::0000001001000000::0000000000000010::0000000000000000::0000000000000000',
+};
+
 interface StoreState {
     user: User | null;
     doughLoops: DoughLoop[];
@@ -65,29 +74,32 @@ interface StoreState {
     setError: (error: string | null) => void;
 }
 
-export const useStore = create<StoreState>((set) => ({
-    user: null,
-    doughLoops: [],
-    loading: false,
-    error: null,
-    numBeats: 4,
-    numSubdivisions: 4,
-    bpm: 85,
-    isPlaying: false,
-    currentStep: 0,
-    selectedLoop: null,
-    name: '',
-    grid: Array(8)
-        .fill(null)
-        .map(() => Array(16).fill(false)),
-    selectedSamples: ['kick1', 'clap1', 'snare1', 'hat1', 'rim1', 'tom1', 'cymbal1', 'triangle1'],
+export const useStore = create<StoreState>((set) => {
+    // Decode the default Funk loop
+    const decoded = decodeDrumGrid(DEFAULT_FUNK_LOOP.beatRep);
 
-    volumes: [1, 1, 1, 1, 1, 1, 1, 1],
-    fontSize: 0,
-	userDropdownOpen: false,
-	demoDropdownOpen: false,
-    orientation: 'landscape',
-    instrumentVariants: [1, 1, 1, 1, 1, 1, 1, 1],
+    return {
+        user: null,
+        doughLoops: [],
+        loading: false,
+        error: null,
+        numBeats: decoded?.numBeats ?? 4,
+        numSubdivisions: decoded?.subdivisions ?? 4,
+        bpm: decoded?.bpm ?? 95,
+        isPlaying: false,
+        currentStep: 0,
+        selectedLoop: DEFAULT_FUNK_LOOP,
+        name: DEFAULT_FUNK_LOOP.name,
+        grid: decoded?.grid ?? Array(8)
+            .fill(null)
+            .map(() => Array(16).fill(false)),
+        selectedSamples: decoded?.samples ?? ['kick1', 'clap1', 'snare1', 'hat1', 'rim1', 'tom1', 'cymbal1', 'triangle1'],
+        volumes: decoded?.volumes ?? [1, 1, 1, 1, 1, 1, 1, 1],
+        fontSize: 0,
+        userDropdownOpen: false,
+        demoDropdownOpen: false,
+        orientation: 'landscape',
+        instrumentVariants: [1, 1, 1, 1, 1, 1, 1, 1],
 	setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
 	setDemoDropdownOpen: (val: boolean) => set({ demoDropdownOpen: val }),
     setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
@@ -195,4 +207,5 @@ export const useStore = create<StoreState>((set) => ({
 
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
-}));
+    };
+});

@@ -405,25 +405,24 @@
     width: 100%;
     height: 100%;
     max-width: 100%;
-    overflow: hidden;
     gap: 0;
     transition: none;
+    min-height: 0;
 }
 
-/* Portrait controls row - at the top, horizontal layout */
+/* Portrait controls row - at the top, horizontal layout, fixed position */
 .controlsRowPortrait {
     display: flex;
     gap: 6px;
     padding-bottom: 4px;
     flex-shrink: 0;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: visible;
     scrollbar-width: thin;
     scrollbar-color: #ad10a0 #000;
-    position: sticky;
-    top: 0;
     z-index: 10;
     background: var(--grid-background);
+    position: relative;
 }
 
 .controlsRowPortrait::-webkit-scrollbar {
@@ -465,6 +464,42 @@
     transition: none;
 }
 
+.controlsItemPortrait {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    flex-shrink: 0;
+    position: relative;
+    min-width: 0;
+}
+
+.volumeButtonPortrait {
+    background: #D9A974;
+    color: #000;
+    border: 1px solid #C99A5F;
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-size: 9px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 11;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.volumeButtonPortrait:hover {
+    background: #E8BF8F;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.volumeButtonPortrait:active {
+    transform: scale(0.95);
+}
+
 .instrumentEmojiPortrait {
     font-size: 24px;
     height: 30%;
@@ -499,6 +534,40 @@
     width: 80%;
     height: 40%;
     accent-color: rgb(110, 19, 96);
+    display: none;
+}
+
+.volumeSliderPopup {
+    position: fixed;
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-accent);
+    border-radius: 6px;
+    padding: 4px;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 110px;
+    pointer-events: auto;
+}
+
+.volumeSliderPopupInput {
+    width: 24px;
+    height: 90px;
+    accent-color: rgb(110, 19, 96);
+    cursor: pointer;
+    -webkit-appearance: slider-vertical;
+    appearance: slider-vertical;
+}
+
+.volumeDisplayPortrait {
+    font-size: 10px;
+    color: var(--ui-text-primary);
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
 }
 
 /* Portrait scrollable grid - vertical scrolling */
@@ -648,7 +717,12 @@
     }
 
     .controlsBoxPortrait {
-        width: auto;
+        width: 100%;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .controlsItemPortrait {
         flex: 1;
         min-width: 0;
     }

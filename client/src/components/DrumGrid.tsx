@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useStore } from '../store';
 import styles from '../styles/DrumGrid.module.css';
 
@@ -20,6 +20,11 @@ const instrumentEmojis: Record<string, string> = {
 };
 
 export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
+    const [volumeSliderOpen, setVolumeSliderOpen] = useState<Set<number>>(new Set());
+    const [popupPositions, setPopupPositions] = useState<Record<number, { top: number; left: number }>>({});
+    const volumeSliderRefs = useRef<Record<number, HTMLDivElement | null>>({});
+    const volumeButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+    const controlItemRefs = useRef<(HTMLDivElement | null)[]>([]);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const orientation = useStore((s) => s.orientation);
     const instruments = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
@@ -31,6 +36,62 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const instrumentVariants = useStore((s) => s.instrumentVariants);
     const setInstrumentVariant = useStore((s) => s.setInstrumentVariant);
     const computedFontSize = Math.max(10, fontSize * 1.4);
+
+    // Calculate popup positions when opened or window resizes
+    useEffect(() => {
+        const updatePositions = () => {
+            const newPositions: Record<number, { top: number; left: number }> = {};
+            volumeSliderOpen.forEach((instrumentIndex) => {
+                if (volumeButtonRefs.current[instrumentIndex]) {
+                    const button = volumeButtonRefs.current[instrumentIndex];
+                    if (button) {
+                        const rect = button.getBoundingClientRect();
+                        newPositions[instrumentIndex] = {
+                            top: rect.bottom + 4,
+                            left: rect.left + rect.width / 2,
+                        };
+                    }
+                }
+            });
+            setPopupPositions(newPositions);
+        };
+
+        // Use requestAnimationFrame to ensure DOM is fully updated
+        if (volumeSliderOpen.size > 0) {
+            requestAnimationFrame(updatePositions);
+        }
+
+        if (volumeSliderOpen.size > 0) {
+            window.addEventListener('resize', updatePositions);
+            return () => {
+                window.removeEventListener('resize', updatePositions);
+            };
+        }
+    }, [volumeSliderOpen]);
+
+    // Close volume slider when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+            const isClickOnButton = volumeButtonRefs.current.some(
+                (btn) => btn && btn.contains(target)
+            );
+            const isClickOnSlider = Array.from(volumeSliderOpen).some(
+                (idx) => volumeSliderRefs.current[idx]?.contains(target)
+            );
+
+            if (!isClickOnSlider && !isClickOnButton) {
+                setVolumeSliderOpen(new Set());
+            }
+        };
+
+        if (volumeSliderOpen.size > 0) {
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }
+    }, [volumeSliderOpen]);
 
     const cycleVariant = (index: number) => {
         const currentVariant = instrumentVariants[index];
@@ -77,44 +138,91 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
         return (
             <div className={styles.drumGridOuter} data-orientation="portrait">
                 <div className={styles.portraitContainer}>
-                    {/* Scrollable grid area containing controls and grid */}
-                    <div className={styles.scrollContainerPortrait}>
-                        <div className={styles.innerGridContainerPortrait}>
-                            {/* Controls row at top */}
-                            <div className={styles.controlsRowPortrait}>
-                                {/* Instrument controls in horizontal row */}
-                                {grid.map((_, instrumentIndex) => (
+                    {/* Controls row at top - FIXED, outside scroll container */}
+                    <div className={styles.controlsRowPortrait}>
+                        {/* Instrument controls in horizontal row */}
+                        {grid.map((_, instrumentIndex) => (
+                            <div
+                                className={styles.controlsItemPortrait}
+                                key={`controls-${instrumentIndex}`}
+                                ref={(el) => {
+                                    if (el) controlItemRefs.current[instrumentIndex] = el;
+                                }}
+                            >
+                                {/* Instrument control box */}
+                                <div
+                                    className={styles.controlsBoxPortrait}
+                                    onClick={() => cycleVariant(instrumentIndex)}
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                >
                                     <div
-                                        className={styles.controlsBoxPortrait}
-                                        key={`controls-${instrumentIndex}`}
-                                        onClick={() => cycleVariant(instrumentIndex)}
+                                        className={styles.instrumentEmojiPortrait}
+                                        title={`${instruments[instrumentIndex]} (Variant ${instrumentVariants[instrumentIndex]})`}
                                         style={{
-                                            cursor: 'pointer',
+                                            filter: `hue-rotate(${getHueRotation(instrumentVariants[instrumentIndex])}deg)`,
                                         }}
                                     >
-                                        <div
-                                            className={styles.instrumentEmojiPortrait}
-                                            title={`${instruments[instrumentIndex]} (Variant ${instrumentVariants[instrumentIndex]})`}
-                                            style={{
-                                                filter: `hue-rotate(${getHueRotation(instrumentVariants[instrumentIndex])}deg)`,
-                                            }}
-                                        >
-                                            {instrumentEmojis[instruments[instrumentIndex]]}
-                                        </div>
-
-                                        <input
-                                            className={styles.volumeSliderPortrait}
-                                            type="range"
-                                            min={0}
-                                            max={1}
-                                            step={0.01}
-                                            value={volumes[instrumentIndex]}
-                                            onChange={(e) => setVolume(instrumentIndex, parseFloat(e.target.value))}
-                                        />
+                                        {instrumentEmojis[instruments[instrumentIndex]]}
                                     </div>
-                                ))}
-                            </div>
+                                </div>
 
+                                {/* Volume button - small and yellow, BELOW the control box */}
+                                <button
+                                    className={styles.volumeButtonPortrait}
+                                    ref={(el) => {
+                                        if (el) volumeButtonRefs.current[instrumentIndex] = el;
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        const newSet = new Set(volumeSliderOpen);
+                                        if (newSet.has(instrumentIndex)) {
+                                            newSet.delete(instrumentIndex);
+                                        } else {
+                                            newSet.add(instrumentIndex);
+                                        }
+                                        setVolumeSliderOpen(newSet);
+                                    }}
+                                    title="Adjust volume"
+                                >
+                                    Vol
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Volume slider popups - fixed positioning */}
+                    {Array.from(volumeSliderOpen).map((instrumentIndex) => (
+                        <div
+                            key={`volume-popup-${instrumentIndex}`}
+                            className={styles.volumeSliderPopup}
+                            ref={(el) => {
+                                if (el) volumeSliderRefs.current[instrumentIndex] = el;
+                            }}
+                            style={{
+                                top: `${popupPositions[instrumentIndex]?.top || 0}px`,
+                                left: `${popupPositions[instrumentIndex]?.left || 0}px`,
+                                transform: 'translateX(-50%)',
+                                width: `calc(${controlItemRefs.current[instrumentIndex]?.offsetWidth || 70}px - 4px)`,
+                                visibility: popupPositions[instrumentIndex] ? 'visible' : 'hidden',
+                            }}
+                        >
+                            <input
+                                className={styles.volumeSliderPopupInput}
+                                type="range"
+                                min={0}
+                                max={1}
+                                step={0.01}
+                                value={volumes[instrumentIndex]}
+                                onChange={(e) => setVolume(instrumentIndex, parseFloat(e.target.value))}
+                            />
+                        </div>
+                    ))}
+
+                    {/* Scrollable grid area - below controls */}
+                    <div className={styles.scrollContainerPortrait}>
+                        <div className={styles.innerGridContainerPortrait}>
                             {/* Grid: rows = steps, columns = instruments */}
                             <div className={styles.drumGridPortrait}>
                                 {/* Beat background - horizontally striped behind grid */}
