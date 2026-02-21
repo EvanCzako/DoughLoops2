@@ -31,6 +31,7 @@ interface StoreState {
     volumes: number[]; // from 0 (mute) to 1 (full volume)
     fontSize: number;
 	userDropdownOpen: boolean;
+	demoDropdownOpen: boolean;
     orientation: 'portrait' | 'landscape';
     instrumentVariants: number[];
 
@@ -50,6 +51,7 @@ interface StoreState {
 
     // Auth actions
 	setUserDropdownOpen: (open: boolean) => void;
+	setDemoDropdownOpen: (open: boolean) => void;
     setUser: (user: User | null) => void;
     logout: () => void;
 
@@ -83,9 +85,11 @@ export const useStore = create<StoreState>((set) => ({
     volumes: [1, 1, 1, 1, 1, 1, 1, 1],
     fontSize: 0,
 	userDropdownOpen: false,
+	demoDropdownOpen: false,
     orientation: 'landscape',
     instrumentVariants: [1, 1, 1, 1, 1, 1, 1, 1],
 	setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
+	setDemoDropdownOpen: (val: boolean) => set({ demoDropdownOpen: val }),
     setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
     updateFontSize: () => {

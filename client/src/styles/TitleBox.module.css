@@ -51,3 +51,30 @@
     flex-shrink: 0;
     cursor: pointer;
 }
+
+.spacer {
+    flex: 1;
+}
+
+.demoButton {
+    background-color: var(--ui-accent-2);
+    font-weight: 600;
+    padding: 8px 12px;
+    border: 1px solid var(--ui-border);
+    border-radius: 6px;
+    cursor: pointer;
+    height: 28px;
+    font-size: calc(var(--base-font-size) * 1.5);
+    color: var(--ui-text-primary);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.demoButton:hover {
+    background-color: var(--ui-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
