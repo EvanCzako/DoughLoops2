@@ -508,6 +508,8 @@
     justify-content: center;
     box-sizing: border-box;
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .cellPortrait input[type='checkbox'] {
@@ -546,12 +548,6 @@
         width: auto;
         flex: 1;
         min-width: 0;
-    }
-
-    /* In portrait, make unchecked cells fully black so
-       they stand out clearly against the beat stripes. */
-    .cellPortrait input[type='checkbox']:not(:checked) {
-        background: #000;
     }
 
     .controlsBoxPortrait {
