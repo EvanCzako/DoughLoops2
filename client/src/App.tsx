@@ -27,9 +27,26 @@ export default function App(): JSX.Element {
 	const demoDropdownAnchorRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
+		// Initial call
 		updateFontSize();
+		
+		// On iOS, the first updateFontSize might not have correct dimensions yet
+		// Schedule another update shortly after to ensure accurate dimensions
+		// This addresses an issue where window.innerHeight temporarily includes browser chrome
+		const timeoutId = setTimeout(() => {
+			updateFontSize();
+		}, 100);
+		
+		// Listen to both resize (for viewport changes) and orientationchange (for mobile rotation)
+		// orientationchange fires before/during rotation on mobile and ensures proper dimension updates
 		window.addEventListener('resize', updateFontSize);
-		return () => window.removeEventListener('resize', updateFontSize);
+		window.addEventListener('orientationchange', updateFontSize);
+		
+		return () => {
+			clearTimeout(timeoutId);
+			window.removeEventListener('resize', updateFontSize);
+			window.removeEventListener('orientationchange', updateFontSize);
+		};
 	}, [updateFontSize]);
 
 	return (

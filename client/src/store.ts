@@ -105,6 +105,8 @@ export const useStore = create<StoreState>((set) => {
     setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
     updateFontSize: () => {
+        // On iOS, prefer visualViewport for accurate measurements excluding browser chrome
+        // visualViewport.height is the usable height without URL bar/address bar
         const width = window.visualViewport?.width ?? window.innerWidth;
         const height = window.visualViewport?.height ?? window.innerHeight;
 
