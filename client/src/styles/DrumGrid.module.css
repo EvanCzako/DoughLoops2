@@ -7,6 +7,12 @@
     --cell-gap: 6px;
 }
 
+/* In portrait, make inactive cells slightly darker than beat stripes
+   so their interiors read as solid pads instead of blending in. */
+/* In the portrait media query below we slightly darken
+    the inactive checkbox background so it doesn't visually
+    blend into the beat stripes on small screens. */
+
 .responsiveCell {
     width: var(--grid-cell-size);
     height: 100%; /* 🔥 match row */
@@ -40,8 +46,6 @@
     width: 100%;
     scrollbar-width: thick; /* Firefox */
     scrollbar-color: #ad10a0 #000; /* Firefox: thumb color and track */
-    flex-grow: 1;
-    height: 100%;
 }
 
 /* WebKit (Chrome, Safari) scrollbar */
@@ -60,6 +64,8 @@
 
 .innerGridContainer {
     white-space: nowrap;
+    height: auto;
+    display: block;
 }
 
 .ghostRow {
@@ -166,6 +172,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    height: auto;
 }
 /* Beat background container positioned behind grid rows */
 .beatBackground {
@@ -220,6 +227,18 @@
     border-radius: 5px;
     height: var(--grid-cell-size);
     cursor: default;
+    box-sizing: border-box; /* ensure total height matches grid rows */
+}
+
+.instrumentEmoji {
+    font-size: clamp(20px, calc(var(--grid-cell-size) * 0.4), 32px);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
 .controlsBox select {
@@ -527,6 +546,12 @@
         width: auto;
         flex: 1;
         min-width: 0;
+    }
+
+    /* In portrait, make unchecked cells fully black so
+       they stand out clearly against the beat stripes. */
+    .cellPortrait input[type='checkbox']:not(:checked) {
+        background: #000;
     }
 
     .controlsBoxPortrait {
