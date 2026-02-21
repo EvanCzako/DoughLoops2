@@ -724,7 +724,6 @@
     }
 
     .controlsBoxPortrait {
-        width: 100%;
         flex: 1;
         min-width: 0;
         aspect-ratio: 1;
