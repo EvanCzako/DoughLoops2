@@ -7,6 +7,13 @@
     --cell-gap: 6px;
 }
 
+/* In portrait mode, set a smaller initial default before updateFontSize calculates it */
+@media (orientation: portrait) {
+    :root {
+        --grid-cell-size: 45px;
+    }
+}
+
 /* In portrait, make inactive cells slightly darker than beat stripes
    so their interiors read as solid pads instead of blending in. */
 /* In the portrait media query below we slightly darken
@@ -725,14 +732,15 @@
     }
 
     .controlsBoxPortrait {
-        flex: 1;
+        flex: 0 0 auto;
         min-width: 0;
         aspect-ratio: 1;
-        height: auto;
+        height: var(--grid-cell-size);
+        width: var(--grid-cell-size);
     }
 
     .controlsItemPortrait {
-        flex: 1;
+        flex: 0 0 auto;
         min-width: 0;
     }
 
