@@ -430,6 +430,7 @@
     z-index: 10;
     background: var(--grid-background);
     position: relative;
+    align-items: flex-start;
 }
 
 .controlsRowPortrait::-webkit-scrollbar {
@@ -727,12 +728,12 @@
         flex: 1;
         min-width: 0;
         aspect-ratio: 1;
+        height: auto;
     }
 
     .controlsItemPortrait {
         flex: 1;
         min-width: 0;
-        height: var(--grid-cell-size);
     }
 
     .gridRowPortrait {
