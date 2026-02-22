@@ -427,7 +427,7 @@
 /* Portrait controls row - at the top, horizontal layout, fixed position */
 .controlsRowPortrait {
     display: flex;
-    gap: 6px;
+    gap: 0;
     padding-bottom: 4px;
     flex-shrink: 0;
     overflow-x: hidden;
@@ -438,6 +438,8 @@
     background: var(--grid-background);
     position: relative;
     align-items: flex-start;
+    width: 100%;
+    justify-content: space-around;
 }
 
 .controlsRowPortrait::-webkit-scrollbar {
@@ -681,6 +683,8 @@
     height: var(--grid-cell-size);
     align-items: stretch;
     gap: 6px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 .cellPortrait {
     width: var(--grid-cell-size);
