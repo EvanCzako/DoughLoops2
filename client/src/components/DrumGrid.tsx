@@ -13,7 +13,7 @@ const instrumentEmojis: Record<string, string> = {
     clap: '👏',
     snare: '🥁',
     hat: '📀',
-    rim: '🔔',
+    rim: '🎯',
     tom: '🪘',
     cymbal: '✨',
     triangle: '🔺',
