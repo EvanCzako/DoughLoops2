@@ -675,7 +675,9 @@
 
 .beatStripePortrait {
     width: 100%;
-    flex-shrink: 0;
+    flex: 1;
+    margin: 0;
+    padding: 0;
 }
 
 .gridRowPortrait {
