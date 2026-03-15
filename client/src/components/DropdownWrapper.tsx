@@ -31,14 +31,13 @@ export default function DropdownWrapper({ anchorRef, children, compact = false, 
     }, [closeHandler, anchorRef]);
 
     const anchorRect = anchorRef.current?.getBoundingClientRect();
-    const top = (anchorRect?.bottom ?? 0) + window.scrollY;
-    const left = (anchorRect?.left ?? 0) + window.scrollX;
+    const top = anchorRect?.bottom ?? 0;
 
     return createPortal(
         <div
             ref={panelRef}
             style={{
-                position: 'absolute',
+                position: 'fixed',
                 top: `${top}px`,
                 right: '15px',
                 zIndex: 999,
@@ -50,10 +49,11 @@ export default function DropdownWrapper({ anchorRef, children, compact = false, 
                 boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
                 minWidth: compact ? 'auto' : '280px',
                 maxWidth: '90vw',
-                maxHeight: `calc(100vh - ${top}px - 12px)`,
+                maxHeight: `calc(100dvh - ${top}px - 12px)`,
                 overflowY: 'auto',
                 overflowX: 'hidden',
                 boxSizing: 'border-box',
+                WebkitOverflowScrolling: 'touch',
             }}
         >
             {children}
