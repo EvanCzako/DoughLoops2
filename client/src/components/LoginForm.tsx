@@ -13,40 +13,39 @@ export default function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-	const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
+    const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
 
-	async function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		setLoading(true);
-		setError(null);
-		setSuccess(null);
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
 
-		try {
-			const res = await fetch(`${API_BASE_URL}/login`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ username, password }),
-			});
+        try {
+            const res = await fetch(`${API_BASE_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
 
-			if (!res.ok) {
-				const errData = await res.json();
-				throw new Error(errData.error || 'Login failed');
-			}
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || 'Login failed');
+            }
 
-			const data: { userId: number; username: string } = await res.json();
+            const data: { userId: number; username: string } = await res.json();
 
-			const loggedInUser: User = { id: data.userId, username: data.username };
-			setUser(loggedInUser);
-			setSuccess('Login successful!');
-			setUserDropdownOpen(false); // ✅ Only close dropdown here
-		} catch (err: any) {
-			console.error(err.message);
-			setError(err.message);
-		} finally {
-			setLoading(false);
-		}
-	}
-
+            const loggedInUser: User = { id: data.userId, username: data.username };
+            setUser(loggedInUser);
+            setSuccess('Login successful!');
+            setUserDropdownOpen(false); // ✅ Only close dropdown here
+        } catch (err: any) {
+            console.error(err.message);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <form
@@ -81,7 +80,9 @@ export default function LoginForm() {
             </button>
 
             {error && <p style={{ color: 'var(--color-off-red-1)', marginTop: 8 }}>{error}</p>}
-            {success && <p style={{ color: 'var(--color-off-green-1)', marginTop: 8 }}>{success}</p>}
+            {success && (
+                <p style={{ color: 'var(--color-off-green-1)', marginTop: 8 }}>{success}</p>
+            )}
         </form>
     );
 }

@@ -2,7 +2,7 @@
 
 :root {
     --controls-container-width: 80px; /* default, overwritten dynamically */
-    --controls-column-width: 80px;    /* default, overwritten dynamically */
+    --controls-column-width: 80px; /* default, overwritten dynamically */
     --controls-container-height: 80px;
 }
 
@@ -16,8 +16,9 @@
     width: var(--controls-container-width);
     height: auto;
     border: 1px solid var(--ui-border);
-    box-shadow: var(--shadow-md),
-                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    box-shadow:
+        var(--shadow-md),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
     box-sizing: border-box;
 }
@@ -45,8 +46,9 @@
     font-weight: 600;
     color: var(--grid-background);
     /* transition: all 0.2s ease; */
-    box-shadow: var(--shadow-sm),
-                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    box-shadow:
+        var(--shadow-sm),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
@@ -63,16 +65,15 @@
     left: 0;
     right: 0;
     height: 50%;
-    background: linear-gradient(180deg,
-                rgba(255, 255, 255, 0.15) 0%,
-                rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
     border-radius: 7px 7px 0 0;
 }
 
 .controlsButton:hover {
     transform: translateY(-1px);
-    box-shadow: var(--shadow-md),
-                0 0 15px rgba(255, 255, 255, 0.1);
+    box-shadow:
+        var(--shadow-md),
+        0 0 15px rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -107,7 +108,11 @@
 
 /* Play/Stop Button States */
 .playing {
-    background: linear-gradient(135deg, var(--button-stop), color-mix(in srgb, var(--button-stop) 85%, black));
+    background: linear-gradient(
+        135deg,
+        var(--button-stop),
+        color-mix(in srgb, var(--button-stop) 85%, black)
+    );
 }
 
 .playing:hover {
@@ -115,7 +120,11 @@
 }
 
 .stopped {
-    background: linear-gradient(135deg, var(--button-play), color-mix(in srgb, var(--button-play) 85%, black));
+    background: linear-gradient(
+        135deg,
+        var(--button-play),
+        color-mix(in srgb, var(--button-play) 85%, black)
+    );
 }
 
 .stopped:hover {
@@ -124,7 +133,11 @@
 
 /* Clear Button */
 .clearButton {
-    background: linear-gradient(135deg, var(--button-clear), color-mix(in srgb, var(--button-clear) 85%, black));
+    background: linear-gradient(
+        135deg,
+        var(--button-clear),
+        color-mix(in srgb, var(--button-clear) 85%, black)
+    );
 }
 
 .clearButton:hover {
@@ -133,7 +146,11 @@
 
 /* Reset Button */
 .resetButton {
-    background: linear-gradient(135deg, var(--button-reset), color-mix(in srgb, var(--button-reset) 85%, black));
+    background: linear-gradient(
+        135deg,
+        var(--button-reset),
+        color-mix(in srgb, var(--button-reset) 85%, black)
+    );
 }
 
 .resetButton:hover {

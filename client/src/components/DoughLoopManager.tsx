@@ -35,11 +35,11 @@ export default function DoughLoopManager() {
                 setName={setName}
             />
             {orientation === 'portrait' && (
-				<div className={styles.bottomControlsRow}>
-					<ControlsContainer grid={grid} setGrid={setGrid} />
-					<BeatSubdivControls />
-				</div>
-			)}
+                <div className={styles.bottomControlsRow}>
+                    <ControlsContainer grid={grid} setGrid={setGrid} />
+                    <BeatSubdivControls />
+                </div>
+            )}
         </div>
     );
 }

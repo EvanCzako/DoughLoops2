@@ -39,8 +39,8 @@ interface StoreState {
     selectedSamples: string[];
     volumes: number[]; // from 0 (mute) to 1 (full volume)
     fontSize: number;
-	userDropdownOpen: boolean;
-	demoDropdownOpen: boolean;
+    userDropdownOpen: boolean;
+    demoDropdownOpen: boolean;
     orientation: 'portrait' | 'landscape';
     instrumentVariants: number[];
 
@@ -59,8 +59,8 @@ interface StoreState {
     setOrientation: (orientation: 'portrait' | 'landscape') => void;
 
     // Auth actions
-	setUserDropdownOpen: (open: boolean) => void;
-	setDemoDropdownOpen: (open: boolean) => void;
+    setUserDropdownOpen: (open: boolean) => void;
+    setDemoDropdownOpen: (open: boolean) => void;
     setUser: (user: User | null) => void;
     logout: () => void;
 
@@ -90,124 +90,135 @@ export const useStore = create<StoreState>((set) => {
         currentStep: 0,
         selectedLoop: DEFAULT_FUNK_LOOP,
         name: DEFAULT_FUNK_LOOP.name,
-        grid: decoded?.grid ?? Array(8)
-            .fill(null)
-            .map(() => Array(16).fill(false)),
-        selectedSamples: decoded?.samples ?? ['kick1', 'clap1', 'snare1', 'hat1', 'rim1', 'tom1', 'cymbal1', 'triangle1'],
+        grid:
+            decoded?.grid ??
+            Array(8)
+                .fill(null)
+                .map(() => Array(16).fill(false)),
+        selectedSamples: decoded?.samples ?? [
+            'kick1',
+            'clap1',
+            'snare1',
+            'hat1',
+            'rim1',
+            'tom1',
+            'cymbal1',
+            'triangle1',
+        ],
         volumes: decoded?.volumes ?? [1, 1, 1, 1, 1, 1, 1, 1],
         fontSize: 0,
         userDropdownOpen: false,
         demoDropdownOpen: false,
         orientation: 'landscape',
         instrumentVariants: [1, 1, 1, 1, 1, 1, 1, 1],
-	setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
-	setDemoDropdownOpen: (val: boolean) => set({ demoDropdownOpen: val }),
-    setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
+        setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
+        setDemoDropdownOpen: (val: boolean) => set({ demoDropdownOpen: val }),
+        setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
-    updateFontSize: () => {
-        // On iOS, prefer visualViewport for accurate measurements excluding browser chrome
-        // visualViewport.height is the usable height without URL bar/address bar
-        const width = window.visualViewport?.width ?? window.innerWidth;
-        const height = window.visualViewport?.height ?? window.innerHeight;
+        updateFontSize: () => {
+            // On iOS, prefer visualViewport for accurate measurements excluding browser chrome
+            // visualViewport.height is the usable height without URL bar/address bar
+            const width = window.visualViewport?.width ?? window.innerWidth;
+            const height = window.visualViewport?.height ?? window.innerHeight;
 
-        // Detect orientation: portrait if height > width
-        const newOrientation = height > width ? 'portrait' : 'landscape';
-        set({ orientation: newOrientation });
-        document.documentElement.setAttribute('data-orientation', newOrientation);
+            // Detect orientation: portrait if height > width
+            const newOrientation = height > width ? 'portrait' : 'landscape';
+            set({ orientation: newOrientation });
+            document.documentElement.setAttribute('data-orientation', newOrientation);
 
-        // Set viewport unit root values
-        document.documentElement.style.setProperty('--vw-unit', `${width / 100}px`);
-        document.documentElement.style.setProperty('--vh-unit', `${height / 100}px`);
-        
-        // Calculate base font size from viewport height (preserve original formula)
-        const product = Math.max(8, Math.pow(height * 0.8, 1 / 3));
-        const fontSize = product * 1.1;
-        set({ fontSize });
-        document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
+            // Set viewport unit root values
+            document.documentElement.style.setProperty('--vw-unit', `${width / 100}px`);
+            document.documentElement.style.setProperty('--vh-unit', `${height / 100}px`);
 
-        // Grid scaling: use width-aware calculation in portrait
-        if (newOrientation === 'portrait') {
-            // Portrait: fit 8 columns across with 6px gaps
-            // Available width = viewport - padding - gaps
-            const gridPadding = 16 * 2; // padding on drum grid
-            const totalGaps = 6 * 7; // 7 gaps between 8 columns
-            const cellSize = Math.max(40, (width - gridPadding - totalGaps) / 8);
-            document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
-        } else {
-            // Landscape: base on height (original formula: sqrt(height * 3) * 0.9)
-            const cellSize = Math.sqrt(height * 3) * 0.9;
-            document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
-        }
+            // Calculate base font size from viewport height (preserve original formula)
+            const product = Math.max(8, Math.pow(height * 0.8, 1 / 3));
+            const fontSize = product * 1.1;
+            set({ fontSize });
+            document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
 
-        // Logo sizing
-        const logoWidth = Math.min(300, width * 0.5);
-        document.documentElement.style.setProperty('--logo-width', `${logoWidth}px`);
-    },
+            // Grid scaling: use width-aware calculation in portrait
+            if (newOrientation === 'portrait') {
+                // Portrait: fit 8 columns across with 6px gaps
+                // Available width = viewport - padding - gaps
+                const gridPadding = 16 * 2; // padding on drum grid
+                const totalGaps = 6 * 7; // 7 gaps between 8 columns
+                const cellSize = Math.max(40, (width - gridPadding - totalGaps) / 8);
+                document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
+            } else {
+                // Landscape: base on height (original formula: sqrt(height * 3) * 0.9)
+                const cellSize = Math.sqrt(height * 3) * 0.9;
+                document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
+            }
 
-    setVolume: (index, volume) =>
-        set((state) => {
-            const updated = [...state.volumes];
-            updated[index] = volume;
-            return { volumes: updated };
-        }),
+            // Logo sizing
+            const logoWidth = Math.min(300, width * 0.5);
+            document.documentElement.style.setProperty('--logo-width', `${logoWidth}px`);
+        },
 
-    setSelectedSample: (index, sample) =>
-        set((state) => {
-            const updated = [...state.selectedSamples];
-            updated[index] = sample;
-            return { selectedSamples: updated };
-        }),
+        setVolume: (index, volume) =>
+            set((state) => {
+                const updated = [...state.volumes];
+                updated[index] = volume;
+                return { volumes: updated };
+            }),
 
-    setInstrumentVariant: (index, variant) =>
-        set((state) => {
-            const updated = [...state.instrumentVariants];
-            updated[index] = variant;
-            return { instrumentVariants: updated };
-        }),
+        setSelectedSample: (index, sample) =>
+            set((state) => {
+                const updated = [...state.selectedSamples];
+                updated[index] = sample;
+                return { selectedSamples: updated };
+            }),
 
-    setName: (name: string) => set({ name }),
-    setGrid: (grid: boolean[][]) => set({ grid }),
+        setInstrumentVariant: (index, variant) =>
+            set((state) => {
+                const updated = [...state.instrumentVariants];
+                updated[index] = variant;
+                return { instrumentVariants: updated };
+            }),
 
-	setSelectedLoop: (loop: DoughLoop | null) => {
-		set((state) => {
-			if (!loop) {
-				return { selectedLoop: null };
-			}
+        setName: (name: string) => set({ name }),
+        setGrid: (grid: boolean[][]) => set({ grid }),
 
-			const decoded = decodeDrumGrid(loop.beatRep);
-			if (!decoded) return { error: 'Invalid beatRep format', selectedLoop: null };
+        setSelectedLoop: (loop: DoughLoop | null) => {
+            set((state) => {
+                if (!loop) {
+                    return { selectedLoop: null };
+                }
 
-			const { grid, bpm, numBeats, subdivisions, samples, volumes } = decoded;
+                const decoded = decodeDrumGrid(loop.beatRep);
+                if (!decoded) return { error: 'Invalid beatRep format', selectedLoop: null };
 
-			return {
-				selectedLoop: loop,
-				grid,
-				bpm,
-				numBeats,
-				numSubdivisions: subdivisions,
-				selectedSamples: samples,
-				volumes,
-				name: loop.name,
-			};
-		});
-	},
+                const { grid, bpm, numBeats, subdivisions, samples, volumes } = decoded;
 
-    setUser: (user) => set({ user }),
-    logout: () => set({ user: null, doughLoops: [], selectedLoop: null }),
-    setNumBeats: (numBeats: number) => set({ numBeats }),
-    setNumSubdivisions: (numSubdivisions: number) => set({ numSubdivisions }),
-    setBpm: (bpm: number) => set({ bpm }),
-    setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
-    setCurrentStep: (step: number) => set({ currentStep: step }),
+                return {
+                    selectedLoop: loop,
+                    grid,
+                    bpm,
+                    numBeats,
+                    numSubdivisions: subdivisions,
+                    selectedSamples: samples,
+                    volumes,
+                    name: loop.name,
+                };
+            });
+        },
 
-    setDoughLoops: (loops) => set({ doughLoops: loops }),
-    addDoughLoop: (loop) => set((state) => ({ doughLoops: [...state.doughLoops, loop] })),
-    replaceDoughLoop: (loop: DoughLoop) =>
-        set((state) => ({
-            doughLoops: state.doughLoops.map((dl) => (dl.id === loop.id ? loop : dl)),
-        })),
+        setUser: (user) => set({ user }),
+        logout: () => set({ user: null, doughLoops: [], selectedLoop: null }),
+        setNumBeats: (numBeats: number) => set({ numBeats }),
+        setNumSubdivisions: (numSubdivisions: number) => set({ numSubdivisions }),
+        setBpm: (bpm: number) => set({ bpm }),
+        setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
+        setCurrentStep: (step: number) => set({ currentStep: step }),
 
-    setLoading: (loading) => set({ loading }),
-    setError: (error) => set({ error }),
+        setDoughLoops: (loops) => set({ doughLoops: loops }),
+        addDoughLoop: (loop) => set((state) => ({ doughLoops: [...state.doughLoops, loop] })),
+        replaceDoughLoop: (loop: DoughLoop) =>
+            set((state) => ({
+                doughLoops: state.doughLoops.map((dl) => (dl.id === loop.id ? loop : dl)),
+            })),
+
+        setLoading: (loading) => set({ loading }),
+        setError: (error) => set({ error }),
     };
 });

@@ -42,13 +42,13 @@
 }
 
 @media (orientation: portrait) {
-    .drumGridOuter[data-orientation="portrait"] {
+    .drumGridOuter[data-orientation='portrait'] {
         padding: 8px;
     }
 }
 
 @media (orientation: landscape) {
-    .drumGridOuter[data-orientation="landscape"] {
+    .drumGridOuter[data-orientation='landscape'] {
         padding: 4px;
     }
 }
@@ -63,6 +63,8 @@
     flex-grow: 1;
     height: 100%;
     transition: none;
+    padding-left: 10px;
+    box-sizing: border-box;
 }
 
 /* WebKit (Chrome, Safari) scrollbar */
@@ -156,7 +158,7 @@
 
 .cell {
     width: var(--grid-cell-size);
-    height: 100%; 
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -186,7 +188,7 @@
 }
 
 .playing {
-    outline: 2px solid rgb(255, 0, 242);
+    box-shadow: inset 0 0 0 2px var(--grid-playing), 0 0 8px var(--grid-playing);
 }
 
 /* Remove previous alternating backgrounds from cells */
@@ -205,10 +207,10 @@
 }
 /* Beat background container positioned behind grid rows */
 .beatBackground {
-    top: var(--drum-grid-row-height); 
+    top: var(--drum-grid-row-height);
     position: absolute;
     top: 0;
-    left: var(--controls-column-width * 1); 
+    left: var(--controls-column-width * 1);
     height: 100%;
     width: 100%;
     pointer-events: none;
@@ -239,10 +241,9 @@
 
 /* Keep playing outline above backgrounds */
 .playing {
-    outline: 2px solid var(--grid-playing);
+    box-shadow: inset 0 0 0 2px var(--grid-playing), 0 0 8px var(--grid-playing);
     position: relative;
     z-index: 2;
-    box-shadow: 0 0 8px var(--grid-playing);
 }
 
 .controlsBox {
@@ -328,7 +329,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-	font-weight: 900;
+    font-weight: 900;
 }
 
 .volumeSlider {
@@ -379,7 +380,7 @@
     border: 1px solid var(--ui-border);
     border-bottom: 2px solid var(--ui-accent);
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
     font-size: larger;
     font-weight: 700;
@@ -406,6 +407,19 @@
         height: 100%;
         gap: 0;
         transition: none;
+        position: relative;
+    }
+
+    .fixedGridContainer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 28px;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(166, 15, 153, 0.3));
+        pointer-events: none;
+        z-index: 4;
     }
 }
 
@@ -422,6 +436,19 @@
     gap: 0;
     transition: none;
     min-height: 0;
+    position: relative;
+}
+
+.portraitContainer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 28px;
+    background: linear-gradient(to bottom, transparent, rgba(166, 15, 153, 0.3));
+    pointer-events: none;
+    z-index: 4;
 }
 
 /* Portrait controls row - at the top, horizontal layout, fixed position */
@@ -493,9 +520,9 @@
 }
 
 .volumeButtonPortrait {
-    background: #D9A974;
+    background: #d9a974;
     color: #000;
-    border: 1px solid #C99A5F;
+    border: 1px solid #c99a5f;
     border-radius: 3px;
     padding: 2px 4px;
     font-size: 9px;
@@ -509,7 +536,7 @@
 }
 
 .volumeButtonPortrait:hover {
-    background: #E8BF8F;
+    background: #e8bf8f;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -723,10 +750,9 @@
 }
 
 .gridRowPortrait .playing {
-    outline: 2px solid var(--grid-playing);
+    box-shadow: inset 0 0 0 2px var(--grid-playing), 0 0 8px var(--grid-playing);
     position: relative;
     z-index: 2;
-    box-shadow: 0 0 8px var(--grid-playing);
 }
 
 /* Portrait mode: shrink columns to fit viewport */
@@ -773,9 +799,9 @@
 }
 
 .volumeButtonLandscape {
-    background: #D9A974;
+    background: #d9a974;
     color: #000;
-    border: 1px solid #C99A5F;
+    border: 1px solid #c99a5f;
     border-radius: 2px;
     padding: 0;
     font-size: 7px;
@@ -795,7 +821,7 @@
 }
 
 .volumeButtonLandscape:hover {
-    background: #E8BF8F;
+    background: #e8bf8f;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 

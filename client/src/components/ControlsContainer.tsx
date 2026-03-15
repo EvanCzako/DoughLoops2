@@ -22,9 +22,9 @@ export default function ControlsContainer(opts: {
     const setNumBeats = useStore((s) => s.setNumBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-	const stepRef = useRef(currentStep);
-	const fontSize = useStore((s) => s.fontSize);
-	const computedFontSize = Math.max(10, fontSize*2);
+    const stepRef = useRef(currentStep);
+    const fontSize = useStore((s) => s.fontSize);
+    const computedFontSize = Math.max(10, fontSize * 2);
 
     const handlePlayToggle = async () => {
         setIsPlaying(!isPlaying);
@@ -50,12 +50,7 @@ export default function ControlsContainer(opts: {
 
     return (
         <div className={styles.controlsContainer}>
-            <DrumLoopPlayer
-                grid={opts.grid}
-                isPlaying={isPlaying}
-                bpm={bpm}
-				stepRef={stepRef}
-            />
+            <DrumLoopPlayer grid={opts.grid} isPlaying={isPlaying} bpm={bpm} stepRef={stepRef} />
             <div className={styles.controlsGrid}>
                 {/* Row 1: tempo -, BPM label, tempo + */}
                 <button
@@ -63,17 +58,19 @@ export default function ControlsContainer(opts: {
                     style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setBpm(Math.max(20, bpm - 5))}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">➖</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        ➖
+                    </span>
                 </button>
-                <div className={styles.bpmLabel}>
-                    {Math.round(bpm)}
-                </div>
+                <div className={styles.bpmLabel}>{Math.round(bpm)}</div>
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setBpm(Math.min(300, bpm + 5))}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">➕</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        ➕
+                    </span>
                 </button>
                 {/* Row 2: reset, play/stop, clear */}
                 <button
@@ -84,7 +81,9 @@ export default function ControlsContainer(opts: {
                     className={`${styles.controlsButton} ${styles.resetButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">↩️</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        ↩️
+                    </span>
                 </button>
                 <button
                     className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
@@ -99,13 +98,17 @@ export default function ControlsContainer(opts: {
                     onClick={() => {
                         const numRows = opts.grid.length;
                         const numCols = opts.grid[0]?.length || 0;
-                        const cleared = Array.from({ length: numRows }, () => Array(numCols).fill(false));
+                        const cleared = Array.from({ length: numRows }, () =>
+                            Array(numCols).fill(false)
+                        );
                         opts.setGrid(cleared);
                     }}
                     className={`${styles.controlsButton} ${styles.clearButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">🧹</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        🧹
+                    </span>
                 </button>
             </div>
         </div>

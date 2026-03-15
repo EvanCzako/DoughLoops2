@@ -7,24 +7,26 @@ import DemoLoopList from './DemoLoopList';
 import styles from '../styles/UserLoopsWrapper.module.css';
 
 export default function UserLoopsWrapper({ isDemoLoops = false }: { isDemoLoops?: boolean }) {
-	const user = useStore((s) => s.user);
-	const fontSize = useStore((s) => s.fontSize);
+    const user = useStore((s) => s.user);
+    const fontSize = useStore((s) => s.fontSize);
 
-	// When showing demo loops dropdown, show only demo loops
-	if (isDemoLoops) {
-		return <DemoLoopList />;
-	}
+    // When showing demo loops dropdown, show only demo loops
+    if (isDemoLoops) {
+        return <DemoLoopList />;
+    }
 
-	return (
-		<div className={styles.userLoopsWrapper}>
-			{user ? (
-				<>
-					<NewDoughLoopForm />
-					<DoughLoopList/>
-				</>
-			) : (
-				<p style={{fontSize: fontSize*2}}>Log in or register to save and edit your loops!</p>
-			)}
-		</div>
-	);
+    return (
+        <div className={styles.userLoopsWrapper}>
+            {user ? (
+                <>
+                    <NewDoughLoopForm />
+                    <DoughLoopList />
+                </>
+            ) : (
+                <p style={{ fontSize: fontSize * 2 }}>
+                    Log in or register to save and edit your loops!
+                </p>
+            )}
+        </div>
+    );
 }

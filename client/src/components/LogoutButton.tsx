@@ -11,7 +11,7 @@ export default function LogoutButton() {
 
     const handleLogout = () => {
         logout();
-		setUserDropdownOpen(false);
+        setUserDropdownOpen(false);
     };
 
     return (

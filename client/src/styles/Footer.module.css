@@ -1,23 +1,22 @@
 @import './variables.module.css';
 
 .footerWrapper {
-	border-width: 10px;
-	border-style: solid;
-	border-color: var(--color-dark-gray-1);
-	border-radius: 10px;
-	background-color: var(--color-dark-purple-2);
-	font-weight: 600;
-	padding: 10px;
-	margin-bottom: 0px;
-	text-align: center;
+    border-width: 10px;
+    border-style: solid;
+    border-color: var(--color-dark-gray-1);
+    border-radius: 10px;
+    background-color: var(--color-dark-purple-2);
+    font-weight: 600;
+    padding: 10px;
+    margin-bottom: 0px;
+    text-align: center;
 }
 
 .footerWrapper a {
-	color: var(--ui-accent-2);
-	text-decoration: none;
-	
+    color: var(--ui-accent-2);
+    text-decoration: none;
 }
 
 .footerWrapper a:hover {
-	color: var(--ui-accent);
+    color: var(--ui-accent);
 }

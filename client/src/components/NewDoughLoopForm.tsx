@@ -16,18 +16,17 @@ export default function NewDoughLoopForm() {
     const bpm = useStore((s) => s.bpm);
     const numBeats = useStore((s) => s.numBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
-	const grid = useStore((s) => s.grid);
-	const setGrid = useStore((s) => s.setGrid);
-	const name = useStore((s) => s.name);
-	const setName = useStore((s) => s.setName);
+    const grid = useStore((s) => s.grid);
+    const setGrid = useStore((s) => s.setGrid);
+    const name = useStore((s) => s.name);
+    const setName = useStore((s) => s.setName);
     const selectedSamples = useStore((s) => s.selectedSamples);
     const volumes = useStore((s) => s.volumes);
     const addDoughLoop = useStore((s) => s.addDoughLoop);
     const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
     const setError = useStore((s) => s.setError);
-	const fontSize = useStore((s) => s.fontSize);
-	const computedFontSize = Math.max(10, fontSize*2.5);
-
+    const fontSize = useStore((s) => s.fontSize);
+    const computedFontSize = Math.max(10, fontSize * 2.5);
 
     const handleSave = async () => {
         if (!user) return null;
@@ -66,17 +65,19 @@ export default function NewDoughLoopForm() {
 
     return (
         <div>
-            <h3 style={{fontSize: computedFontSize}}>New Loop</h3>
+            <h3 style={{ fontSize: computedFontSize }}>New Loop</h3>
             <div>
                 <input
                     type="text"
                     placeholder="Loop name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-					className={styles.loopNameEntry}
-					style={{fontSize: `${fontSize*2}px`}}
+                    className={styles.loopNameEntry}
+                    style={{ fontSize: `${fontSize * 2}px` }}
                 />
-                <button onClick={handleSave} className={styles.saveButton}>Save</button>
+                <button onClick={handleSave} className={styles.saveButton}>
+                    Save
+                </button>
             </div>
         </div>
     );

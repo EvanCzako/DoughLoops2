@@ -19,7 +19,9 @@ export default function BeatSubdivControls() {
                     style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumBeats(Math.max(1, numBeats - 1))}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">➖</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        ➖
+                    </span>
                 </button>
                 <div className={styles.beatsLabel}>{numBeats}</div>
                 <button
@@ -27,7 +29,9 @@ export default function BeatSubdivControls() {
                     style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumBeats(Math.min(16, numBeats + 1))}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">➕</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        ➕
+                    </span>
                 </button>
 
                 {/* Row 2: Subdivisions - / value / + */}
@@ -36,7 +40,9 @@ export default function BeatSubdivControls() {
                     style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumSubdivisions(Math.max(1, numSubdivisions - 1))}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">➖</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        ➖
+                    </span>
                 </button>
                 <div className={styles.subdivLabel}>{numSubdivisions}</div>
                 <button
@@ -44,7 +50,9 @@ export default function BeatSubdivControls() {
                     style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumSubdivisions(Math.min(8, numSubdivisions + 1))}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">➕</span>
+                    <span className={styles.buttonIcon} aria-hidden="true">
+                        ➕
+                    </span>
                 </button>
             </div>
         </div>

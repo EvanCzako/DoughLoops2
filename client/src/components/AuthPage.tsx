@@ -5,7 +5,6 @@ import { useStore } from '../store';
 import styles from '../styles/AuthPage.module.css';
 import LogoutButton from './LogoutButton';
 
-
 export default function AuthPage(opts: { grid: any; setGrid: any; name: any; setName: any }) {
     const [isLogin, setIsLogin] = useState(true);
     const formContainerRef = useRef<HTMLDivElement | null>(null);
@@ -48,7 +47,10 @@ export default function AuthPage(opts: { grid: any; setGrid: any; name: any; set
 
     const loggedInDisp = (
         <div>
-            <div className={styles.logoutContainer} style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
+            <div
+                className={styles.logoutContainer}
+                style={{ maxWidth: 400, margin: 'auto', padding: 16 }}
+            >
                 {user ? (
                     <>
                         <h2>Welcome, {user.username}!</h2>

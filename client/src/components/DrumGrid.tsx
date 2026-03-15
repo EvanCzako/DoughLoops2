@@ -21,7 +21,9 @@ const instrumentEmojis: Record<string, string> = {
 
 export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
     const [volumeSliderOpen, setVolumeSliderOpen] = useState<Set<number>>(new Set());
-    const [popupPositions, setPopupPositions] = useState<Record<number, { top: number; left: number }>>({});
+    const [popupPositions, setPopupPositions] = useState<
+        Record<number, { top: number; left: number }>
+    >({});
     const volumeSliderRefs = useRef<Record<number, HTMLDivElement | null>>({});
     const volumeButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const controlItemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -86,8 +88,8 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
             const isClickOnButton = volumeButtonRefs.current.some(
                 (btn) => btn && btn.contains(target)
             );
-            const isClickOnSlider = Array.from(volumeSliderOpen).some(
-                (idx) => volumeSliderRefs.current[idx]?.contains(target)
+            const isClickOnSlider = Array.from(volumeSliderOpen).some((idx) =>
+                volumeSliderRefs.current[idx]?.contains(target)
             );
 
             if (!isClickOnSlider && !isClickOnButton) {
@@ -223,7 +225,9 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                 max={1}
                                 step={0.01}
                                 value={volumes[instrumentIndex]}
-                                onChange={(e) => setVolume(instrumentIndex, parseFloat(e.target.value))}
+                                onChange={(e) =>
+                                    setVolume(instrumentIndex, parseFloat(e.target.value))
+                                }
                             />
                         </div>
                     ))}
@@ -235,20 +239,27 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                             <div className={styles.drumGridPortrait}>
                                 {/* Beat background - horizontally striped behind grid */}
                                 <div className={styles.beatBackgroundPortrait}>
-                                    {Array.from({ length: numCols / numSubdivisions }).map((_, beatIndex) => (
-                                        <div
-                                            key={`beat-bg-${beatIndex}`}
-                                            className={`${styles.beatStripePortrait} ${
-                                                beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
-                                            }`}
-                                            style={{ height: beatSizePortrait }}
-                                        />
-                                    ))}
+                                    {Array.from({ length: numCols / numSubdivisions }).map(
+                                        (_, beatIndex) => (
+                                            <div
+                                                key={`beat-bg-${beatIndex}`}
+                                                className={`${styles.beatStripePortrait} ${
+                                                    beatIndex % 2 === 0
+                                                        ? styles.evenBeatHue
+                                                        : styles.oddBeatHue
+                                                }`}
+                                                style={{ height: beatSizePortrait }}
+                                            />
+                                        )
+                                    )}
                                 </div>
 
                                 {/* Grid rows */}
                                 {grid[0]?.map((_, stepIndex) => (
-                                    <div className={styles.gridRowPortrait} key={`row-${stepIndex}`}>
+                                    <div
+                                        className={styles.gridRowPortrait}
+                                        key={`row-${stepIndex}`}
+                                    >
                                         {grid.map((_, instrumentIndex) => (
                                             <div
                                                 key={`cell-${stepIndex}-${instrumentIndex}`}
@@ -259,7 +270,9 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                                 <input
                                                     type="checkbox"
                                                     checked={grid[instrumentIndex][stepIndex]}
-                                                    onChange={() => toggle(instrumentIndex, stepIndex)}
+                                                    onChange={() =>
+                                                        toggle(instrumentIndex, stepIndex)
+                                                    }
                                                 />
                                             </div>
                                         ))}
@@ -361,15 +374,19 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                     <div className={styles.innerGridContainer}>
                         <div className={styles.gridContainer}>
                             <div className={styles.beatBackground}>
-                                {Array.from({ length: numCols / numSubdivisions }).map((_, beatIndex) => (
-                                    <div
-                                        key={`beat-bg-${beatIndex}`}
-                                        className={`${styles.beatStripe} ${
-                                            beatIndex % 2 === 0 ? styles.evenBeatHue : styles.oddBeatHue
-                                        }`}
-                                        style={{ width: beatSizeLandscape }}
-                                    />
-                                ))}
+                                {Array.from({ length: numCols / numSubdivisions }).map(
+                                    (_, beatIndex) => (
+                                        <div
+                                            key={`beat-bg-${beatIndex}`}
+                                            className={`${styles.beatStripe} ${
+                                                beatIndex % 2 === 0
+                                                    ? styles.evenBeatHue
+                                                    : styles.oddBeatHue
+                                            }`}
+                                            style={{ width: beatSizeLandscape }}
+                                        />
+                                    )
+                                )}
                             </div>
 
                             <div className={styles.drumGrid}>

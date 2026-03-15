@@ -10,7 +10,7 @@
 }
 
 .loginFormInput::placeholder {
-	color: rgb(60, 60, 60);
+    color: rgb(60, 60, 60);
 }
 
 .loginButton {
@@ -19,7 +19,7 @@
     background-color: var(--ui-accent-2);
     border-radius: 5px;
     margin-bottom: 10px;
-	color: var(--color-off-white-1);
+    color: var(--color-off-white-1);
     font-weight: 900;
     font-size: calc(var(--base-font-size) * 2);
 }

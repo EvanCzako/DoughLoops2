@@ -6,14 +6,14 @@ interface DrumLoopPlayerProps {
     grid: boolean[][];
     isPlaying: boolean;
     bpm?: number;
-    stepRef: React.RefObject<number>
+    stepRef: React.RefObject<number>;
 }
 
 export default function DrumLoopPlayer({
     grid,
     isPlaying,
     bpm = 85,
-	stepRef
+    stepRef,
 }: DrumLoopPlayerProps) {
     const base = import.meta.env.BASE_URL;
 
@@ -25,8 +25,8 @@ export default function DrumLoopPlayer({
     const volumes = useStore((s) => s.volumes);
     const selectedSamples = useStore((s) => s.selectedSamples);
 
-	const setCurrentStep = useStore((s) => s.setCurrentStep);
-	const currentStep = useStore((s) => s.currentStep);
+    const setCurrentStep = useStore((s) => s.setCurrentStep);
+    const currentStep = useStore((s) => s.currentStep);
 
     const selectedSamplesRef = useRef<string[]>(selectedSamples);
 

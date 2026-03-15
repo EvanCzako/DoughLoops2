@@ -12,70 +12,76 @@ import ControlsContainer from './components/ControlsContainer';
 import BeatSubdivControls from './components/BeatSubdivControls';
 
 export default function App(): JSX.Element {
-	const grid = useStore((s) => s.grid);
-	const setGrid = useStore((s) => s.setGrid);
-	const name = useStore((s) => s.name);
-	const setName = useStore((s) => s.setName);
-	const updateFontSize = useStore((s) => s.updateFontSize);
-	const showDropdown = useStore((s) => s.userDropdownOpen);
-	const showDemoDropdown = useStore((s) => s.demoDropdownOpen);
-	const orientation = useStore((s) => s.orientation);
+    const grid = useStore((s) => s.grid);
+    const setGrid = useStore((s) => s.setGrid);
+    const name = useStore((s) => s.name);
+    const setName = useStore((s) => s.setName);
+    const updateFontSize = useStore((s) => s.updateFontSize);
+    const showDropdown = useStore((s) => s.userDropdownOpen);
+    const showDemoDropdown = useStore((s) => s.demoDropdownOpen);
+    const orientation = useStore((s) => s.orientation);
 
-	const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);
+    const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);
 
-	const dropdownAnchorRef = useRef<HTMLButtonElement>(null);
-	const demoDropdownAnchorRef = useRef<HTMLButtonElement>(null);
+    const dropdownAnchorRef = useRef<HTMLButtonElement>(null);
+    const demoDropdownAnchorRef = useRef<HTMLButtonElement>(null);
 
-	useEffect(() => {
-		// Initial call
-		updateFontSize();
-		
-		// On iOS, the first updateFontSize might not have correct dimensions yet
-		// Schedule another update shortly after to ensure accurate dimensions
-		// This addresses an issue where window.innerHeight temporarily includes browser chrome
-		const timeoutId = setTimeout(() => {
-			updateFontSize();
-		}, 100);
-		
-		// Listen to both resize (for viewport changes) and orientationchange (for mobile rotation)
-		// orientationchange fires before/during rotation on mobile and ensures proper dimension updates
-		window.addEventListener('resize', updateFontSize);
-		window.addEventListener('orientationchange', updateFontSize);
-		
-		return () => {
-			clearTimeout(timeoutId);
-			window.removeEventListener('resize', updateFontSize);
-			window.removeEventListener('orientationchange', updateFontSize);
-		};
-	}, [updateFontSize]);
+    useEffect(() => {
+        // Initial call
+        updateFontSize();
 
-	return (
-		<div className={styles.App}>
-			<TitleBox dropdownAnchorRef={dropdownAnchorRef} demoDropdownAnchorRef={demoDropdownAnchorRef} />
-			<div className={styles.mainContent}>
-				{showDropdown && (
-					<DropdownWrapper anchorRef={dropdownAnchorRef}>
-						<AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
-					</DropdownWrapper>
-				)}
-				{showDemoDropdown && (
-					<DropdownWrapper anchorRef={demoDropdownAnchorRef} compact={true} onClose={() => setDemoDropdownOpen(false)}>
-						<UserLoopsWrapper isDemoLoops={true} />
-					</DropdownWrapper>
-				)}
-				<div className={styles.gridAndLoopsWrapper}>
-					<DoughLoopManager />
-					{orientation === 'landscape' && (
-						<div className={styles.sideControlsPanel}>
-							<BeatSubdivControls />
-							<ControlsContainer grid={grid} setGrid={setGrid} />
-						</div>
-					)}
-					{/* <UserLoopsWrapper /> */}
-				</div>
-			</div>
-			{/* <Footer/> */}
-		</div>
+        // On iOS, the first updateFontSize might not have correct dimensions yet
+        // Schedule another update shortly after to ensure accurate dimensions
+        // This addresses an issue where window.innerHeight temporarily includes browser chrome
+        const timeoutId = setTimeout(() => {
+            updateFontSize();
+        }, 100);
 
-	);
+        // Listen to both resize (for viewport changes) and orientationchange (for mobile rotation)
+        // orientationchange fires before/during rotation on mobile and ensures proper dimension updates
+        window.addEventListener('resize', updateFontSize);
+        window.addEventListener('orientationchange', updateFontSize);
+
+        return () => {
+            clearTimeout(timeoutId);
+            window.removeEventListener('resize', updateFontSize);
+            window.removeEventListener('orientationchange', updateFontSize);
+        };
+    }, [updateFontSize]);
+
+    return (
+        <div className={styles.App}>
+            <TitleBox
+                dropdownAnchorRef={dropdownAnchorRef}
+                demoDropdownAnchorRef={demoDropdownAnchorRef}
+            />
+            <div className={styles.mainContent}>
+                {showDropdown && (
+                    <DropdownWrapper anchorRef={dropdownAnchorRef}>
+                        <AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
+                    </DropdownWrapper>
+                )}
+                {showDemoDropdown && (
+                    <DropdownWrapper
+                        anchorRef={demoDropdownAnchorRef}
+                        compact={true}
+                        onClose={() => setDemoDropdownOpen(false)}
+                    >
+                        <UserLoopsWrapper isDemoLoops={true} />
+                    </DropdownWrapper>
+                )}
+                <div className={styles.gridAndLoopsWrapper}>
+                    <DoughLoopManager />
+                    {orientation === 'landscape' && (
+                        <div className={styles.sideControlsPanel}>
+                            <BeatSubdivControls />
+                            <ControlsContainer grid={grid} setGrid={setGrid} />
+                        </div>
+                    )}
+                    {/* <UserLoopsWrapper /> */}
+                </div>
+            </div>
+            {/* <Footer/> */}
+        </div>
+    );
 }
