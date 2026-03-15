@@ -1,4 +1,4 @@
-import React from 'react';
+import { RefObject } from 'react';
 import { useStore } from '../store';
 import styles from '../styles/TitleBox.module.css';
 import DoughLoopsLogo from '../assets/DoughLoops2-downSaturated.png';
@@ -6,7 +6,7 @@ import DoughLoopsLogo from '../assets/DoughLoops2-downSaturated.png';
 export default function TitleBox({
     demoDropdownAnchorRef,
 }: {
-    demoDropdownAnchorRef: React.RefObject<HTMLButtonElement | null>;
+    demoDropdownAnchorRef: RefObject<HTMLButtonElement | null>;
 }) {
     const demoDropdownOpen = useStore((s) => s.demoDropdownOpen);
     const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);

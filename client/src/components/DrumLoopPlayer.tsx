@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, RefObject } from 'react';
 import { useStore } from '../store';
 import * as Tone from 'tone';
 
@@ -6,7 +6,7 @@ interface DrumLoopPlayerProps {
     grid: boolean[][];
     isPlaying: boolean;
     bpm?: number;
-    stepRef: React.RefObject<number>;
+    stepRef: RefObject<number>;
 }
 
 export default function DrumLoopPlayer({
@@ -80,8 +80,9 @@ export default function DrumLoopPlayer({
     useEffect(() => {
         if (!samplesLoaded) return;
 
-        Tone.Transport.stop();
-        Tone.Transport.cancel();
+        const transport = Tone.getTransport();
+        transport.stop();
+        transport.cancel();
 
         const repeat = (time: number) => {
             const step = stepRef.current;
@@ -107,18 +108,18 @@ export default function DrumLoopPlayer({
         const secondsPerBeat = 60 / bpm;
         const stepDuration = secondsPerBeat / numSubdivisions;
 
-        Tone.Transport.bpm.value = bpm;
-        const repeatId = Tone.Transport.scheduleRepeat(repeat, stepDuration);
+        transport.bpm.value = bpm;
+        const repeatId = transport.scheduleRepeat(repeat, stepDuration);
 
         if (isPlaying) {
             Tone.start().then(() => {
-                Tone.Transport.start();
+                transport.start();
             });
         }
 
         return () => {
-            Tone.Transport.clear(repeatId);
-            Tone.Transport.stop();
+            transport.clear(repeatId);
+            transport.stop();
         };
     }, [isPlaying, bpm, numSubdivisions, samplesLoaded]);
 

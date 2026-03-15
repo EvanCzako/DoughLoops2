@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { useStore, User } from '../store';
 import styles from '../styles/LoginForm.module.css';
 
@@ -14,7 +14,7 @@ export default function LoginForm() {
     const [success, setSuccess] = useState<string | null>(null);
     const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
 
-    async function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -39,7 +39,6 @@ export default function LoginForm() {
             setSuccess('Login successful!');
             setUserDropdownOpen(false);
         } catch (err: any) {
-            console.error(err.message);
             setError(err.message);
         } finally {
             setLoading(false);

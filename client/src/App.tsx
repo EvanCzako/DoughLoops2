@@ -9,12 +9,13 @@ import styles from './App.module.css';
 import Footer from './components/Footer';
 import ControlsContainer from './components/ControlsContainer';
 import BeatSubdivControls from './components/BeatSubdivControls';
+import DrumLoopPlayer from './components/DrumLoopPlayer';
 
 export default function App(): JSX.Element {
     const grid = useStore((s) => s.grid);
     const setGrid = useStore((s) => s.setGrid);
-    const name = useStore((s) => s.name);
-    const setName = useStore((s) => s.setName);
+    const isPlaying = useStore((s) => s.isPlaying);
+    const bpm = useStore((s) => s.bpm);
     const showDropdown = useStore((s) => s.userDropdownOpen);
     const showDemoDropdown = useStore((s) => s.demoDropdownOpen);
     const orientation = useStore((s) => s.orientation);
@@ -23,6 +24,7 @@ export default function App(): JSX.Element {
 
     const dropdownAnchorRef = useRef<HTMLButtonElement>(null);
     const demoDropdownAnchorRef = useRef<HTMLButtonElement>(null);
+    const stepRef = useRef(0);
 
     useEffect(() => {
         const update = () => useStore.getState().updateFontSize();
@@ -42,11 +44,12 @@ export default function App(): JSX.Element {
 
     return (
         <div className={styles.App}>
+            <DrumLoopPlayer grid={grid} isPlaying={isPlaying} bpm={bpm} stepRef={stepRef} />
             <TitleBox demoDropdownAnchorRef={demoDropdownAnchorRef} />
             <div className={styles.mainContent}>
                 {showDropdown && (
                     <DropdownWrapper anchorRef={dropdownAnchorRef}>
-                        <AuthPage grid={grid} setGrid={setGrid} name={name} setName={setName} />
+                        <AuthPage />
                     </DropdownWrapper>
                 )}
                 {showDemoDropdown && (
@@ -59,11 +62,11 @@ export default function App(): JSX.Element {
                     </DropdownWrapper>
                 )}
                 <div className={styles.gridAndLoopsWrapper}>
-                    <DoughLoopManager />
+                    <DoughLoopManager stepRef={stepRef} />
                     {orientation === 'landscape' && (
                         <div className={styles.sideControlsPanel}>
                             <BeatSubdivControls />
-                            <ControlsContainer grid={grid} setGrid={setGrid} />
+                            <ControlsContainer grid={grid} setGrid={setGrid} stepRef={stepRef} />
                         </div>
                     )}
                 </div>

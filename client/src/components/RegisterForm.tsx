@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, FormEvent } from 'react';
 
 import styles from '../styles/LoginForm.module.css';
 
@@ -19,7 +19,7 @@ export default function RegisterForm() {
         return true;
     }
 
-    async function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         setError(null);
         setSuccess(null);

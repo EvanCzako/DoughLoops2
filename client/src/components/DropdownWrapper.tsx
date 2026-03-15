@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, RefObject, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useStore } from '../store';
 
 import styles from '../styles/AuthPage.module.css';
 
 interface Props {
-    anchorRef: React.RefObject<HTMLElement | null>;
-    children: React.ReactNode;
+    anchorRef: RefObject<HTMLElement | null>;
+    children: ReactNode;
     compact?: boolean;
     onClose?: () => void;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '../store';
 import { DoughLoop } from '../store';
 import styles from '../styles/UserLoopsWrapper.module.css';
@@ -83,9 +83,7 @@ export default function DoughLoopList() {
                                         ? 'orange'
                                         : 'var(--color-off-white-1)',
                             }}
-                            onClick={() => {
-                                setSelectedLoop({ ...loop });
-                            }}
+                            onClick={() => setSelectedLoop(loop)}
                         >
                             {loop.name}
                         </li>

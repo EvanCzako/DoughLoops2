@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, RefObject } from 'react';
 import { useStore } from '../store';
 
 import DrumLoopEditor from './DrumLoopEditor';
@@ -6,7 +6,7 @@ import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
 import BeatSubdivControls from './BeatSubdivControls';
 
-export default function DoughLoopManager() {
+export default function DoughLoopManager({ stepRef }: { stepRef: RefObject<number> }) {
     const user = useStore((s) => s.user);
     const selectedLoop = useStore((s) => s.selectedLoop);
     const setSelectedLoop = useStore((s) => s.setSelectedLoop);
@@ -20,7 +20,7 @@ export default function DoughLoopManager() {
         if (!user && selectedLoop) {
             setSelectedLoop(null);
         }
-    }, [user]);
+    }, [user, setSelectedLoop]);
 
     return (
         <div className={styles.doughLoopManager}>
@@ -33,7 +33,7 @@ export default function DoughLoopManager() {
             />
             {orientation === 'portrait' && (
                 <div className={styles.bottomControlsRow}>
-                    <ControlsContainer grid={grid} setGrid={setGrid} />
+                    <ControlsContainer grid={grid} setGrid={setGrid} stepRef={stepRef} />
                     <BeatSubdivControls />
                 </div>
             )}

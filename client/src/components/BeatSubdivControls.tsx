@@ -1,4 +1,3 @@
-import React from 'react';
 import { useStore } from '../store';
 import styles from '../styles/ControlsContainer.module.css';
 

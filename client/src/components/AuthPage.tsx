@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import { useStore } from '../store';
 import styles from '../styles/AuthPage.module.css';
 import LogoutButton from './LogoutButton';
 
-export default function AuthPage(opts: { grid: any; setGrid: any; name: any; setName: any }) {
+export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
     const formContainerRef = useRef<HTMLDivElement | null>(null);
 

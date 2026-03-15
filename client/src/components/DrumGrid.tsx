@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useStore } from '../store';
 import styles from '../styles/DrumGrid.module.css';
 
@@ -41,40 +41,37 @@ export default function DrumGrid({ grid, setGrid }: DrumGridProps) {
     const isPortrait = orientation === 'portrait';
 
     useEffect(() => {
+        if (volumeSliderOpen.size === 0) return;
+
         const updatePositions = () => {
             const newPositions: Record<number, { top: number; left: number }> = {};
             volumeSliderOpen.forEach((instrumentIndex) => {
-                if (volumeButtonRefs.current[instrumentIndex]) {
-                    const button = volumeButtonRefs.current[instrumentIndex];
-                    if (button) {
-                        const rect = button.getBoundingClientRect();
-                        if (isPortrait) {
-                            newPositions[instrumentIndex] = {
-                                top: rect.bottom + 4,
-                                left: rect.left + rect.width / 2,
-                            };
-                        } else {
-                            newPositions[instrumentIndex] = {
-                                top: rect.top + rect.height / 2,
-                                left: rect.right + 4,
-                            };
-                        }
+                const button = volumeButtonRefs.current[instrumentIndex];
+                if (button) {
+                    const rect = button.getBoundingClientRect();
+                    if (isPortrait) {
+                        newPositions[instrumentIndex] = {
+                            top: rect.bottom + 4,
+                            left: rect.left + rect.width / 2,
+                        };
+                    } else {
+                        newPositions[instrumentIndex] = {
+                            top: rect.top + rect.height / 2,
+                            left: rect.right + 4,
+                        };
                     }
                 }
             });
             setPopupPositions(newPositions);
         };
 
-        if (volumeSliderOpen.size > 0) {
-            requestAnimationFrame(updatePositions);
-        }
+        const rafId = requestAnimationFrame(updatePositions);
+        window.addEventListener('resize', updatePositions);
 
-        if (volumeSliderOpen.size > 0) {
-            window.addEventListener('resize', updatePositions);
-            return () => {
-                window.removeEventListener('resize', updatePositions);
-            };
-        }
+        return () => {
+            cancelAnimationFrame(rafId);
+            window.removeEventListener('resize', updatePositions);
+        };
     }, [volumeSliderOpen, isPortrait]);
 
     useEffect(() => {

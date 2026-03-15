@@ -1,6 +1,4 @@
-import React from 'react';
 import { useStore } from '../store';
-import { DoughLoop } from '../store';
 import NewDoughLoopForm from './NewDoughLoopForm';
 import DoughLoopList from './DoughLoopList';
 import DemoLoopList from './DemoLoopList';

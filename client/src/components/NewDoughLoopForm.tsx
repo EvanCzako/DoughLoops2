@@ -1,4 +1,3 @@
-import React from 'react';
 import { useStore } from '../store';
 import styles from '../styles/NewDoughLoopForm.module.css';
 import { encodeDrumGrid } from './utils';

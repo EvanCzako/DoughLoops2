@@ -1,12 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, RefObject } from 'react';
 import { useStore } from '../store';
-import DrumLoopPlayer from './DrumLoopPlayer';
-import * as Tone from 'tone';
 import styles from '../styles/ControlsContainer.module.css';
 
 export default function ControlsContainer(opts: {
     grid: boolean[][];
     setGrid: (grid: boolean[][]) => void;
+    stepRef: RefObject<number>;
 }) {
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
@@ -14,10 +13,7 @@ export default function ControlsContainer(opts: {
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
     const numBeats = useStore((s) => s.numBeats);
-    const setNumBeats = useStore((s) => s.setNumBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
-    const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-    const stepRef = useRef(0);
     const fontSize = useStore((s) => s.fontSize);
     const computedFontSize = Math.max(10, fontSize * 2);
 
@@ -34,11 +30,10 @@ export default function ControlsContainer(opts: {
                 return newRow.fill(false, row.length);
             })
         );
-    }, [numBeats, numSubdivisions]);
+    }, [numBeats, numSubdivisions, opts.setGrid]);
 
     return (
         <div className={styles.controlsContainer}>
-            <DrumLoopPlayer grid={opts.grid} isPlaying={isPlaying} bpm={bpm} stepRef={stepRef} />
             <div className={styles.controlsGrid}>
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
@@ -63,7 +58,7 @@ export default function ControlsContainer(opts: {
                 <button
                     onClick={() => {
                         setCurrentStep(0);
-                        stepRef.current = 0;
+                        opts.stepRef.current = 0;
                     }}
                     className={`${styles.controlsButton} ${styles.resetButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}
