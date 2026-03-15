@@ -14,7 +14,6 @@ app.use(
 
 app.use(express.json());
 
-// 👇 Initialize tables on startup
 initDB()
     .then(() => {
         console.log('✅ Database initialized');
@@ -23,23 +22,19 @@ initDB()
         console.error('❌ Failed to initialize DB:', err);
     });
 
-// Register route
 app.post('/register', async (req, res) => {
     try {
         const { username, password } = req.body;
         const db = await getDB();
 
-        // Check if username exists
         const existingUser = await db.get(`SELECT * FROM users WHERE username = ?`, [username]);
         if (existingUser) {
             return res.status(409).json({ error: 'Username already exists' });
         }
 
-        // Hash password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Insert new user
         await db.run(`INSERT INTO users (username, hashedPassword) VALUES (?, ?)`, [
             username,
             hashedPassword,
@@ -52,25 +47,21 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Login route
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
         const db = await getDB();
 
-        // Find user by username
         const user = await db.get(`SELECT * FROM users WHERE username = ?`, [username]);
         if (!user) {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
-        // Compare password with hashed password
         const isValid = await bcrypt.compare(password, user.hashedPassword);
         if (!isValid) {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
-        // Successful login — in real apps you’d generate a session or token here
         res.json({ message: 'Login successful', userId: user.id, username: user.username });
     } catch (err) {
         console.error(err);
@@ -78,7 +69,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// server/index.js or routes/doughloops.js
 app.post('/doughloops', async (req, res) => {
     const { userId, name, beatRep } = req.body;
 
@@ -129,10 +119,9 @@ app.get('/doughloops', async (req, res) => {
     }
 });
 
-// Delete DoughLoop by ID, verifying userId
 app.delete('/doughloops/:id', async (req, res) => {
     const { id } = req.params;
-    const { userId } = req.query; // assumes userId is passed as a query param
+    const { userId } = req.query;
 
     if (!id || !userId) {
         return res.status(400).json({ error: 'Missing loop ID or userId' });
@@ -158,13 +147,5 @@ app.delete('/doughloops/:id', async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));
-
