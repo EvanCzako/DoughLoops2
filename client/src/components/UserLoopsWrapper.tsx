@@ -10,7 +10,6 @@ export default function UserLoopsWrapper({ isDemoLoops = false }: { isDemoLoops?
     const user = useStore((s) => s.user);
     const fontSize = useStore((s) => s.fontSize);
 
-    // When showing demo loops dropdown, show only demo loops
     if (isDemoLoops) {
         return <DemoLoopList />;
     }

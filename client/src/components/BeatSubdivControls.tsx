@@ -13,7 +13,6 @@ export default function BeatSubdivControls() {
     return (
         <div className={styles.controlsContainer}>
             <div className={styles.controlsGrid}>
-                {/* Row 1: Beats - / value / + */}
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}
@@ -34,7 +33,6 @@ export default function BeatSubdivControls() {
                     </span>
                 </button>
 
-                {/* Row 2: Subdivisions - / value / + */}
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}

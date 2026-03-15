@@ -1,5 +1,4 @@
 :root {
-    /* Main UI Theme - Softer, Modern Palette */
     --ui-background: #1a1b26;
     --ui-surface: #24283b;
     --ui-surface-light: #2f3449;
@@ -10,50 +9,43 @@
     --ui-text-secondary: #9aa5ce;
     --ui-border: #414868;
 
-    /* Interactive States */
     --ui-hover: #394077;
     --ui-active: #9d7cd8;
 
-    /* Drum Grid Specific - Higher Contrast But Modern */
     --grid-background: #16161e;
     --grid-cell-inactive: #1f2335;
     --grid-cell-active: #ff9e64;
     --grid-cell-border: #565f89;
-    /* Slightly subtler beat stripes so cell interiors read as solid */
+
     --grid-beat-even: rgba(99, 110, 255, 0.35);
     --grid-beat-odd: rgba(255, 121, 198, 0.35);
     --grid-playing: #f7768e;
 
-    /* Legacy Color Support */
-    --color-dark-purple-1: #41416e; /* Modernized */
-    --color-dark-purple-2: #32344a; /* Modernized */
+    --color-dark-purple-1: #41416e;
+    --color-dark-purple-2: #32344a;
     --color-dark-gray-1: var(--ui-surface);
     --color-off-white-1: var(--ui-text-primary);
-    --color-off-pink-1: #f7768e; /* Modernized */
-    --color-warm-pink-1: #ff79c6; /* Modernized */
-    --color-bright-warm-pink-1: #ff9ec4; /* Modernized */
-    --color-off-orange-1: #ff9e64; /* Modernized */
-    --color-off-red-1: #f7768e; /* Modernized */
-    --color-off-green-1: #73daca; /* Modernized */
+    --color-off-pink-1: #f7768e;
+    --color-warm-pink-1: #ff79c6;
+    --color-bright-warm-pink-1: #ff9ec4;
+    --color-off-orange-1: #ff9e64;
+    --color-off-red-1: #f7768e;
+    --color-off-green-1: #73daca;
 
-    /* Control Button Colors */
-    --button-play: #9ece6a; /* Soft green for play */
-    --button-stop: #f7768e; /* Soft red for stop */
-    --button-clear: #7dcfff; /* Soft blue for clear */
-    --button-reset: #bb9af7; /* Soft purple for reset */
+    --button-play: #9ece6a;
+    --button-stop: #f7768e;
+    --button-clear: #7dcfff;
+    --button-reset: #bb9af7;
 
-    /* Button Hover States */
     --button-play-hover: #b9f27c;
     --button-stop-hover: #ff8c9e;
     --button-clear-hover: #8edcff;
     --button-reset-hover: #cfb1ff;
 
-    /* Effects */
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
     --shadow-lg: 0 8px 12px rgba(0, 0, 0, 0.2);
 
-    /* Enhanced Effects */
     --glow-sm: 0 0 15px rgba(255, 255, 255, 0.1);
     --glow-md: 0 0 20px rgba(255, 255, 255, 0.15);
     --inner-highlight: inset 0 1px 1px rgba(255, 255, 255, 0.2);

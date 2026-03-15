@@ -1,4 +1,3 @@
-// client/src/components/LoginForm.tsx
 import React, { useState } from 'react';
 import { useStore, User } from '../store';
 import styles from '../styles/LoginForm.module.css';
@@ -38,7 +37,7 @@ export default function LoginForm() {
             const loggedInUser: User = { id: data.userId, username: data.username };
             setUser(loggedInUser);
             setSuccess('Login successful!');
-            setUserDropdownOpen(false); // ✅ Only close dropdown here
+            setUserDropdownOpen(false);
         } catch (err: any) {
             console.error(err.message);
             setError(err.message);

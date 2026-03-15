@@ -1,8 +1,6 @@
-// client/src/env.d.ts
-
 interface ImportMetaEnv {
     readonly VITE_API_BASE_URL: string;
-    readonly BASE_URL: string; // ← add this line
+    readonly BASE_URL: string;
 }
 
 interface ImportMeta {

@@ -35,11 +35,10 @@ export default function Knob({ min, max, value, onChange, size = 60 }: KnobProps
         const cy = rect.top + rect.height / 2;
 
         const dx = e.clientX - cx;
-        const dy = cy - e.clientY; // inverted Y for canvas coordinates
-        let theta = Math.atan2(dy, dx) * (180 / Math.PI); // in degrees
-        theta = (theta + 360) % 360; // normalize
+        const dy = cy - e.clientY;
+        let theta = Math.atan2(dy, dx) * (180 / Math.PI);
+        theta = (theta + 360) % 360;
 
-        // Clamp angle between 135 and 405 (270 degrees total)
         const clamped = Math.min(Math.max(theta, 135), 405);
         const newValue = min + ((clamped - 135) / 270) * (max - min);
         onChange(parseFloat(newValue.toFixed(2)));

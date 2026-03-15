@@ -1,6 +1,5 @@
-// client/src/store.ts
 import { create } from 'zustand';
-import { decodeDrumGrid } from './components/utils'; // adjust path as needed
+import { decodeDrumGrid } from './components/utils';
 
 export interface User {
     id: number;
@@ -14,7 +13,6 @@ export interface DoughLoop {
     beatRep: string;
 }
 
-// Default Funk loop
 const DEFAULT_FUNK_LOOP: DoughLoop = {
     id: -7,
     userId: -1,
@@ -37,7 +35,7 @@ interface StoreState {
     name: string;
     grid: boolean[][];
     selectedSamples: string[];
-    volumes: number[]; // from 0 (mute) to 1 (full volume)
+    volumes: number[];
     fontSize: number;
     userDropdownOpen: boolean;
     demoDropdownOpen: boolean;
@@ -58,24 +56,20 @@ interface StoreState {
     updateFontSize: () => void;
     setOrientation: (orientation: 'portrait' | 'landscape') => void;
 
-    // Auth actions
     setUserDropdownOpen: (open: boolean) => void;
     setDemoDropdownOpen: (open: boolean) => void;
     setUser: (user: User | null) => void;
     logout: () => void;
 
-    // DoughLoop actions
     setDoughLoops: (loops: DoughLoop[]) => void;
     addDoughLoop: (loop: DoughLoop) => void;
     replaceDoughLoop: (loop: DoughLoop) => void;
 
-    // UI actions
     setLoading: (loading: boolean) => void;
     setError: (error: string | null) => void;
 }
 
 export const useStore = create<StoreState>((set) => {
-    // Decode the default Funk loop
     const decoded = decodeDrumGrid(DEFAULT_FUNK_LOOP.beatRep);
 
     return {
@@ -116,41 +110,31 @@ export const useStore = create<StoreState>((set) => {
         setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
         updateFontSize: () => {
-            // On iOS, prefer visualViewport for accurate measurements excluding browser chrome
-            // visualViewport.height is the usable height without URL bar/address bar
             const width = window.visualViewport?.width ?? window.innerWidth;
             const height = window.visualViewport?.height ?? window.innerHeight;
 
-            // Detect orientation: portrait if height > width
             const newOrientation = height > width ? 'portrait' : 'landscape';
             set({ orientation: newOrientation });
             document.documentElement.setAttribute('data-orientation', newOrientation);
 
-            // Set viewport unit root values
             document.documentElement.style.setProperty('--vw-unit', `${width / 100}px`);
             document.documentElement.style.setProperty('--vh-unit', `${height / 100}px`);
 
-            // Calculate base font size from viewport height (preserve original formula)
             const product = Math.max(8, Math.pow(height * 0.8, 1 / 3));
             const fontSize = product * 1.1;
             set({ fontSize });
             document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
 
-            // Grid scaling: use width-aware calculation in portrait
             if (newOrientation === 'portrait') {
-                // Portrait: fit 8 columns across with 6px gaps
-                // Available width = viewport - padding - gaps
-                const gridPadding = 16 * 2; // padding on drum grid
-                const totalGaps = 6 * 7; // 7 gaps between 8 columns
+                const gridPadding = 16 * 2;
+                const totalGaps = 6 * 7;
                 const cellSize = Math.max(40, (width - gridPadding - totalGaps) / 8);
                 document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
             } else {
-                // Landscape: base on height (original formula: sqrt(height * 3) * 0.9)
                 const cellSize = Math.sqrt(height * 3) * 0.9;
                 document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
             }
 
-            // Logo sizing
             const logoWidth = Math.min(300, width * 0.5);
             document.documentElement.style.setProperty('--logo-width', `${logoWidth}px`);
         },

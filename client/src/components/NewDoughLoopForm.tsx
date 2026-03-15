@@ -1,13 +1,7 @@
 import React from 'react';
 import { useStore } from '../store';
-import { DoughLoop } from '../store';
 import styles from '../styles/NewDoughLoopForm.module.css';
 import { encodeDrumGrid } from './utils';
-
-interface Props {
-    onSelectLoop: (loop: DoughLoop) => void;
-    selectedLoop: DoughLoop | null;
-}
 
 export default function NewDoughLoopForm() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;

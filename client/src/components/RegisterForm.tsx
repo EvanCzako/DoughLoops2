@@ -1,4 +1,3 @@
-// client/src/components/RegisterForm.tsx
 import React, { useState } from 'react';
 
 import styles from '../styles/LoginForm.module.css';
@@ -16,7 +15,7 @@ export default function RegisterForm() {
             setError('Username and password cannot be empty');
             return false;
         }
-        // Add more client-side checks if you want (length, chars, etc)
+
         return true;
     }
 

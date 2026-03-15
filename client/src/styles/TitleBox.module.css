@@ -25,25 +25,6 @@
     transform: scale(1.05);
 }
 
-.authToggleButton {
-    background-color: var(--ui-accent-2);
-    font-weight: 600;
-    padding: 8px 12px;
-    border: 1px solid var(--ui-border);
-    border-radius: 6px;
-    cursor: pointer;
-    height: 50px;
-    font-size: calc(var(--base-font-size) * 1.6);
-    color: var(--ui-text-primary);
-    transition: all 0.2s ease;
-}
-
-.authToggleButton:hover {
-    background-color: var(--ui-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-}
-
 .logoImage {
     height: 100%;
     width: auto;

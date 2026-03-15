@@ -40,7 +40,7 @@ export default function DropdownWrapper({ anchorRef, children, compact = false, 
             style={{
                 position: 'absolute',
                 top: `${top}px`,
-                // left: `${left}px`,
+
                 right: '15px',
                 zIndex: 999,
                 background: '#111',

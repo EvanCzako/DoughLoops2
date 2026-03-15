@@ -1,28 +1,20 @@
 @import './variables.module.css';
 
 :root {
-    /* Core responsive variables */
-    --grid-cell-size: 80px; /* Portrait: calculated from width; Landscape: from height */
-    --drum-grid-row-height: var(--grid-cell-size); /* Backward compatible alias */
+    --grid-cell-size: 80px;
+    --drum-grid-row-height: var(--grid-cell-size);
     --cell-gap: 6px;
 }
 
-/* In portrait mode, set a smaller initial default before updateFontSize calculates it */
 @media (orientation: portrait) {
     :root {
         --grid-cell-size: 45px;
     }
 }
 
-/* In portrait, make inactive cells slightly darker than beat stripes
-   so their interiors read as solid pads instead of blending in. */
-/* In the portrait media query below we slightly darken
-    the inactive checkbox background so it doesn't visually
-    blend into the beat stripes on small screens. */
-
 .responsiveCell {
     width: var(--grid-cell-size);
-    height: 100%; /* 🔥 match row */
+    height: 100%;
     flex-shrink: 0;
     box-sizing: border-box;
 }
@@ -58,8 +50,8 @@
     overflow-y: hidden;
     white-space: nowrap;
     min-width: 0;
-    scrollbar-width: thick; /* Firefox */
-    scrollbar-color: #ad10a0 #000; /* Firefox: thumb color and track */
+    scrollbar-width: thick;
+    scrollbar-color: #ad10a0 #000;
     flex-grow: 1;
     height: 100%;
     transition: none;
@@ -67,18 +59,17 @@
     box-sizing: border-box;
 }
 
-/* WebKit (Chrome, Safari) scrollbar */
 .scrollContainer::-webkit-scrollbar {
     height: 8px;
 }
 
 .scrollContainer::-webkit-scrollbar-thumb {
-    background: #a60f99; /* Neon green thumb */
+    background: #a60f99;
     border-radius: 4px;
 }
 
 .scrollContainer::-webkit-scrollbar-track {
-    background: #000; /* Black track (can change as needed) */
+    background: #000;
 }
 
 .innerGridContainer {
@@ -91,8 +82,8 @@
 .ghostRow {
     display: flex;
     align-items: center;
-    height: var(--grid-cell-size); /* 🔥 match row height */
-    margin-bottom: 6px; /* optional gap */
+    height: var(--grid-cell-size);
+    margin-bottom: 6px;
 }
 
 .ghostRow .labelSpacer {
@@ -106,7 +97,7 @@
 
 .ghostCell {
     width: var(--grid-cell-size);
-    height: calc(var(--grid-cell-size) * 0.25); /* shorter for ghost row */
+    height: calc(var(--grid-cell-size) * 0.25);
     border-radius: 2px;
     background: #222;
     flex-shrink: 0;
@@ -188,16 +179,16 @@
 }
 
 .playing {
-    box-shadow: inset 0 0 0 2px var(--grid-playing), 0 0 8px var(--grid-playing);
+    box-shadow:
+        inset 0 0 0 2px var(--grid-playing),
+        0 0 8px var(--grid-playing);
 }
 
-/* Remove previous alternating backgrounds from cells */
 .cell.evenBeat,
 .cell.oddBeat {
     background-color: transparent !important;
 }
 
-/* New container for the grid */
 .gridContainer {
     position: relative;
     display: flex;
@@ -205,7 +196,7 @@
     height: 100%;
     width: 100%;
 }
-/* Beat background container positioned behind grid rows */
+
 .beatBackground {
     top: var(--drum-grid-row-height);
     position: absolute;
@@ -218,13 +209,11 @@
     display: flex;
 }
 
-/* Each vertical stripe for a beat */
 .beatStripe {
     height: 100%;
     flex-shrink: 0;
 }
 
-/* Use subtle hue shifts for even/odd beats */
 .evenBeatHue {
     background-color: var(--grid-beat-even);
 }
@@ -233,15 +222,15 @@
     background-color: var(--grid-beat-odd);
 }
 
-/* Make sure drum grid rows and cells are above */
 .drumGrid {
     position: relative;
     z-index: 3;
 }
 
-/* Keep playing outline above backgrounds */
 .playing {
-    box-shadow: inset 0 0 0 2px var(--grid-playing), 0 0 8px var(--grid-playing);
+    box-shadow:
+        inset 0 0 0 2px var(--grid-playing),
+        0 0 8px var(--grid-playing);
     position: relative;
     z-index: 2;
 }
@@ -324,7 +313,7 @@
 .sampleComboBox {
     background-color: rgb(61, 27, 78);
     border-radius: 5px;
-    font-size: calc(var(--grid-cell-size) * 0.4); /* scale with cell size */
+    font-size: calc(var(--grid-cell-size) * 0.4);
     max-height: 60%;
     overflow: hidden;
     white-space: nowrap;
@@ -335,7 +324,7 @@
 .volumeSlider {
     accent-color: rgb(110, 19, 96);
     width: 100%;
-    height: 30%; /* or whatever fits nicely */
+    height: 30%;
 }
 
 @media (orientation: landscape) {
@@ -423,10 +412,6 @@
     }
 }
 
-/* ============================================================================
-   PORTRAIT MODE STYLES (Steps as rows, Instruments as columns)
-   ============================================================================ */
-
 .portraitContainer {
     display: flex;
     flex-direction: column;
@@ -451,7 +436,6 @@
     z-index: 4;
 }
 
-/* Portrait controls row - at the top, horizontal layout, fixed position */
 .controlsRowPortrait {
     display: flex;
     gap: 0;
@@ -615,7 +599,6 @@
     text-align: center;
 }
 
-/* Portrait scrollable grid - vertical scrolling */
 .scrollContainerPortrait {
     overflow-x: hidden;
     overflow-y: auto;
@@ -652,7 +635,6 @@
     transition: none;
 }
 
-/* Ghost column wrapper - left side, shows current step */
 .ghostColumnWrapper {
     display: flex;
     flex-direction: column;
@@ -676,7 +658,6 @@
     box-sizing: border-box;
 }
 
-/* Portrait grid - rows = steps, columns = instruments */
 .drumGridPortrait {
     display: flex;
     flex-direction: column;
@@ -686,7 +667,6 @@
     width: 100%;
 }
 
-/* Beat background for portrait - horizontal stripes behind grid */
 .beatBackgroundPortrait {
     position: absolute;
     top: 0;
@@ -751,12 +731,13 @@
 }
 
 .gridRowPortrait .playing {
-    box-shadow: inset 0 0 0 2px var(--grid-playing), 0 0 8px var(--grid-playing);
+    box-shadow:
+        inset 0 0 0 2px var(--grid-playing),
+        0 0 8px var(--grid-playing);
     position: relative;
     z-index: 2;
 }
 
-/* Portrait mode: shrink columns to fit viewport */
 @media (orientation: portrait) {
     .cellPortrait {
         width: auto;
@@ -786,10 +767,6 @@
         display: none;
     }
 }
-
-/* ============================================================================
-   LANDSCAPE MODE: Volume controls
-   ============================================================================ */
 
 .controlsItemLandscape {
     display: flex;

@@ -52,14 +52,12 @@ export default function DrumLoopPlayer({
 
         playersRef.current = allPlayers;
 
-        // Wait for all players to load
         const allLoadPromises = instrumentKeys.flatMap((inst) =>
             variations.map((num) => allPlayers[inst][`${inst}${num}`].loaded)
         );
 
         Promise.all(allLoadPromises).then(() => {
             setSamplesLoaded(true);
-            console.log('All samples loaded 🎉');
         });
     }, []);
 
@@ -77,7 +75,6 @@ export default function DrumLoopPlayer({
     useEffect(() => {
         if (!samplesLoaded) return;
 
-        // Always cancel existing scheduled events before creating new ones
         Tone.Transport.stop();
         Tone.Transport.cancel();
 
@@ -91,7 +88,7 @@ export default function DrumLoopPlayer({
                 const stepActive = gridRef.current[i]?.[step];
                 if (!stepActive) return;
 
-                const sampleName = selectedSamplesRef.current[i]; // now reads current value!
+                const sampleName = selectedSamplesRef.current[i];
                 const player = playersRef.current[inst][sampleName];
 
                 player.volume.value = Tone.gainToDb(volumesRef.current[i]);
@@ -115,10 +112,10 @@ export default function DrumLoopPlayer({
         }
 
         return () => {
-            Tone.Transport.clear(repeatId); // just clears this one repeat
-            Tone.Transport.stop(); // stops the clock
+            Tone.Transport.clear(repeatId);
+            Tone.Transport.stop();
         };
     }, [isPlaying, bpm, numSubdivisions, samplesLoaded, selectedLoop]);
 
-    return null; // No UI needed here
+    return null;
 }

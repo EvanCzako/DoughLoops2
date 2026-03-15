@@ -40,7 +40,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const computedFontSize = Math.max(10, fontSize * 1.4);
     const isPortrait = orientation === 'portrait';
 
-    // Calculate popup positions when opened or window resizes
     useEffect(() => {
         const updatePositions = () => {
             const newPositions: Record<number, { top: number; left: number }> = {};
@@ -50,13 +49,11 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                     if (button) {
                         const rect = button.getBoundingClientRect();
                         if (isPortrait) {
-                            // Portrait: popup below the button, centered
                             newPositions[instrumentIndex] = {
                                 top: rect.bottom + 4,
                                 left: rect.left + rect.width / 2,
                             };
                         } else {
-                            // Landscape: popup to the right of the button
                             newPositions[instrumentIndex] = {
                                 top: rect.top + rect.height / 2,
                                 left: rect.right + 4,
@@ -68,7 +65,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
             setPopupPositions(newPositions);
         };
 
-        // Use requestAnimationFrame to ensure DOM is fully updated
         if (volumeSliderOpen.size > 0) {
             requestAnimationFrame(updatePositions);
         }
@@ -81,7 +77,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
         }
     }, [volumeSliderOpen, isPortrait]);
 
-    // Close volume slider when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Node;
@@ -109,7 +104,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
         const currentVariant = instrumentVariants[index];
         const nextVariant = currentVariant === 3 ? 1 : currentVariant + 1;
         setInstrumentVariant(index, nextVariant);
-        // Update the selected sample to match the new variant
+
         const newSample = `${instruments[index]}${nextVariant}`;
         setSelectedSample(index, newSample);
     };
@@ -137,20 +132,15 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const numCols = grid[0]?.length || 0;
     const numRows = grid.length;
 
-    // Calculate beat dimensions for grid background (different for each orientation)
-    // Portrait: calc based on proportion of total rows (numSubdivisions rows per beat)
     const beatSizePortrait = `${(numSubdivisions / numCols) * 100}%`;
-    // Landscape: steps flow horizontally, cell-size per cell, no extra gap accounting
+
     const beatSizeLandscape = `calc(var(--grid-cell-size) * ${numSubdivisions})`;
 
-    // PORTRAIT MODE: Render grid with steps as rows, instruments as columns
     if (isPortrait) {
         return (
             <div className={styles.drumGridOuter} data-orientation="portrait">
                 <div className={styles.portraitContainer}>
-                    {/* Controls row at top - FIXED, outside scroll container */}
                     <div className={styles.controlsRowPortrait}>
-                        {/* Instrument controls in horizontal row */}
                         {grid.map((_, instrumentIndex) => (
                             <div
                                 className={styles.controlsItemPortrait}
@@ -159,7 +149,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                     if (el) controlItemRefs.current[instrumentIndex] = el;
                                 }}
                             >
-                                {/* Instrument control box */}
                                 <div
                                     className={styles.controlsBoxPortrait}
                                     onClick={() => cycleVariant(instrumentIndex)}
@@ -178,7 +167,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                     </div>
                                 </div>
 
-                                {/* Volume button - small and yellow, BELOW the control box */}
                                 <button
                                     className={styles.volumeButtonPortrait}
                                     ref={(el) => {
@@ -202,7 +190,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                         ))}
                     </div>
 
-                    {/* Volume slider popups - fixed positioning */}
                     {Array.from(volumeSliderOpen).map((instrumentIndex) => (
                         <div
                             key={`volume-popup-${instrumentIndex}`}
@@ -232,12 +219,9 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                         </div>
                     ))}
 
-                    {/* Scrollable grid area - below controls */}
                     <div className={styles.scrollContainerPortrait}>
                         <div className={styles.innerGridContainerPortrait}>
-                            {/* Grid: rows = steps, columns = instruments */}
                             <div className={styles.drumGridPortrait}>
-                                {/* Beat background - horizontally striped behind grid */}
                                 <div className={styles.beatBackgroundPortrait}>
                                     {Array.from({ length: numCols / numSubdivisions }).map(
                                         (_, beatIndex) => (
@@ -254,7 +238,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                     )}
                                 </div>
 
-                                {/* Grid rows */}
                                 {grid[0]?.map((_, stepIndex) => (
                                     <div
                                         className={styles.gridRowPortrait}
@@ -286,11 +269,9 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
         );
     }
 
-    // LANDSCAPE MODE: Keep original layout (steps as columns, instruments as rows)
     return (
         <div className={styles.drumGridOuter} data-orientation="landscape">
             <div className={styles.fixedGridContainer}>
-                {/* Controls column on left */}
                 <div className={styles.controlsColumn}>
                     {grid.map((_, rowIndex) => (
                         <div
@@ -318,7 +299,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                                 </div>
                             </div>
 
-                            {/* Volume button on the right - landscape mode */}
                             <button
                                 className={styles.volumeButtonLandscape}
                                 ref={(el) => {
@@ -342,7 +322,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                     ))}
                 </div>
 
-                {/* Volume slider popups - fixed positioning */}
                 {Array.from(volumeSliderOpen).map((rowIndex) => (
                     <div
                         key={`volume-popup-${rowIndex}`}
@@ -369,7 +348,6 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
                     </div>
                 ))}
 
-                {/* Scrollable grid */}
                 <div className={styles.scrollContainer}>
                     <div className={styles.innerGridContainer}>
                         <div className={styles.gridContainer}>

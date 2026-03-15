@@ -1,11 +1,9 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from '../store';
 
 import DrumLoopEditor from './DrumLoopEditor';
 import styles from '../styles/DoughLoopManager.module.css';
 import ControlsContainer from './ControlsContainer';
-import UserLoopsWrapper from './UserLoopsWrapper';
 import BeatSubdivControls from './BeatSubdivControls';
 
 export default function DoughLoopManager() {
@@ -18,7 +16,6 @@ export default function DoughLoopManager() {
     const setName = useStore((s) => s.setName);
     const orientation = useStore((s) => s.orientation);
 
-    // // Reset selected loop on logout
     useEffect(() => {
         if (!user && selectedLoop) {
             setSelectedLoop(null);

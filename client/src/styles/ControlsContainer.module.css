@@ -1,8 +1,8 @@
 @import './variables.module.css';
 
 :root {
-    --controls-container-width: 80px; /* default, overwritten dynamically */
-    --controls-column-width: 80px; /* default, overwritten dynamically */
+    --controls-container-width: 80px;
+    --controls-column-width: 80px;
     --controls-container-height: 80px;
 }
 
@@ -45,7 +45,7 @@
     width: 100%;
     font-weight: 600;
     color: var(--grid-background);
-    /* transition: all 0.2s ease; */
+
     box-shadow:
         var(--shadow-sm),
         inset 0 1px 1px rgba(255, 255, 255, 0.2);
@@ -106,7 +106,6 @@
     color: var(--ui-text-primary);
 }
 
-/* Play/Stop Button States */
 .playing {
     background: linear-gradient(
         135deg,
@@ -131,7 +130,6 @@
     background: linear-gradient(135deg, var(--button-play-hover), var(--button-play));
 }
 
-/* Clear Button */
 .clearButton {
     background: linear-gradient(
         135deg,
@@ -144,7 +142,6 @@
     background: linear-gradient(135deg, var(--button-clear-hover), var(--button-clear));
 }
 
-/* Reset Button */
 .resetButton {
     background: linear-gradient(
         135deg,
@@ -157,7 +154,6 @@
     background: linear-gradient(135deg, var(--button-reset-hover), var(--button-reset));
 }
 
-/* Optional: slightly tweak tempo buttons if needed */
 .tempoButton {
     font-size: 0.9em;
 }

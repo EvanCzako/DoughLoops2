@@ -22,7 +22,6 @@ code {
 }
 
 input[type='range'] {
-    /* accent-color: #ff4081; */
     accent-color: var(--color-warm-pink-1);
 }
 

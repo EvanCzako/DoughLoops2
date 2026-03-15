@@ -34,7 +34,7 @@ export default function DoughLoopList() {
         };
 
         fetchLoops();
-    }, [user]); // ONLY depend on user
+    }, [user]);
 
     async function deleteLoop(userId?: number, loopId?: number): Promise<void> {
         if (!userId || !loopId) return;
@@ -44,7 +44,6 @@ export default function DoughLoopList() {
                 method: 'DELETE',
             });
             if (res.ok) {
-                // Refetch loops after successful delete
                 const loopsRes = await fetch(`${API_BASE_URL}/doughloops?userId=${userId}`);
                 const data = await loopsRes.json();
                 setDoughLoops(data);

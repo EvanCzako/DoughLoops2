@@ -1,6 +1,5 @@
 import { JSX, useEffect, useRef } from 'react';
 import { useStore } from './store';
-import React from 'react';
 import DoughLoopManager from './components/DoughLoopManager';
 import TitleBox from './components/TitleBox';
 import AuthPage from './components/AuthPage';
@@ -27,18 +26,12 @@ export default function App(): JSX.Element {
     const demoDropdownAnchorRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        // Initial call
         updateFontSize();
 
-        // On iOS, the first updateFontSize might not have correct dimensions yet
-        // Schedule another update shortly after to ensure accurate dimensions
-        // This addresses an issue where window.innerHeight temporarily includes browser chrome
         const timeoutId = setTimeout(() => {
             updateFontSize();
         }, 100);
 
-        // Listen to both resize (for viewport changes) and orientationchange (for mobile rotation)
-        // orientationchange fires before/during rotation on mobile and ensures proper dimension updates
         window.addEventListener('resize', updateFontSize);
         window.addEventListener('orientationchange', updateFontSize);
 
@@ -51,10 +44,7 @@ export default function App(): JSX.Element {
 
     return (
         <div className={styles.App}>
-            <TitleBox
-                dropdownAnchorRef={dropdownAnchorRef}
-                demoDropdownAnchorRef={demoDropdownAnchorRef}
-            />
+            <TitleBox demoDropdownAnchorRef={demoDropdownAnchorRef} />
             <div className={styles.mainContent}>
                 {showDropdown && (
                     <DropdownWrapper anchorRef={dropdownAnchorRef}>
@@ -78,10 +68,8 @@ export default function App(): JSX.Element {
                             <ControlsContainer grid={grid} setGrid={setGrid} />
                         </div>
                     )}
-                    {/* <UserLoopsWrapper /> */}
                 </div>
             </div>
-            {/* <Footer/> */}
         </div>
     );
 }

@@ -61,7 +61,6 @@ export default function DemoLoopList() {
     const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);
 
     const handleSelectLoop = (loop: DoughLoop) => {
-        console.log('Demo loop selected:', loop.beatRep);
         setSelectedLoop(loop);
         setDemoDropdownOpen(false);
     };

@@ -10,14 +10,12 @@ export default function AuthPage(opts: { grid: any; setGrid: any; name: any; set
     const formContainerRef = useRef<HTMLDivElement | null>(null);
 
     const user = useStore((s) => s.user);
-    const selectedLoop = useStore((s) => s.selectedLoop);
-    const setSelectedLoop = useStore((s) => s.setSelectedLoop);
 
     const handleToggle = (toLogin: boolean) => {
         setIsLogin(toLogin);
         setTimeout(() => {
             formContainerRef.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' });
-        }, 0); // defer until DOM updates
+        }, 0);
     };
 
     const loggedOutDisp = (
