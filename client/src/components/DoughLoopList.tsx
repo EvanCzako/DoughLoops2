@@ -72,10 +72,9 @@ export default function DoughLoopList() {
             </h3>
             <ul>
                 {doughLoops.map((loop) => (
-                    <div className={styles.userLoopWrapper}>
+                    <div className={styles.userLoopWrapper} key={loop.id}>
                         <li
                             className={styles.userLoop}
-                            key={loop.id}
                             style={{
                                 cursor: 'pointer',
                                 fontWeight: selectedLoop?.id === loop.id ? 900 : 600,

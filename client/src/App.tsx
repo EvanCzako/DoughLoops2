@@ -15,7 +15,6 @@ export default function App(): JSX.Element {
     const setGrid = useStore((s) => s.setGrid);
     const name = useStore((s) => s.name);
     const setName = useStore((s) => s.setName);
-    const updateFontSize = useStore((s) => s.updateFontSize);
     const showDropdown = useStore((s) => s.userDropdownOpen);
     const showDemoDropdown = useStore((s) => s.demoDropdownOpen);
     const orientation = useStore((s) => s.orientation);
@@ -26,21 +25,20 @@ export default function App(): JSX.Element {
     const demoDropdownAnchorRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        updateFontSize();
+        const update = () => useStore.getState().updateFontSize();
 
-        const timeoutId = setTimeout(() => {
-            updateFontSize();
-        }, 100);
+        update();
+        const timeoutId = setTimeout(update, 100);
 
-        window.addEventListener('resize', updateFontSize);
-        window.addEventListener('orientationchange', updateFontSize);
+        window.addEventListener('resize', update);
+        window.addEventListener('orientationchange', update);
 
         return () => {
             clearTimeout(timeoutId);
-            window.removeEventListener('resize', updateFontSize);
-            window.removeEventListener('orientationchange', updateFontSize);
+            window.removeEventListener('resize', update);
+            window.removeEventListener('orientationchange', update);
         };
-    }, [updateFontSize]);
+    }, []);
 
     return (
         <div className={styles.App}>

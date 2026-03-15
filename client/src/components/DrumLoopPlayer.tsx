@@ -21,12 +21,10 @@ export default function DrumLoopPlayer({
 
     const [samplesLoaded, setSamplesLoaded] = useState(false);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
-    const selectedLoop = useStore((s) => s.selectedLoop);
     const volumes = useStore((s) => s.volumes);
     const selectedSamples = useStore((s) => s.selectedSamples);
 
     const setCurrentStep = useStore((s) => s.setCurrentStep);
-    const currentStep = useStore((s) => s.currentStep);
 
     const selectedSamplesRef = useRef<string[]>(selectedSamples);
 
@@ -59,6 +57,13 @@ export default function DrumLoopPlayer({
         Promise.all(allLoadPromises).then(() => {
             setSamplesLoaded(true);
         });
+
+        return () => {
+            Object.values(playersRef.current).forEach((variants) =>
+                Object.values(variants).forEach((player) => player.dispose())
+            );
+            playersRef.current = {};
+        };
     }, []);
 
     const gridRef = useRef(grid);
@@ -115,7 +120,7 @@ export default function DrumLoopPlayer({
             Tone.Transport.clear(repeatId);
             Tone.Transport.stop();
         };
-    }, [isPlaying, bpm, numSubdivisions, samplesLoaded, selectedLoop]);
+    }, [isPlaying, bpm, numSubdivisions, samplesLoaded]);
 
     return null;
 }

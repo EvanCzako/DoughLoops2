@@ -11,14 +11,13 @@ export default function ControlsContainer(opts: {
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
     const setCurrentStep = useStore((s) => s.setCurrentStep);
-    const currentStep = useStore((s) => s.currentStep);
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
     const numBeats = useStore((s) => s.numBeats);
     const setNumBeats = useStore((s) => s.setNumBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-    const stepRef = useRef(currentStep);
+    const stepRef = useRef(0);
     const fontSize = useStore((s) => s.fontSize);
     const computedFontSize = Math.max(10, fontSize * 2);
 
@@ -27,8 +26,9 @@ export default function ControlsContainer(opts: {
     };
 
     useEffect(() => {
+        const grid = useStore.getState().grid;
         opts.setGrid(
-            opts.grid.map((row) => {
+            grid.map((row) => {
                 const newRow = [...row];
                 newRow.length = numBeats * numSubdivisions;
                 return newRow.fill(false, row.length);

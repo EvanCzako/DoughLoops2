@@ -5,7 +5,6 @@ import styles from '../styles/DrumGrid.module.css';
 interface DrumGridProps {
     grid: boolean[][];
     setGrid: (g: boolean[][]) => void;
-    currentStep?: number;
 }
 
 const instrumentEmojis: Record<string, string> = {
@@ -19,7 +18,7 @@ const instrumentEmojis: Record<string, string> = {
     triangle: '🔺',
 };
 
-export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) {
+export default function DrumGrid({ grid, setGrid }: DrumGridProps) {
     const [volumeSliderOpen, setVolumeSliderOpen] = useState<Set<number>>(new Set());
     const [popupPositions, setPopupPositions] = useState<
         Record<number, { top: number; left: number }>
@@ -27,6 +26,7 @@ export default function DrumGrid({ grid, setGrid, currentStep }: DrumGridProps) 
     const volumeSliderRefs = useRef<Record<number, HTMLDivElement | null>>({});
     const volumeButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const controlItemRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const currentStep = useStore((s) => s.currentStep);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const orientation = useStore((s) => s.orientation);
     const instruments = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];

@@ -7,7 +7,6 @@ import { decodeDrumGrid } from './utils';
 
 interface DrumLoopEditorProps {
     selectedLoop: DoughLoop | null;
-    currentStep?: number;
     grid: boolean[][];
     setGrid: (g: boolean[][]) => void;
     name: string;
@@ -25,7 +24,6 @@ export default function DrumLoopEditor({
     const setNumBeats = useStore((s) => s.setNumBeats);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
     const setVolume = useStore((s) => s.setVolume);
-    const currentStep = useStore((s) => s.currentStep);
 
     const setSelectedSample = useStore((s) => s.setSelectedSample);
 
@@ -49,7 +47,7 @@ export default function DrumLoopEditor({
 
     return (
         <div className={styles.drumLoopEditor}>
-            <DrumGrid grid={grid} setGrid={setGrid} currentStep={currentStep} />
+            <DrumGrid grid={grid} setGrid={setGrid} />
         </div>
     );
 }
