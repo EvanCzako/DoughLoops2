@@ -40,7 +40,6 @@ export default function DropdownWrapper({ anchorRef, children, compact = false, 
             style={{
                 position: 'absolute',
                 top: `${top}px`,
-
                 right: '15px',
                 zIndex: 999,
                 background: '#111',
@@ -51,6 +50,10 @@ export default function DropdownWrapper({ anchorRef, children, compact = false, 
                 boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
                 minWidth: compact ? 'auto' : '280px',
                 maxWidth: '90vw',
+                maxHeight: `calc(100vh - ${top}px - 12px)`,
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                boxSizing: 'border-box',
             }}
         >
             {children}
