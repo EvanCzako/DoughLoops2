@@ -81,18 +81,25 @@ export default function ControlsContainer(opts: {
                     className={`${styles.controlsButton} ${styles.resetButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">
-                        ↩️
-                    </span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true">
+                        <rect x="4" y="4" width="3" height="16" rx="1" />
+                        <polygon points="20,4 9,12 20,20" />
+                    </svg>
                 </button>
                 <button
                     className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
                     style={{ fontSize: `${computedFontSize}px` }}
                     onClick={handlePlayToggle}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">
-                        {isPlaying ? '⏹️' : '▶️'}
-                    </span>
+                    {isPlaying ? (
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true">
+                            <rect x="4" y="4" width="16" height="16" rx="2" />
+                        </svg>
+                    ) : (
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true">
+                            <polygon points="6,3 20,12 6,21" />
+                        </svg>
+                    )}
                 </button>
                 <button
                     onClick={() => {
@@ -106,9 +113,11 @@ export default function ControlsContainer(opts: {
                     className={`${styles.controlsButton} ${styles.clearButton}`}
                     style={{ fontSize: `${computedFontSize}px` }}
                 >
-                    <span className={styles.buttonIcon} aria-hidden="true">
-                        🧹
-                    </span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true">
+                        <path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1z" />
+                        <rect x="3" y="6" width="18" height="2" rx="1" />
+                        <path d="M5 9l1.5 11a1 1 0 0 0 1 .9h9a1 1 0 0 0 1-.9L19 9H5z" />
+                    </svg>
                 </button>
             </div>
         </div>

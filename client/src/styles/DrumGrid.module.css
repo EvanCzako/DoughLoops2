@@ -261,6 +261,7 @@
     transition: none;
     will-change: height;
     flex-shrink: 0;
+    container-type: size;
 }
 
 @media (orientation: landscape) {
@@ -279,7 +280,7 @@
 }
 
 .instrumentEmoji {
-    font-size: clamp(20px, calc(var(--grid-cell-size) * 0.4), 32px);
+    font-size: clamp(16px, 62cqmin, 56px);
     line-height: 1;
     display: flex;
     align-items: center;
@@ -293,7 +294,6 @@
 
 @media (orientation: landscape) {
     .instrumentEmoji {
-        font-size: clamp(14px, calc(var(--grid-cell-size) * 0.35), 32px);
         padding: 2px;
     }
 }
@@ -499,6 +499,7 @@
     box-sizing: border-box;
     user-select: none;
     transition: none;
+    container-type: size;
 }
 
 .controlsBoxPortrait:hover {
@@ -545,7 +546,7 @@
 }
 
 .instrumentEmojiPortrait {
-    font-size: 24px;
+    font-size: clamp(16px, 62cqmin, 56px);
     height: 30%;
     display: flex;
     align-items: center;
