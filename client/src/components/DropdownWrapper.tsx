@@ -2,8 +2,6 @@ import { useEffect, useRef, RefObject, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useStore } from '../store';
 
-import styles from '../styles/AuthPage.module.css';
-
 interface Props {
     anchorRef: RefObject<HTMLElement | null>;
     children: ReactNode;
@@ -42,7 +40,7 @@ export default function DropdownWrapper({ anchorRef, children, compact = false, 
                 right: '15px',
                 zIndex: 999,
                 background: '#111',
-                color: 'var(--color-off-white-1)',
+                color: 'var(--ui-text-primary)',
                 border: '1px solid #333',
                 borderRadius: '8px',
                 padding: '16px',

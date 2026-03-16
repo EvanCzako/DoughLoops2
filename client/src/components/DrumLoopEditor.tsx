@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import DrumGrid from './DrumGrid';
 import type { DoughLoop } from '../store';
 import styles from '../styles/DoughLoopManager.module.css';
-import { decodeDrumGrid } from './utils';
+import { decodeDrumGrid } from '../utils';
 
 interface DrumLoopEditorProps {
     selectedLoop: DoughLoop | null;
@@ -17,7 +17,6 @@ export default function DrumLoopEditor({
     selectedLoop,
     grid,
     setGrid,
-    name,
     setName,
 }: DrumLoopEditorProps) {
     const setBpm = useStore((s) => s.setBpm);

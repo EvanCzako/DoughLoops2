@@ -14,7 +14,7 @@ body {
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
     background-color: black;
-    color: var(--color-off-white-1);
+    color: var(--ui-text-primary);
 }
 
 code {

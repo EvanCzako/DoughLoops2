@@ -43,8 +43,8 @@ export default function RegisterForm() {
             setSuccess('Registered successfully! You can now log in.');
             setUsername('');
             setPassword('');
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Registration failed');
         } finally {
             setLoading(false);
         }

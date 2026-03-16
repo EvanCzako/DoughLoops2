@@ -1,11 +1,16 @@
 @import './variables.module.css';
 
+:root {
+    --dropdown-bg: #111;
+    --dropdown-border: #333;
+}
+
 .dropdownWrapper {
     position: absolute;
     top: 0;
     left: 0;
-    background: #111;
-    border: 1px solid #333;
+    background: var(--dropdown-bg);
+    border: 1px solid var(--dropdown-border);
     border-radius: 8px;
     padding: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);

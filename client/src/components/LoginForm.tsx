@@ -38,8 +38,8 @@ export default function LoginForm() {
             setUser(loggedInUser);
             setSuccess('Login successful!');
             setUserDropdownOpen(false);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Login failed');
         } finally {
             setLoading(false);
         }

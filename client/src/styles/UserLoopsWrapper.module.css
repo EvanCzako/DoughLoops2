@@ -1,9 +1,14 @@
 @import './variables.module.css';
 
+:root {
+    --delete-button-bg: rgb(199, 29, 29);
+    --delete-button-bg-hover: rgb(226, 80, 80);
+}
+
 .userLoopsWrapper {
     border-width: 10px;
     border-style: solid;
-    border-color: var(--color-dark-gray-1);
+    border-color: var(--ui-surface);
     border-radius: 10px;
     background-color: var(--color-dark-purple-2);
     font-weight: 600;
@@ -16,7 +21,7 @@
 }
 
 .deleteButton {
-    background-color: rgb(199, 29, 29);
+    background-color: var(--delete-button-bg);
     border-radius: 5px;
     padding: 5px;
     margin-left: 15px;
@@ -24,7 +29,7 @@
 }
 
 .deleteButton:hover {
-    background-color: rgb(226, 80, 80);
+    background-color: var(--delete-button-bg-hover);
 }
 
 @media (orientation: landscape) and (min-width: 900px) {

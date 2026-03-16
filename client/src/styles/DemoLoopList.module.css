@@ -11,7 +11,7 @@
 .loopItem {
     padding: 10px 14px;
     cursor: pointer;
-    color: var(--color-off-white-1);
+    color: var(--ui-text-primary);
     font-weight: 500;
     font-size: calc(var(--base-font-size) * 1.4);
     border-radius: 6px;

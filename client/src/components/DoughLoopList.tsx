@@ -8,7 +8,6 @@ export default function DoughLoopList() {
 
     const user = useStore((s) => s.user);
     const setLoading = useStore((s) => s.setLoading);
-    const loading = useStore((s) => s.loading);
     const setDoughLoops = useStore((s) => s.setDoughLoops);
     const setError = useStore((s) => s.setError);
     const doughLoops = useStore((s) => s.doughLoops);
@@ -81,7 +80,7 @@ export default function DoughLoopList() {
                                 color:
                                     selectedLoop?.id === loop.id
                                         ? 'orange'
-                                        : 'var(--color-off-white-1)',
+                                        : 'var(--ui-text-primary)',
                             }}
                             onClick={() => setSelectedLoop(loop)}
                         >

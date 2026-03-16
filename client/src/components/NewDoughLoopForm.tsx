@@ -1,6 +1,6 @@
 import { useStore } from '../store';
 import styles from '../styles/NewDoughLoopForm.module.css';
-import { encodeDrumGrid } from './utils';
+import { encodeDrumGrid } from '../utils';
 
 export default function NewDoughLoopForm() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -10,7 +10,6 @@ export default function NewDoughLoopForm() {
     const numBeats = useStore((s) => s.numBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const grid = useStore((s) => s.grid);
-    const setGrid = useStore((s) => s.setGrid);
     const name = useStore((s) => s.name);
     const setName = useStore((s) => s.setName);
     const selectedSamples = useStore((s) => s.selectedSamples);
@@ -51,7 +50,7 @@ export default function NewDoughLoopForm() {
             }
 
             setName('');
-        } catch (err) {
+        } catch {
             setError('Error saving loop');
         }
     };

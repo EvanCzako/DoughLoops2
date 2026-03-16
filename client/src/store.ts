@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { decodeDrumGrid } from './components/utils';
+import { decodeDrumGrid } from './utils';
 
 export interface User {
     id: number;
@@ -164,7 +164,7 @@ export const useStore = create<StoreState>((set) => {
         setGrid: (grid: boolean[][]) => set({ grid }),
 
         setSelectedLoop: (loop: DoughLoop | null) => {
-            set((state) => {
+            set((_state) => {
                 if (!loop) {
                     return { selectedLoop: null };
                 }

@@ -11,12 +11,12 @@ interface KnobProps {
 export default function Knob({ min, max, value, onChange, size = 60 }: KnobProps) {
     const radius = size / 2;
     const center = { x: radius, y: radius };
-    const [isDragging, setDragging] = useState(false);
+    const [_isDragging, setDragging] = useState(false);
     const svgRef = useRef<SVGSVGElement>(null);
 
     const angle = ((value - min) / (max - min)) * 270 - 135;
 
-    const handleMouseDown = (e: React.MouseEvent) => {
+    const handleMouseDown = (_e: React.MouseEvent) => {
         setDragging(true);
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);

@@ -6,11 +6,9 @@
     --ui-accent-2: #9273cb;
     --ui-accent-3: #9573ac;
     --ui-text-primary: #c0caf5;
-    --ui-text-secondary: #9aa5ce;
     --ui-border: #414868;
 
     --ui-hover: #394077;
-    --ui-active: #9d7cd8;
 
     --grid-background: #16161e;
     --grid-cell-inactive: #1f2335;
@@ -21,16 +19,11 @@
     --grid-beat-odd: rgba(255, 121, 198, 0.35);
     --grid-playing: #f7768e;
 
-    --color-dark-purple-1: #41416e;
     --color-dark-purple-2: #32344a;
-    --color-dark-gray-1: var(--ui-surface);
-    --color-off-white-1: var(--ui-text-primary);
-    --color-off-pink-1: #f7768e;
     --color-warm-pink-1: #ff79c6;
-    --color-bright-warm-pink-1: #ff9ec4;
-    --color-off-orange-1: #ff9e64;
-    --color-off-red-1: #f7768e;
     --color-off-green-1: #73daca;
+
+    --placeholder-text: rgb(60, 60, 60);
 
     --button-play: #9ece6a;
     --button-stop: #f7768e;
@@ -46,13 +39,5 @@
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
     --shadow-lg: 0 8px 12px rgba(0, 0, 0, 0.2);
 
-    --glow-sm: 0 0 15px rgba(255, 255, 255, 0.1);
-    --glow-md: 0 0 20px rgba(255, 255, 255, 0.15);
-    --inner-highlight: inset 0 1px 1px rgba(255, 255, 255, 0.2);
     --surface-gradient: linear-gradient(145deg, var(--ui-surface-light), var(--ui-surface));
-    --button-highlight: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0) 100%
-    );
 }

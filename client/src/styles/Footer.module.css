@@ -3,7 +3,7 @@
 .footerWrapper {
     border-width: 10px;
     border-style: solid;
-    border-color: var(--color-dark-gray-1);
+    border-color: var(--ui-surface);
     border-radius: 10px;
     background-color: var(--color-dark-purple-2);
     font-weight: 600;

@@ -2,8 +2,15 @@
 
 :root {
     --grid-cell-size: 80px;
-    --drum-grid-row-height: var(--grid-cell-size);
-    --cell-gap: 6px;
+    --scrollbar-thumb: #ad10a0;
+    --scrollbar-track: #000;
+    --volume-accent: rgb(110, 19, 96);
+    --volume-button-bg: #d9a974;
+    --volume-button-bg-hover: #e8bf8f;
+    --volume-button-border: #c99a5f;
+    --ghost-cell-bg: #222;
+    --fade-edge-color: rgba(166, 15, 153, 0.3);
+    --combobox-bg: rgb(61, 27, 78);
 }
 
 @media (orientation: portrait) {
@@ -51,7 +58,7 @@
     white-space: nowrap;
     min-width: 0;
     scrollbar-width: thick;
-    scrollbar-color: #ad10a0 #000;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
     flex-grow: 1;
     height: 100%;
     transition: none;
@@ -64,12 +71,12 @@
 }
 
 .scrollContainer::-webkit-scrollbar-thumb {
-    background: #a60f99;
+    background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
 
 .scrollContainer::-webkit-scrollbar-track {
-    background: #000;
+    background: var(--scrollbar-track);
 }
 
 .innerGridContainer {
@@ -99,7 +106,7 @@
     width: var(--grid-cell-size);
     height: calc(var(--grid-cell-size) * 0.25);
     border-radius: 2px;
-    background: #222;
+    background: var(--ghost-cell-bg);
     flex-shrink: 0;
     box-sizing: border-box;
 }
@@ -198,7 +205,6 @@
 }
 
 .beatBackground {
-    top: var(--drum-grid-row-height);
     position: absolute;
     top: 0;
     left: var(--controls-column-width * 1);
@@ -311,7 +317,7 @@
 }
 
 .sampleComboBox {
-    background-color: rgb(61, 27, 78);
+    background-color: var(--combobox-bg);
     border-radius: 5px;
     font-size: calc(var(--grid-cell-size) * 0.4);
     max-height: 60%;
@@ -322,7 +328,7 @@
 }
 
 .volumeSlider {
-    accent-color: rgb(110, 19, 96);
+    accent-color: var(--volume-accent);
     width: 100%;
     height: 30%;
 }
@@ -406,7 +412,7 @@
         right: 0;
         width: 28px;
         height: 100%;
-        background: linear-gradient(to right, transparent, rgba(166, 15, 153, 0.3));
+        background: linear-gradient(to right, transparent, var(--fade-edge-color));
         pointer-events: none;
         z-index: 4;
     }
@@ -431,7 +437,7 @@
     left: 0;
     width: 100%;
     height: 28px;
-    background: linear-gradient(to bottom, transparent, rgba(166, 15, 153, 0.3));
+    background: linear-gradient(to bottom, transparent, var(--fade-edge-color));
     pointer-events: none;
     z-index: 4;
 }
@@ -444,7 +450,7 @@
     overflow-x: hidden;
     overflow-y: visible;
     scrollbar-width: thin;
-    scrollbar-color: #ad10a0 #000;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
     z-index: 10;
     background: var(--grid-background);
     position: relative;
@@ -458,12 +464,12 @@
 }
 
 .controlsRowPortrait::-webkit-scrollbar-thumb {
-    background: #a60f99;
+    background: var(--scrollbar-thumb);
     border-radius: 2px;
 }
 
 .controlsRowPortrait::-webkit-scrollbar-track {
-    background: #000;
+    background: var(--scrollbar-track);
 }
 
 .controlsBoxPortrait {
@@ -505,9 +511,9 @@
 }
 
 .volumeButtonPortrait {
-    background: #d9a974;
+    background: var(--volume-button-bg);
     color: #000;
-    border: 1px solid #c99a5f;
+    border: 1px solid var(--volume-button-border);
     border-radius: 3px;
     padding: 2px 4px;
     font-size: 9px;
@@ -521,7 +527,7 @@
 }
 
 .volumeButtonPortrait:hover {
-    background: #e8bf8f;
+    background: var(--volume-button-bg-hover);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -562,7 +568,7 @@
 .volumeSliderPortrait {
     width: 80%;
     height: 40%;
-    accent-color: rgb(110, 19, 96);
+    accent-color: var(--volume-accent);
     display: none;
 }
 
@@ -585,7 +591,7 @@
 .volumeSliderPopupInput {
     width: 24px;
     height: 90px;
-    accent-color: rgb(110, 19, 96);
+    accent-color: var(--volume-accent);
     cursor: pointer;
     -webkit-appearance: slider-vertical;
     appearance: slider-vertical;
@@ -605,7 +611,7 @@
     white-space: normal;
     width: 100%;
     scrollbar-width: thick;
-    scrollbar-color: #ad10a0 #000;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
     flex-grow: 1;
     height: 100%;
     min-height: 0;
@@ -619,12 +625,12 @@
 }
 
 .scrollContainerPortrait::-webkit-scrollbar-thumb {
-    background: #a60f99;
+    background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
 
 .scrollContainerPortrait::-webkit-scrollbar-track {
-    background: #000;
+    background: var(--scrollbar-track);
 }
 
 .innerGridContainerPortrait {
@@ -653,7 +659,7 @@
     width: var(--grid-cell-size);
     height: calc(var(--grid-cell-size) * 0.25);
     border-radius: 2px;
-    background: #222;
+    background: var(--ghost-cell-bg);
     flex-shrink: 0;
     box-sizing: border-box;
 }
@@ -777,9 +783,9 @@
 }
 
 .volumeButtonLandscape {
-    background: #d9a974;
+    background: var(--volume-button-bg);
     color: #000;
-    border: 1px solid #c99a5f;
+    border: 1px solid var(--volume-button-border);
     border-radius: 2px;
     padding: 0;
     font-size: 7px;
@@ -799,7 +805,7 @@
 }
 
 .volumeButtonLandscape:hover {
-    background: #e8bf8f;
+    background: var(--volume-button-bg-hover);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -827,7 +833,7 @@
 .volumeSliderPopupInputLandscape {
     width: 90px;
     height: 80%;
-    accent-color: rgb(110, 19, 96);
+    accent-color: var(--volume-accent);
     cursor: pointer;
     -webkit-appearance: slider-horizontal;
     appearance: slider-horizontal;

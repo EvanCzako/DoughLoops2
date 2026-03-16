@@ -30,14 +30,11 @@ export default function DrumGrid({ grid, setGrid }: DrumGridProps) {
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const orientation = useStore((s) => s.orientation);
     const instruments = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
-    const selectedSamples = useStore((s) => s.selectedSamples);
     const setSelectedSample = useStore((s) => s.setSelectedSample);
     const volumes = useStore((s) => s.volumes);
     const setVolume = useStore((s) => s.setVolume);
-    const fontSize = useStore((s) => s.fontSize);
     const instrumentVariants = useStore((s) => s.instrumentVariants);
     const setInstrumentVariant = useStore((s) => s.setInstrumentVariant);
-    const computedFontSize = Math.max(10, fontSize * 1.4);
     const isPortrait = orientation === 'portrait';
 
     useEffect(() => {
@@ -127,7 +124,6 @@ export default function DrumGrid({ grid, setGrid }: DrumGridProps) {
     };
 
     const numCols = grid[0]?.length || 0;
-    const numRows = grid.length;
 
     const beatSizePortrait = `${(numSubdivisions / numCols) * 100}%`;
 
