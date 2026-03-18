@@ -34,6 +34,19 @@
     text-decoration: underline;
 }
 
+.backLinkPortrait {
+    display: none;
+}
+
+@media (orientation: portrait) {
+    .backLinkLandscape {
+        display: none;
+    }
+    .backLinkPortrait {
+        display: inline;
+    }
+}
+
 .spacer {
     flex: 1;
 }

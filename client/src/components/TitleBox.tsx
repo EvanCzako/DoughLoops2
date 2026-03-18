@@ -23,7 +23,8 @@ export default function TitleBox({
                 rel="noopener noreferrer"
                 className={styles.backLink}
             >
-                Back to Dough's Lab
+                <span className={styles.backLinkLandscape}>Back to Dough's Lab</span>
+                <span className={styles.backLinkPortrait}>Dough's Lab</span>
             </a>
             <div className={styles.spacer} />
             <button
