@@ -8,7 +8,6 @@ export default function Footer() {
         <div className={styles.footerWrapper} style={{ fontSize: fontSize * 2 }}>
             <a
                 href="https://evanczako.github.io/DoughLab2/"
-                target="_blank"
                 rel="noopener noreferrer"
             >
                 More interactive projects by Evan Czako here! (Click me)

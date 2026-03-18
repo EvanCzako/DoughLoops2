@@ -20,7 +20,6 @@ export default function TitleBox({
             <img className={styles.logoImage} src={DoughLoopsLogo} alt="DoughLoops" />
             <a
                 href="https://evanczako.github.io/DoughLab2/"
-                target="_blank"
                 rel="noopener noreferrer"
                 className={styles.backLink}
             >
