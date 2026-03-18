@@ -17,12 +17,14 @@ export default function TitleBox({
 
     return (
         <div className={styles.titleBox}>
+            <img className={styles.logoImage} src={DoughLoopsLogo} alt="DoughLoops" />
             <a
                 href="https://evanczako.github.io/DoughLab2/"
                 target="_blank"
                 rel="noopener noreferrer"
+                className={styles.backLink}
             >
-                <img className={styles.logoImage} src={DoughLoopsLogo} alt="DoughLoops" />
+                Back to Dough's Lab
             </a>
             <div className={styles.spacer} />
             <button
