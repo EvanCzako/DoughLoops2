@@ -19,11 +19,11 @@ export default function TitleBox({
         <div className={styles.titleBox}>
             <img className={styles.logoImage} src={DoughLoopsLogo} alt="DoughLoops" />
             <a
-                href="https://evanczako.github.io/DoughLab2/"
+                href="https://evanczako.com"
                 rel="noopener noreferrer"
                 className={styles.backLink}
             >
-                <span className={styles.backLinkLandscape}>Back to Dough's Lab</span>
+                <span className={styles.backLinkLandscape}>Back to Bakery</span>
                 <span className={styles.backLinkPortrait}>Dough's Lab</span>
             </a>
             <div className={styles.spacer} />
