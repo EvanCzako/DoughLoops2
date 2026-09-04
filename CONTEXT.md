@@ -1,7 +1,8 @@
 # CONTEXT.md — DoughLoops2
 
 Working notes for future sessions. Not user-facing docs; see `README.md` for
-that, and `AUDIT.md` for the outstanding-work checklist.
+that, and `STYLE_GUIDE.md` for the conventions these notes assume (portable to
+sibling projects).
 
 ## What this is
 
@@ -44,7 +45,7 @@ loops. Part of a portfolio family that links back to `evanczako.com` and
 ```
 
 It is the on-disk format in SQLite, the shape of the hardcoded demo loops in
-`DemoLoopList.tsx`, the default loop in `store.ts`, *and* what
+`DemoLoopList.tsx`, the default loop in `store.ts`, _and_ what
 `persistence.ts` writes to localStorage. There is no version tag and no
 migration path, so changing the format breaks every saved loop. `decodeDrumGrid`
 is the trust boundary for all four sources: it validates ranges strictly and
@@ -62,9 +63,9 @@ properties and the portrait block swaps which axis each feeds, transposing the
 grid. Don't reintroduce a second JSX branch.
 
 **Design tokens are seed-driven.** `styles/variables.module.css` has three
-layers: ~20 *seed* colors, then a *derived* layer that computes every semantic
+layers: ~20 _seed_ colors, then a _derived_ layer that computes every semantic
 and component token from those seeds with `color-mix()`, then theme-independent
-*structure* (sizes, radii, motion, elevation). A theme is one
+_structure_ (sizes, radii, motion, elevation). A theme is one
 `[data-theme='...']` block of seeds and nothing else -- no theme ever restates a
 semantic token. No component CSS contains a hardcoded color; if you add one, it
 will not follow the theme.
@@ -95,10 +96,10 @@ clean once the scaffolding goes.
 
 **Sizing.** Two separate mechanisms, deliberately:
 
-- *Type scale.* `store.updateViewportMetrics()` runs on resize (rAF-throttled in
+- _Type scale._ `store.updateViewportMetrics()` runs on resize (rAF-throttled in
   `App.tsx`) and writes only `--base-font-size` to `documentElement`. No
   component holds a font size in state.
-- *Grid geometry.* `gridMetrics.ts` + a `ResizeObserver` in `DrumGrid` measure
+- _Grid geometry._ `gridMetrics.ts` + a `ResizeObserver` in `DrumGrid` measure
   the sequencer's own content box and write `--cell-w`, `--cell-h` and
   `--kit-main` onto that element. The viewport is not consulted: the grid's
   panel is not the window.
@@ -108,7 +109,7 @@ clean once the scaffolding goes.
 the bound the grid scrolls rather than compressing further; a 64-step pattern
 used to produce cells four times taller than wide, which read as a bar chart
 rather than a step. Grid tracks are therefore fixed sizes, not `1fr` — once the
-ratio is bounded the grid *must* be free to outgrow its scroll area.
+ratio is bounded the grid _must_ be free to outgrow its scroll area.
 
 Ordering inside `computeGridMetrics` matters: each orientation resolves one axis
 from the panel and derives the other, so the kit track's size (which follows the
@@ -131,8 +132,12 @@ drives the highlight. `Tone.start()` is called from the click handler in
 `AuthPage` / `UserLoopsWrapper`, so login, register and saved loops are
 unreachable and Vite tree-shakes them out of the bundle. The code is kept on
 purpose — do not delete it as dead code. `App.tsx` carries the reconnection
-steps in a header comment, and `AUDIT.md` has the full inventory. The demo
-dropdown renders `DemoLoopList` directly and is unrelated to any of this.
+steps in a header comment. Everything it needs still exists and compiles --
+`AuthPage`, `LoginForm`, `RegisterForm`, `LogoutButton`, `UserLoopsWrapper`,
+`NewDoughLoopForm`, `DoughLoopList`, `api.ts`, the `user` / `token` /
+`doughLoops` slice of the store, and the whole server -- so Vite tree-shakes it
+out of the bundle rather than dropping it from the repo. The demo dropdown
+renders `DemoLoopList` directly and is unrelated to any of this.
 
 **Auth (when reconnected).** Session tokens, not client-supplied ids. `/login`
 returns a token stored in localStorage under `doughloops.token`; `api.ts`
@@ -191,13 +196,14 @@ so. CORS accepts any `localhost:<port>` when `NODE_ENV !== 'production'`.
 - The grid can render up to 16 × 8 = 128 columns. Cells use a roving tabindex —
   only one checkbox is in the tab order — and arrow keys read their origin from
   the focused element, not from state (key repeat outruns React).
-- `AUDIT.md` tracks what is still open; the five deferred items there are
-  deliberate, not forgotten.
+- Known-deferred, deliberately: tests and CI; `beatRep` versioning; Tone.js
+  code-splitting; replacing the remaining JS type-scale pipeline with container
+  queries; a velocity/accent layer on the grid.
 
 ## Conventions
 
 Prettier: 4 spaces, single quotes, 100 print width, trailing commas. Comments
 were deliberately stripped in commits `f124f9e` / `998c5e0`; comments added
-since explain *why* a non-obvious choice was made, never what the code does.
+since explain _why_ a non-obvious choice was made, never what the code does.
 Components are default-exported function declarations. Store access is always
 per-field selectors (`useStore((s) => s.x)`), never whole-store destructuring.
