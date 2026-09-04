@@ -2,10 +2,16 @@
  * TEMPORARY -- theme preview scaffolding.
  *
  * This exists so themes can be compared in the running app. Once a look is
- * chosen: fold that theme's seeds into the :root block of
- * `styles/variables.module.css`, then delete this file, `ThemeSwitcher.tsx`,
- * its stylesheet, the `[data-theme]` / `[data-shape]` blocks at the bottom of
- * variables.module.css, and the one <ThemeSwitcher /> line in App.tsx.
+ * chosen, fold that theme's seeds into the :root seed block of
+ * `styles/variables.module.css` and then remove:
+ *
+ *   - this file, `components/ThemeSwitcher.tsx`, `styles/ThemeSwitcher.module.css`
+ *   - the <ThemeSwitcher /> line and its import in `components/TitleBox.tsx`
+ *   - the applyTheme/applyShape calls and import in `main.tsx`
+ *   - the [data-theme] and [data-shape] blocks in variables.module.css
+ *
+ * The defaults (midnight, soft) deliberately write no DOM attribute, so nothing
+ * is left behind once the scaffolding is gone.
  */
 
 export const THEMES = [

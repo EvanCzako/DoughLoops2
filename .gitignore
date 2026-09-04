@@ -45,3 +45,6 @@ pnpm-lock.yaml
 
 # Linting
 .eslintcache
+# SQLite WAL sidecars
+*.db-wal
+*.db-shm

@@ -45,8 +45,21 @@
     .backLinkLandscape {
         display: none;
     }
+
     .backLinkPortrait {
         display: inline;
+    }
+
+    /* The logo is a wide raster; at full header height it ate 40% of a phone
+       header and pushed the back-link into an ellipsis. */
+    .logoImage {
+        max-width: 108px;
+        object-fit: contain;
+    }
+
+    .titleBoxButton {
+        padding: 8px;
+        gap: 4px;
     }
 }
 

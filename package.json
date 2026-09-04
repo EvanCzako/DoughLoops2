@@ -2,19 +2,13 @@
     "name": "DoughLoops2",
     "scripts": {
         "dev": "concurrently \"npm run dev --prefix client\" \"npm run start --prefix server\"",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-        "format": "prettier --write ."
+        "lint": "npm run lint --prefix client",
+        "format": "prettier --write .",
+        "typecheck": "npm run typecheck --prefix client",
+        "check": "npm run typecheck && npm run lint && npm run build --prefix client"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^8.34.1",
-        "@typescript-eslint/parser": "^8.34.1",
         "concurrently": "^8.0.0",
-        "eslint": "^8.57.1",
-        "eslint-config-prettier": "^10.1.5",
-        "eslint-plugin-import": "^2.31.0",
-        "eslint-plugin-jsx-a11y": "^6.10.2",
-        "eslint-plugin-react": "^7.37.5",
-        "eslint-plugin-react-hooks": "^5.2.0",
         "prettier": "^3.5.3"
     }
 }

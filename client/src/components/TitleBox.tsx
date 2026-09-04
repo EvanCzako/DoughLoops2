@@ -1,5 +1,6 @@
 import { RefObject } from 'react';
 import { useStore } from '../store';
+import ThemeSwitcher from './ThemeSwitcher';
 import styles from '../styles/TitleBox.module.css';
 import DoughLoopsLogo from '../assets/DoughLoops2-downSaturated.png';
 
@@ -31,6 +32,8 @@ export default function TitleBox({ demoDropdownAnchorRef }: TitleBoxProps) {
                 Demos
                 <span aria-hidden="true">{demoDropdownOpen ? '▼' : '▶'}</span>
             </button>
+            {/* TEMPORARY preview control -- see src/theme.ts */}
+            <ThemeSwitcher />
         </header>
     );
 }

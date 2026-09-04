@@ -8,7 +8,6 @@ import DemoLoopList from './components/DemoLoopList';
 import ControlsContainer from './components/ControlsContainer';
 import BeatSubdivControls from './components/BeatSubdivControls';
 import DrumLoopPlayer from './components/DrumLoopPlayer';
-import ThemeSwitcher from './components/ThemeSwitcher';
 import styles from './App.module.css';
 
 /*
@@ -108,8 +107,6 @@ export default function App(): JSX.Element {
                     </div>
                 </div>
             </div>
-            {/* TEMPORARY preview control -- see src/theme.ts */}
-            <ThemeSwitcher />
         </div>
     );
 }
