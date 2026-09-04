@@ -1,11 +1,7 @@
 @import './variables.module.css';
 
-:root {
-    --manager-bg: rgb(30, 30, 30);
-}
-
 .doughLoopManager {
-    background-color: var(--manager-bg);
+    background-color: var(--ui-surface-raised);
     padding: 4px;
     border-radius: 8px;
     display: flex;

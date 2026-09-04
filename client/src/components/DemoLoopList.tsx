@@ -65,15 +65,18 @@ export default function DemoLoopList() {
     };
 
     return (
-        <div className={styles.demoDropdown}>
+        <div className={styles.demoDropdown} role="menu" aria-label="Demo loops">
             {demoLoops.map((loop) => (
-                <div
+                <button
+                    type="button"
+                    role="menuitem"
                     key={loop.id}
                     className={`${styles.loopItem} ${selectedLoop?.id === loop.id ? styles.active : ''}`}
+                    aria-current={selectedLoop?.id === loop.id}
                     onClick={() => handleSelectLoop(loop)}
                 >
                     {loop.name}
-                </div>
+                </button>
             ))}
         </div>
     );

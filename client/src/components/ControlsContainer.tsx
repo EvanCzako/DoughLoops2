@@ -1,67 +1,71 @@
-import { useEffect, RefObject } from 'react';
+import { RefObject } from 'react';
+import * as Tone from 'tone';
 import { useStore } from '../store';
 import styles from '../styles/ControlsContainer.module.css';
 
-export default function ControlsContainer(opts: {
-    grid: boolean[][];
-    setGrid: (grid: boolean[][]) => void;
-    stepRef: RefObject<number>;
-}) {
+export default function ControlsContainer({ stepRef }: { stepRef: RefObject<number> }) {
     const isPlaying = useStore((s) => s.isPlaying);
     const setIsPlaying = useStore((s) => s.setIsPlaying);
     const setCurrentStep = useStore((s) => s.setCurrentStep);
     const bpm = useStore((s) => s.bpm);
     const setBpm = useStore((s) => s.setBpm);
-    const numBeats = useStore((s) => s.numBeats);
-    const numSubdivisions = useStore((s) => s.numSubdivisions);
-    const fontSize = useStore((s) => s.fontSize);
-    const computedFontSize = Math.max(10, fontSize * 2);
+    const grid = useStore((s) => s.grid);
+    const setGrid = useStore((s) => s.setGrid);
+    const sampleStatus = useStore((s) => s.sampleStatus);
+
+    const disabled = sampleStatus !== 'ready';
 
     const handlePlayToggle = async () => {
+        // Tone.start() has to run inside the user gesture that requested audio.
+        // Doing it from an effect further down the render worked by accident.
+        if (!isPlaying) await Tone.start();
         setIsPlaying(!isPlaying);
     };
 
-    useEffect(() => {
-        const grid = useStore.getState().grid;
-        opts.setGrid(
-            grid.map((row) => {
-                const newRow = [...row];
-                newRow.length = numBeats * numSubdivisions;
-                return newRow.fill(false, row.length);
-            })
-        );
-    }, [numBeats, numSubdivisions, opts.setGrid]);
+    const handleReset = () => {
+        setCurrentStep(0);
+        stepRef.current = 0;
+    };
+
+    const handleClear = () => {
+        setGrid(grid.map((row) => row.map(() => false)));
+    };
+
+    const playLabel = isPlaying ? 'Stop' : 'Play';
 
     return (
         <div className={styles.controlsContainer}>
             <div className={styles.controlsGrid}>
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setBpm(Math.max(20, bpm - 5))}
+                    aria-label="Decrease tempo by 5 BPM"
                 >
                     <span className={styles.buttonIcon} aria-hidden="true">
-                        ➖
+                        &minus;
                     </span>
                 </button>
-                <div className={styles.bpmLabel}>{Math.round(bpm)}</div>
+                <div className={styles.readout} aria-live="polite">
+                    <span className="sr-only">Tempo&nbsp;</span>
+                    <span className={styles.readoutValue}>{Math.round(bpm)}</span>
+                    <span className={styles.readoutCaption} aria-hidden="true">
+                        BPM
+                    </span>
+                </div>
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setBpm(Math.min(300, bpm + 5))}
+                    aria-label="Increase tempo by 5 BPM"
                 >
                     <span className={styles.buttonIcon} aria-hidden="true">
-                        ➕
+                        +
                     </span>
                 </button>
 
                 <button
-                    onClick={() => {
-                        setCurrentStep(0);
-                        opts.stepRef.current = 0;
-                    }}
+                    onClick={handleReset}
                     className={`${styles.controlsButton} ${styles.resetButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
+                    aria-label="Return playhead to the first step"
                 >
                     <svg
                         viewBox="0 0 24 24"
@@ -76,10 +80,21 @@ export default function ControlsContainer(opts: {
                 </button>
                 <button
                     className={`${styles.controlsButton} ${isPlaying ? styles.playing : styles.stopped}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
                     onClick={handlePlayToggle}
+                    disabled={disabled}
+                    aria-label={playLabel}
+                    aria-pressed={isPlaying}
+                    title={
+                        sampleStatus === 'loading'
+                            ? 'Loading samples…'
+                            : sampleStatus === 'error'
+                              ? 'Samples failed to load'
+                              : playLabel
+                    }
                 >
-                    {isPlaying ? (
+                    {sampleStatus === 'loading' ? (
+                        <span className={styles.spinner} aria-hidden="true" />
+                    ) : isPlaying ? (
                         <svg
                             viewBox="0 0 24 24"
                             fill="currentColor"
@@ -102,16 +117,9 @@ export default function ControlsContainer(opts: {
                     )}
                 </button>
                 <button
-                    onClick={() => {
-                        const numRows = opts.grid.length;
-                        const numCols = opts.grid[0]?.length || 0;
-                        const cleared = Array.from({ length: numRows }, () =>
-                            Array(numCols).fill(false)
-                        );
-                        opts.setGrid(cleared);
-                    }}
+                    onClick={handleClear}
                     className={`${styles.controlsButton} ${styles.clearButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
+                    aria-label="Clear all steps"
                 >
                     <svg
                         viewBox="0 0 24 24"

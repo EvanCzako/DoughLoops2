@@ -5,6 +5,10 @@ import { useStore } from '../store';
 import styles from '../styles/AuthPage.module.css';
 import LogoutButton from './LogoutButton';
 
+/*
+ * Part of the account feature, which is currently not mounted anywhere --
+ * see the note at the top of App.tsx.
+ */
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
     const formContainerRef = useRef<HTMLDivElement | null>(null);
@@ -19,8 +23,8 @@ export default function AuthPage() {
     };
 
     const loggedOutDisp = (
-        <div style={{ maxWidth: 400, margin: 'auto', padding: 16 }} ref={formContainerRef}>
-            <div style={{ marginBottom: 16, textAlign: 'center' }}>
+        <div className={styles.authPanel} ref={formContainerRef}>
+            <div className={styles.authToggle}>
                 <button
                     type="button"
                     className={styles.loginRegisterButton}
@@ -44,18 +48,9 @@ export default function AuthPage() {
     );
 
     const loggedInDisp = (
-        <div>
-            <div
-                className={styles.logoutContainer}
-                style={{ maxWidth: 400, margin: 'auto', padding: 16 }}
-            >
-                {user ? (
-                    <>
-                        <h2>Welcome, {user.username}!</h2>
-                        <LogoutButton />
-                    </>
-                ) : null}
-            </div>
+        <div className={styles.authPanel}>
+            <h2 className={styles.welcome}>Welcome, {user?.username}!</h2>
+            <LogoutButton />
         </div>
     );
 

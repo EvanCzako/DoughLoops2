@@ -19,6 +19,9 @@
 }
 
 .backLink {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: clamp(0.72rem, 1.76vw, 1rem);
     font-weight: 500;
     color: var(--color-text-gold);
@@ -51,9 +54,10 @@
     flex: 1;
 }
 
-.demoButton {
+.titleBoxButton {
     background-color: var(--ui-accent-2);
     font-weight: 600;
+    margin-left: 6px;
     padding: 8px 12px;
     border: 1px solid var(--ui-border);
     border-radius: 6px;
@@ -61,14 +65,17 @@
     height: 28px;
     font-size: calc(var(--base-font-size) * 1.5);
     color: var(--ui-text-primary);
-    transition: all 0.2s ease;
+    transition:
+        background-color var(--transition-base),
+        transform var(--transition-base),
+        box-shadow var(--transition-base);
     display: flex;
     align-items: center;
     gap: 6px;
     white-space: nowrap;
 }
 
-.demoButton:hover {
+.titleBoxButton:hover {
     background-color: var(--ui-hover);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);

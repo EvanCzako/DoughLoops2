@@ -3,37 +3,34 @@ import { useStore } from '../store';
 import styles from '../styles/TitleBox.module.css';
 import DoughLoopsLogo from '../assets/DoughLoops2-downSaturated.png';
 
-export default function TitleBox({
-    demoDropdownAnchorRef,
-}: {
+interface TitleBoxProps {
     demoDropdownAnchorRef: RefObject<HTMLButtonElement | null>;
-}) {
+}
+
+export default function TitleBox({ demoDropdownAnchorRef }: TitleBoxProps) {
     const demoDropdownOpen = useStore((s) => s.demoDropdownOpen);
     const setDemoDropdownOpen = useStore((s) => s.setDemoDropdownOpen);
 
-    const demoDropdownClickedHandler = () => {
-        setDemoDropdownOpen(!demoDropdownOpen);
-    };
-
     return (
-        <div className={styles.titleBox}>
+        <header className={styles.titleBox}>
             <img className={styles.logoImage} src={DoughLoopsLogo} alt="DoughLoops" />
-            <a
-                href="https://evanczako.com"
-                rel="noopener noreferrer"
-                className={styles.backLink}
-            >
+            <a href="https://evanczako.com" rel="noopener noreferrer" className={styles.backLink}>
                 <span className={styles.backLinkLandscape}>Back to Bakery</span>
-                <span className={styles.backLinkPortrait}>Dough's Lab</span>
+                <span className={styles.backLinkPortrait}>Dough&rsquo;s Lab</span>
             </a>
             <div className={styles.spacer} />
+            {/* An Account button belongs here when the account feature is
+                reconnected -- see the note at the top of App.tsx. */}
             <button
                 ref={demoDropdownAnchorRef}
-                className={styles.demoButton}
-                onClick={demoDropdownClickedHandler}
+                className={styles.titleBoxButton}
+                onClick={() => setDemoDropdownOpen(!demoDropdownOpen)}
+                aria-expanded={demoDropdownOpen}
+                aria-haspopup="menu"
             >
-                Demos {demoDropdownOpen ? '▼' : '▶'}
+                Demos
+                <span aria-hidden="true">{demoDropdownOpen ? '▼' : '▶'}</span>
             </button>
-        </div>
+        </header>
     );
 }

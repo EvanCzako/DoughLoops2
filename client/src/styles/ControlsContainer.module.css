@@ -1,54 +1,36 @@
 @import './variables.module.css';
 
-:root {
-    --controls-container-width: 80px;
-    --controls-column-width: 80px;
-    --controls-container-height: 80px;
-}
-
 .controlsContainer {
-    background: linear-gradient(145deg, var(--ui-surface-light), var(--ui-surface));
+    background: var(--ui-surface);
     padding: 8px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     position: relative;
     font-weight: 500;
     font-size: 20px;
     width: var(--controls-container-width);
     height: auto;
     border: 1px solid var(--ui-border);
-    box-shadow:
-        var(--shadow-md),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-md);
     box-sizing: border-box;
 }
 
-.controlsSlider {
-    width: 40%;
-    accent-color: rgb(189, 125, 69);
-    color: white;
-    left: 50px;
-}
-
-.sliderContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    font-weight: 750;
-}
-
 .controlsButton {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    font-size: max(10px, calc(var(--base-font-size) * 2));
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
     margin: 0;
     height: 40px;
     width: 100%;
     font-weight: 600;
-    color: var(--grid-background);
+    color: var(--button-ink);
 
-    box-shadow:
-        var(--shadow-sm),
-        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-sm);
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
@@ -58,23 +40,10 @@
     gap: 0;
 }
 
-.controlsButton::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
-    border-radius: 7px 7px 0 0;
-}
-
 .controlsButton:hover {
     transform: translateY(-1px);
-    box-shadow:
-        var(--shadow-md),
-        0 0 15px rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-md);
+    filter: brightness(1.08);
 }
 
 .controlsButton:active {
@@ -95,15 +64,27 @@
     line-height: 1;
 }
 
-.bpmLabel,
-.beatsLabel,
-.subdivLabel {
+.readout {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 0.9em;
-    font-weight: 600;
+    gap: 1px;
+    line-height: 1;
     color: var(--ui-text-primary);
+}
+
+.readoutValue {
+    font-size: 0.95em;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.readoutCaption {
+    font-size: 0.42em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
 }
 
 .playing {
@@ -165,5 +146,35 @@
         margin: 8px 0 0 0;
         padding-left: 8px;
         padding-right: 8px;
+    }
+}
+
+.controlsButton:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.controlsButton:disabled {
+    cursor: progress;
+    filter: saturate(0.35) brightness(0.8);
+}
+
+.controlsButton:disabled:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.spinner {
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }

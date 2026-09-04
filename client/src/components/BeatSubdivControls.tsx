@@ -6,49 +6,59 @@ export default function BeatSubdivControls() {
     const setNumBeats = useStore((s) => s.setNumBeats);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
     const setNumSubdivisions = useStore((s) => s.setNumSubdivisions);
-    const fontSize = useStore((s) => s.fontSize);
-    const computedFontSize = Math.max(10, fontSize * 1.6);
 
     return (
         <div className={styles.controlsContainer}>
             <div className={styles.controlsGrid}>
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumBeats(Math.max(1, numBeats - 1))}
+                    aria-label="Remove a beat"
                 >
                     <span className={styles.buttonIcon} aria-hidden="true">
-                        ➖
+                        &minus;
                     </span>
                 </button>
-                <div className={styles.beatsLabel}>{numBeats}</div>
+                <div className={styles.readout} aria-live="polite">
+                    <span className="sr-only">Beats&nbsp;</span>
+                    <span className={styles.readoutValue}>{numBeats}</span>
+                    <span className={styles.readoutCaption} aria-hidden="true">
+                        BEATS
+                    </span>
+                </div>
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumBeats(Math.min(16, numBeats + 1))}
+                    aria-label="Add a beat"
                 >
                     <span className={styles.buttonIcon} aria-hidden="true">
-                        ➕
+                        +
                     </span>
                 </button>
 
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumSubdivisions(Math.max(1, numSubdivisions - 1))}
+                    aria-label="Remove a subdivision per beat"
                 >
                     <span className={styles.buttonIcon} aria-hidden="true">
-                        ➖
+                        &minus;
                     </span>
                 </button>
-                <div className={styles.subdivLabel}>{numSubdivisions}</div>
+                <div className={styles.readout} aria-live="polite">
+                    <span className="sr-only">Subdivisions&nbsp;</span>
+                    <span className={styles.readoutValue}>{numSubdivisions}</span>
+                    <span className={styles.readoutCaption} aria-hidden="true">
+                        SPLIT
+                    </span>
+                </div>
                 <button
                     className={`${styles.controlsButton} ${styles.tempoButton}`}
-                    style={{ fontSize: `${computedFontSize}px` }}
                     onClick={() => setNumSubdivisions(Math.min(8, numSubdivisions + 1))}
+                    aria-label="Add a subdivision per beat"
                 >
                     <span className={styles.buttonIcon} aria-hidden="true">
-                        ➕
+                        +
                     </span>
                 </button>
             </div>

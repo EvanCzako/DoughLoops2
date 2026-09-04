@@ -1,29 +1,22 @@
 import { useStore } from '../store';
 import NewDoughLoopForm from './NewDoughLoopForm';
 import DoughLoopList from './DoughLoopList';
-import DemoLoopList from './DemoLoopList';
 import styles from '../styles/UserLoopsWrapper.module.css';
 
-export default function UserLoopsWrapper({ isDemoLoops = false }: { isDemoLoops?: boolean }) {
+/*
+ * Part of the account feature, which is currently not mounted anywhere --
+ * see the note at the top of App.tsx. Pair it with <AuthPage />, which covers
+ * the signed-out case.
+ */
+export default function UserLoopsWrapper() {
     const user = useStore((s) => s.user);
-    const fontSize = useStore((s) => s.fontSize);
 
-    if (isDemoLoops) {
-        return <DemoLoopList />;
-    }
+    if (!user) return null;
 
     return (
         <div className={styles.userLoopsWrapper}>
-            {user ? (
-                <>
-                    <NewDoughLoopForm />
-                    <DoughLoopList />
-                </>
-            ) : (
-                <p style={{ fontSize: fontSize * 2 }}>
-                    Log in or register to save and edit your loops!
-                </p>
-            )}
+            <NewDoughLoopForm />
+            <DoughLoopList />
         </div>
     );
 }

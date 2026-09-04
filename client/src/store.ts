@@ -1,5 +1,9 @@
 import { create } from 'zustand';
 import { decodeDrumGrid } from './utils';
+import { storeToken } from './api';
+import { loadWorkingLoop, saveWorkingLoop } from './persistence';
+
+export type SampleStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 export interface User {
     id: number;
@@ -23,6 +27,7 @@ const DEFAULT_FUNK_LOOP: DoughLoop = {
 
 interface StoreState {
     user: User | null;
+    token: string | null;
     doughLoops: DoughLoop[];
     loading: boolean;
     error: string | null;
@@ -31,20 +36,17 @@ interface StoreState {
     bpm: number;
     isPlaying: boolean;
     currentStep: number;
+    sampleStatus: SampleStatus;
     selectedLoop: DoughLoop | null;
     name: string;
     grid: boolean[][];
     selectedSamples: string[];
     volumes: number[];
-    fontSize: number;
     userDropdownOpen: boolean;
     demoDropdownOpen: boolean;
-    orientation: 'portrait' | 'landscape';
-    instrumentVariants: number[];
 
     setVolume: (index: number, volume: number) => void;
     setSelectedSample: (index: number, sample: string) => void;
-    setInstrumentVariant: (index: number, variant: number) => void;
     setName: (name: string) => void;
     setGrid: (grid: boolean[][]) => void;
     setSelectedLoop: (loop: DoughLoop | null) => void;
@@ -53,27 +55,42 @@ interface StoreState {
     setNumSubdivisions: (numSubdivisions: number) => void;
     setBpm: (bpm: number) => void;
     setIsPlaying: (playing: boolean) => void;
-    updateFontSize: () => void;
-    setOrientation: (orientation: 'portrait' | 'landscape') => void;
+    setSampleStatus: (status: SampleStatus) => void;
+    updateViewportMetrics: () => void;
 
     setUserDropdownOpen: (open: boolean) => void;
     setDemoDropdownOpen: (open: boolean) => void;
-    setUser: (user: User | null) => void;
+    setSession: (user: User | null, token: string | null) => void;
     logout: () => void;
 
     setDoughLoops: (loops: DoughLoop[]) => void;
-    addDoughLoop: (loop: DoughLoop) => void;
-    replaceDoughLoop: (loop: DoughLoop) => void;
+    upsertDoughLoop: (loop: DoughLoop) => void;
 
     setLoading: (loading: boolean) => void;
     setError: (error: string | null) => void;
 }
 
+/*
+ * Grid width is derived state: it must always equal numBeats * numSubdivisions.
+ * Keeping the resize inside the setters makes that invariant hold atomically.
+ * It used to live in a ControlsContainer effect, which remounted on every
+ * orientation change and re-ran the resize as a side effect of rotating.
+ */
+function resizeGrid(grid: boolean[][], numCols: number): boolean[][] {
+    return grid.map((row) => {
+        if (row.length === numCols) return row;
+        if (row.length > numCols) return row.slice(0, numCols);
+        return [...row, ...Array(numCols - row.length).fill(false)];
+    });
+}
+
 export const useStore = create<StoreState>((set) => {
-    const decoded = decodeDrumGrid(DEFAULT_FUNK_LOOP.beatRep);
+    const restored = loadWorkingLoop();
+    const decoded = restored ?? decodeDrumGrid(DEFAULT_FUNK_LOOP.beatRep);
 
     return {
         user: null,
+        token: null,
         doughLoops: [],
         loading: false,
         error: null,
@@ -82,8 +99,9 @@ export const useStore = create<StoreState>((set) => {
         bpm: decoded?.bpm ?? 95,
         isPlaying: false,
         currentStep: 0,
-        selectedLoop: DEFAULT_FUNK_LOOP,
-        name: DEFAULT_FUNK_LOOP.name,
+        sampleStatus: 'idle',
+        selectedLoop: restored ? null : DEFAULT_FUNK_LOOP,
+        name: restored?.name ?? DEFAULT_FUNK_LOOP.name,
         grid:
             decoded?.grid ??
             Array(8)
@@ -100,43 +118,19 @@ export const useStore = create<StoreState>((set) => {
             'triangle1',
         ],
         volumes: decoded?.volumes ?? [1, 1, 1, 1, 1, 1, 1, 1],
-        fontSize: 0,
         userDropdownOpen: false,
         demoDropdownOpen: false,
-        orientation: 'landscape',
-        instrumentVariants: [1, 1, 1, 1, 1, 1, 1, 1],
         setUserDropdownOpen: (val: boolean) => set({ userDropdownOpen: val }),
         setDemoDropdownOpen: (val: boolean) => set({ demoDropdownOpen: val }),
-        setOrientation: (orientation: 'portrait' | 'landscape') => set({ orientation }),
 
-        updateFontSize: () => {
-            const width = window.visualViewport?.width ?? window.innerWidth;
+        updateViewportMetrics: () => {
             const height = window.visualViewport?.height ?? window.innerHeight;
-
-            const newOrientation = height > width ? 'portrait' : 'landscape';
-            set({ orientation: newOrientation });
-            document.documentElement.setAttribute('data-orientation', newOrientation);
-
-            document.documentElement.style.setProperty('--vw-unit', `${width / 100}px`);
-            document.documentElement.style.setProperty('--vh-unit', `${height / 100}px`);
-
-            const product = Math.max(8, Math.pow(height * 0.8, 1 / 3));
-            const fontSize = product * 1.1;
-            set({ fontSize });
-            document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
-
-            if (newOrientation === 'portrait') {
-                const gridPadding = 16 * 2;
-                const totalGaps = 6 * 7;
-                const cellSize = Math.max(40, (width - gridPadding - totalGaps) / 8);
-                document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
-            } else {
-                const cellSize = Math.sqrt(height * 3) * 0.9;
-                document.documentElement.style.setProperty('--grid-cell-size', `${cellSize}px`);
-            }
-
-            const logoWidth = Math.min(300, width * 0.5);
-            document.documentElement.style.setProperty('--logo-width', `${logoWidth}px`);
+            // Grid geometry is measured per-panel by the sequencer itself (see
+            // gridMetrics.ts); the only thing left here is global type scale.
+            document.documentElement.style.setProperty(
+                '--base-font-size',
+                `${Math.max(8, Math.pow(height * 0.8, 1 / 3)) * 1.1}px`
+            );
         },
 
         setVolume: (index, volume) =>
@@ -151,13 +145,6 @@ export const useStore = create<StoreState>((set) => {
                 const updated = [...state.selectedSamples];
                 updated[index] = sample;
                 return { selectedSamples: updated };
-            }),
-
-        setInstrumentVariant: (index, variant) =>
-            set((state) => {
-                const updated = [...state.instrumentVariants];
-                updated[index] = variant;
-                return { instrumentVariants: updated };
             }),
 
         setName: (name: string) => set({ name }),
@@ -187,22 +174,75 @@ export const useStore = create<StoreState>((set) => {
             });
         },
 
-        setUser: (user) => set({ user }),
-        logout: () => set({ user: null, doughLoops: [], selectedLoop: null }),
-        setNumBeats: (numBeats: number) => set({ numBeats }),
-        setNumSubdivisions: (numSubdivisions: number) => set({ numSubdivisions }),
+        setSession: (user, token) => {
+            storeToken(token);
+            set({ user, token });
+        },
+        logout: () => {
+            storeToken(null);
+            set({ user: null, token: null, doughLoops: [], selectedLoop: null });
+        },
+        setNumBeats: (numBeats: number) =>
+            set((state) => ({
+                numBeats,
+                grid: resizeGrid(state.grid, numBeats * state.numSubdivisions),
+            })),
+        setNumSubdivisions: (numSubdivisions: number) =>
+            set((state) => ({
+                numSubdivisions,
+                grid: resizeGrid(state.grid, state.numBeats * numSubdivisions),
+            })),
         setBpm: (bpm: number) => set({ bpm }),
         setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
+        setSampleStatus: (status: SampleStatus) => set({ sampleStatus: status }),
         setCurrentStep: (step: number) => set({ currentStep: step }),
 
         setDoughLoops: (loops) => set({ doughLoops: loops }),
-        addDoughLoop: (loop) => set((state) => ({ doughLoops: [...state.doughLoops, loop] })),
-        replaceDoughLoop: (loop: DoughLoop) =>
+        upsertDoughLoop: (loop: DoughLoop) =>
             set((state) => ({
-                doughLoops: state.doughLoops.map((dl) => (dl.id === loop.id ? loop : dl)),
+                doughLoops: state.doughLoops.some((dl) => dl.id === loop.id)
+                    ? state.doughLoops.map((dl) => (dl.id === loop.id ? loop : dl))
+                    : [...state.doughLoops, loop],
             })),
 
         setLoading: (loading) => set({ loading }),
         setError: (error) => set({ error }),
     };
+});
+
+/*
+ * Mirror the working pattern into localStorage.
+ *
+ * Debounced, because dragging a volume slider fires this on every pointer move
+ * and the encode walks the whole grid. Subscribing here rather than from a
+ * component keeps it out of the render path entirely.
+ */
+let saveTimer: ReturnType<typeof setTimeout> | undefined;
+
+useStore.subscribe((state, prev) => {
+    if (
+        state.grid === prev.grid &&
+        state.bpm === prev.bpm &&
+        state.numBeats === prev.numBeats &&
+        state.numSubdivisions === prev.numSubdivisions &&
+        state.selectedSamples === prev.selectedSamples &&
+        state.volumes === prev.volumes &&
+        state.name === prev.name
+    ) {
+        return;
+    }
+
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+        const s = useStore.getState();
+        saveWorkingLoop({
+            bpm: s.bpm,
+            numBeats: s.numBeats,
+            subdivisions: s.numSubdivisions,
+            grid: s.grid,
+            samples: s.selectedSamples,
+            volumes: s.volumes,
+            name: s.name,
+        });
+    }, 400);
 });

@@ -31,3 +31,22 @@
 .loginForm {
     font-size: calc(var(--base-font-size) * 2);
 }
+
+.formError,
+.formSuccess {
+    margin-top: 8px;
+}
+
+.formError {
+    color: var(--color-off-red-1);
+}
+
+.formSuccess {
+    color: var(--color-off-green-1);
+}
+
+.formHint {
+    margin-top: 8px;
+    font-size: max(9px, calc(var(--base-font-size) * 1.2));
+    opacity: 0.75;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, RefObject, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useStore } from '../store';
+import styles from '../styles/DropdownWrapper.module.css';
 
 interface Props {
     anchorRef: RefObject<HTMLElement | null>;
@@ -12,47 +13,45 @@ interface Props {
 export default function DropdownWrapper({ anchorRef, children, compact = false, onClose }: Props) {
     const panelRef = useRef<HTMLDivElement>(null);
     const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
-    const closeHandler = onClose || (() => setUserDropdownOpen(false));
+
+    const onCloseRef = useRef(onClose);
+    onCloseRef.current = onClose;
 
     useEffect(() => {
+        const close = () => {
+            if (onCloseRef.current) onCloseRef.current();
+            else setUserDropdownOpen(false);
+        };
+
         const handleClickOutside = (e: MouseEvent) => {
             if (
                 panelRef.current &&
                 !panelRef.current.contains(e.target as Node) &&
                 !anchorRef.current?.contains(e.target as Node)
             ) {
-                closeHandler();
+                close();
             }
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [closeHandler, anchorRef]);
 
-    const anchorRect = anchorRef.current?.getBoundingClientRect();
-    const top = anchorRect?.bottom ?? 0;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') close();
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [anchorRef, setUserDropdownOpen]);
+
+    const top = anchorRef.current?.getBoundingClientRect().bottom ?? 0;
 
     return createPortal(
         <div
             ref={panelRef}
-            style={{
-                position: 'fixed',
-                top: `${top}px`,
-                right: '15px',
-                zIndex: 999,
-                background: '#111',
-                color: 'var(--ui-text-primary)',
-                border: '1px solid #333',
-                borderRadius: '8px',
-                padding: '16px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-                minWidth: compact ? 'auto' : '280px',
-                maxWidth: '90vw',
-                maxHeight: `calc(100dvh - ${top}px - 12px)`,
-                overflowY: 'auto',
-                overflowX: 'hidden',
-                boxSizing: 'border-box',
-                WebkitOverflowScrolling: 'touch',
-            }}
+            className={`${styles.dropdownPanel} ${compact ? '' : styles.wide}`}
+            style={{ top: `${top}px`, maxHeight: `calc(100dvh - ${top}px - 12px)` }}
         >
             {children}
         </div>,

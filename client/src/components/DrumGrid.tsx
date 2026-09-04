@@ -1,5 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { useStore } from '../store';
+import { INSTRUMENTS, resolveSampleName, variantOf } from '../instruments';
+import { computeGridMetrics } from '../gridMetrics';
 import styles from '../styles/DrumGrid.module.css';
 
 interface DrumGridProps {
@@ -7,381 +10,273 @@ interface DrumGridProps {
     setGrid: (g: boolean[][]) => void;
 }
 
-const instrumentEmojis: Record<string, string> = {
-    kick: '🥾',
-    clap: '👏',
-    snare: '🥁',
-    hat: '📀',
-    rim: '🎯',
-    tom: '🪘',
-    cymbal: '✨',
-    triangle: '🔺',
-};
+/* Variant 1/2/3 read as three colourways of the same emoji. */
+const VARIANT_HUE: Record<number, number> = { 1: 0, 2: 120, 3: 240 };
 
 export default function DrumGrid({ grid, setGrid }: DrumGridProps) {
-    const [volumeSliderOpen, setVolumeSliderOpen] = useState<Set<number>>(new Set());
-    const [popupPositions, setPopupPositions] = useState<
-        Record<number, { top: number; left: number }>
-    >({});
-    const volumeSliderRefs = useRef<Record<number, HTMLDivElement | null>>({});
-    const volumeButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-    const controlItemRefs = useRef<(HTMLDivElement | null)[]>([]);
     const currentStep = useStore((s) => s.currentStep);
     const numSubdivisions = useStore((s) => s.numSubdivisions);
-    const orientation = useStore((s) => s.orientation);
-    const instruments = ['kick', 'clap', 'snare', 'hat', 'rim', 'tom', 'cymbal', 'triangle'];
+    const selectedSamples = useStore((s) => s.selectedSamples);
     const setSelectedSample = useStore((s) => s.setSelectedSample);
     const volumes = useStore((s) => s.volumes);
     const setVolume = useStore((s) => s.setVolume);
-    const instrumentVariants = useStore((s) => s.instrumentVariants);
-    const setInstrumentVariant = useStore((s) => s.setInstrumentVariant);
-    const isPortrait = orientation === 'portrait';
 
+    const [openVolume, setOpenVolume] = useState<number | null>(null);
+    const [focused, setFocused] = useState({ row: 0, col: 0 });
+
+    const gridRef = useRef<HTMLDivElement>(null);
+    const controlsRef = useRef<HTMLDivElement>(null);
+    const sequencerRef = useRef<HTMLDivElement>(null);
+
+    const numRows = grid.length;
+    const numCols = grid[0]?.length ?? 0;
+    const numBeats = numSubdivisions > 0 ? Math.ceil(numCols / numSubdivisions) : 0;
+
+    /*
+     * Size the cells from the panel we are actually in, not from the viewport.
+     * Observing the sequencer (rather than the scroll area) keeps this out of a
+     * feedback loop: the kit track's width is derived from the cell height,
+     * so measuring the scroll area would make the observed box depend on the
+     * value being computed.
+     */
     useEffect(() => {
-        if (volumeSliderOpen.size === 0) return;
+        const el = sequencerRef.current;
+        if (!el) return;
 
-        const updatePositions = () => {
-            const newPositions: Record<number, { top: number; left: number }> = {};
-            volumeSliderOpen.forEach((instrumentIndex) => {
-                const button = volumeButtonRefs.current[instrumentIndex];
-                if (button) {
-                    const rect = button.getBoundingClientRect();
-                    if (isPortrait) {
-                        newPositions[instrumentIndex] = {
-                            top: rect.bottom + 4,
-                            left: rect.left + rect.width / 2,
-                        };
-                    } else {
-                        newPositions[instrumentIndex] = {
-                            top: rect.top + rect.height / 2,
-                            left: rect.right + 4,
-                        };
-                    }
-                }
-            });
-            setPopupPositions(newPositions);
+        const apply = (rect: { width: number; height: number }) => {
+            const { width, height } = rect;
+            const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+            const m = computeGridMetrics(width, height, numCols, numRows, isPortrait);
+
+            // Floor, not round: rounding up half a pixel per track is enough to
+            // push the grid past its container and show a permanent scrollbar.
+            el.style.setProperty('--cell-w', `${Math.floor(m.cellW)}px`);
+            el.style.setProperty('--cell-h', `${Math.floor(m.cellH)}px`);
+            el.style.setProperty('--kit-main', `${Math.floor(m.kitMain)}px`);
         };
 
-        const rafId = requestAnimationFrame(updatePositions);
-        window.addEventListener('resize', updatePositions);
-
-        return () => {
-            cancelAnimationFrame(rafId);
-            window.removeEventListener('resize', updatePositions);
-        };
-    }, [volumeSliderOpen, isPortrait]);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as Node;
-            const isClickOnButton = volumeButtonRefs.current.some(
-                (btn) => btn && btn.contains(target)
-            );
-            const isClickOnSlider = Array.from(volumeSliderOpen).some((idx) =>
-                volumeSliderRefs.current[idx]?.contains(target)
-            );
-
-            if (!isClickOnSlider && !isClickOnButton) {
-                setVolumeSliderOpen(new Set());
-            }
-        };
-
-        if (volumeSliderOpen.size > 0) {
-            document.addEventListener('mousedown', handleClickOutside);
-            return () => {
-                document.removeEventListener('mousedown', handleClickOutside);
+        const contentBox = () => {
+            const cs = getComputedStyle(el);
+            return {
+                width: el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight),
+                height: el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom),
             };
-        }
-    }, [volumeSliderOpen]);
+        };
 
-    const cycleVariant = (index: number) => {
-        const currentVariant = instrumentVariants[index];
-        const nextVariant = currentVariant === 3 ? 1 : currentVariant + 1;
-        setInstrumentVariant(index, nextVariant);
+        apply(contentBox());
 
-        const newSample = `${instruments[index]}${nextVariant}`;
-        setSelectedSample(index, newSample);
-    };
+        // contentRect is the content box, so padding is already excluded and a
+        // scrollbar appearing inside the grid cannot feed back into the size.
+        const observer = new ResizeObserver(([entry]) => apply(entry.contentRect));
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [numCols, numRows]);
 
-    const getHueRotation = (variant: number): number => {
-        switch (variant) {
-            case 1:
-                return 0;
-            case 2:
-                return 120;
-            case 3:
-                return 240;
-            default:
-                return 0;
-        }
-    };
+    useEffect(() => {
+        if (openVolume === null) return;
+
+        const handlePointerDown = (event: MouseEvent) => {
+            if (!controlsRef.current?.contains(event.target as Node)) setOpenVolume(null);
+        };
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setOpenVolume(null);
+        };
+
+        document.addEventListener('mousedown', handlePointerDown);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', handlePointerDown);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [openVolume]);
 
     const toggle = (row: number, col: number) => {
-        const updated = grid.map((r, ri) =>
-            ri === row ? r.map((c, ci) => (ci === col ? !c : c)) : r
-        );
-        setGrid(updated);
+        setGrid(grid.map((r, ri) => (ri === row ? r.map((c, ci) => (ci === col ? !c : c)) : r)));
     };
 
-    const numCols = grid[0]?.length || 0;
+    const cycleVariant = (row: number) => {
+        const current = variantOf(resolveSampleName(row, selectedSamples[row]));
+        const next = current === 3 ? 1 : current + 1;
+        setSelectedSample(row, `${INSTRUMENTS[row].key}${next}`);
+    };
 
-    const beatSizePortrait = `${(numSubdivisions / numCols) * 100}%`;
+    /*
+     * Roving tabindex. Only one cell is in the tab order at a time -- otherwise
+     * a 16-beat pattern puts 512 checkboxes between the grid and everything
+     * after it -- and the arrow keys walk the pattern.
+     */
+    const handleKeyDown = useCallback(
+        (event: ReactKeyboardEvent<HTMLDivElement>) => {
+            const deltas: Record<string, [number, number]> = {
+                ArrowUp: [-1, 0],
+                ArrowDown: [1, 0],
+                ArrowLeft: [0, -1],
+                ArrowRight: [0, 1],
+            };
+            const delta = deltas[event.key];
+            if (!delta) return;
 
-    const beatSizeLandscape = `calc(var(--grid-cell-size) * ${numSubdivisions})`;
+            // Read the origin off the focused element rather than component
+            // state: held arrow keys repeat faster than React re-renders, and
+            // state would still be reporting the previous cell.
+            const origin = event.target as HTMLElement;
+            const fromRow = Number(origin.dataset.row);
+            const fromCol = Number(origin.dataset.col);
+            if (!Number.isInteger(fromRow) || !Number.isInteger(fromCol)) return;
 
-    if (isPortrait) {
-        return (
-            <div className={styles.drumGridOuter} data-orientation="portrait">
-                <div className={styles.portraitContainer}>
-                    <div className={styles.controlsRowPortrait}>
-                        {grid.map((_, instrumentIndex) => (
-                            <div
-                                className={styles.controlsItemPortrait}
-                                key={`controls-${instrumentIndex}`}
-                                ref={(el) => {
-                                    if (el) controlItemRefs.current[instrumentIndex] = el;
-                                }}
-                            >
-                                <div
-                                    className={styles.controlsBoxPortrait}
-                                    onClick={() => cycleVariant(instrumentIndex)}
-                                    style={{
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    <div
-                                        className={styles.instrumentEmojiPortrait}
-                                        title={`${instruments[instrumentIndex]} (Variant ${instrumentVariants[instrumentIndex]})`}
-                                        style={{
-                                            filter: `hue-rotate(${getHueRotation(instrumentVariants[instrumentIndex])}deg)`,
-                                        }}
-                                    >
-                                        {instrumentEmojis[instruments[instrumentIndex]]}
-                                    </div>
-                                </div>
+            event.preventDefault();
+            const row = Math.min(Math.max(fromRow + delta[0], 0), numRows - 1);
+            const col = Math.min(Math.max(fromCol + delta[1], 0), numCols - 1);
 
-                                <button
-                                    className={styles.volumeButtonPortrait}
-                                    ref={(el) => {
-                                        if (el) volumeButtonRefs.current[instrumentIndex] = el;
-                                    }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        const newSet = new Set(volumeSliderOpen);
-                                        if (newSet.has(instrumentIndex)) {
-                                            newSet.delete(instrumentIndex);
-                                        } else {
-                                            newSet.add(instrumentIndex);
-                                        }
-                                        setVolumeSliderOpen(newSet);
-                                    }}
-                                    title="Adjust volume"
-                                >
-                                    Vol
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-
-                    {Array.from(volumeSliderOpen).map((instrumentIndex) => (
-                        <div
-                            key={`volume-popup-${instrumentIndex}`}
-                            className={styles.volumeSliderPopup}
-                            ref={(el) => {
-                                if (el) volumeSliderRefs.current[instrumentIndex] = el;
-                            }}
-                            style={{
-                                top: `${popupPositions[instrumentIndex]?.top || 0}px`,
-                                left: `${popupPositions[instrumentIndex]?.left || 0}px`,
-                                transform: 'translateX(-50%)',
-                                width: `calc(${controlItemRefs.current[instrumentIndex]?.offsetWidth || 70}px - 4px)`,
-                                visibility: popupPositions[instrumentIndex] ? 'visible' : 'hidden',
-                            }}
-                        >
-                            <input
-                                className={styles.volumeSliderPopupInput}
-                                type="range"
-                                min={0}
-                                max={1}
-                                step={0.01}
-                                value={volumes[instrumentIndex]}
-                                onChange={(e) =>
-                                    setVolume(instrumentIndex, parseFloat(e.target.value))
-                                }
-                            />
-                        </div>
-                    ))}
-
-                    <div className={styles.scrollContainerPortrait}>
-                        <div className={styles.innerGridContainerPortrait}>
-                            <div className={styles.drumGridPortrait}>
-                                <div className={styles.beatBackgroundPortrait}>
-                                    {Array.from({ length: numCols / numSubdivisions }).map(
-                                        (_, beatIndex) => (
-                                            <div
-                                                key={`beat-bg-${beatIndex}`}
-                                                className={`${styles.beatStripePortrait} ${
-                                                    beatIndex % 2 === 0
-                                                        ? styles.evenBeatHue
-                                                        : styles.oddBeatHue
-                                                }`}
-                                                style={{ height: beatSizePortrait }}
-                                            />
-                                        )
-                                    )}
-                                </div>
-
-                                {grid[0]?.map((_, stepIndex) => (
-                                    <div
-                                        className={styles.gridRowPortrait}
-                                        key={`row-${stepIndex}`}
-                                    >
-                                        {grid.map((_, instrumentIndex) => (
-                                            <div
-                                                key={`cell-${stepIndex}-${instrumentIndex}`}
-                                                className={`${styles.cellPortrait} ${styles.responsiveCell} ${
-                                                    currentStep === stepIndex ? styles.playing : ''
-                                                }`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={grid[instrumentIndex][stepIndex]}
-                                                    onChange={() =>
-                                                        toggle(instrumentIndex, stepIndex)
-                                                    }
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+            gridRef.current
+                ?.querySelector<HTMLInputElement>(`[data-row="${row}"][data-col="${col}"]`)
+                ?.focus();
+        },
+        [numRows, numCols]
+    );
 
     return (
-        <div className={styles.drumGridOuter} data-orientation="landscape">
-            <div className={styles.fixedGridContainer}>
-                <div className={styles.controlsColumn}>
-                    {grid.map((_, rowIndex) => (
+        <div
+            ref={sequencerRef}
+            className={styles.sequencer}
+            style={{ '--num-rows': numRows, '--num-cols': numCols } as CSSProperties}
+        >
+            <div className={styles.controlsTrack} ref={controlsRef}>
+                {INSTRUMENTS.slice(0, numRows).map((instrument, row) => {
+                    const variant = variantOf(resolveSampleName(row, selectedSamples[row]));
+                    return (
                         <div
-                            className={styles.controlsItemLandscape}
-                            key={`controls-${rowIndex}`}
-                            ref={(el) => {
-                                if (el) controlItemRefs.current[rowIndex] = el;
-                            }}
+                            className={styles.controlItem}
+                            key={instrument.key}
+                            style={{ '--lane': row } as CSSProperties}
                         >
-                            <div
-                                className={styles.controlsBox}
-                                onClick={() => cycleVariant(rowIndex)}
-                                style={{
-                                    cursor: 'pointer',
-                                }}
+                            <button
+                                type="button"
+                                className={styles.instrumentButton}
+                                onClick={() => cycleVariant(row)}
+                                aria-label={`${instrument.label}: sound ${variant} of 3. Activate to cycle.`}
                             >
-                                <div
+                                <span
                                     className={styles.instrumentEmoji}
-                                    title={`${instruments[rowIndex]} (Variant ${instrumentVariants[rowIndex]})`}
                                     style={{
-                                        filter: `hue-rotate(${getHueRotation(instrumentVariants[rowIndex])}deg)`,
+                                        filter: `hue-rotate(${VARIANT_HUE[variant] ?? 0}deg)`,
                                     }}
+                                    aria-hidden="true"
                                 >
-                                    {instrumentEmojis[instruments[rowIndex]]}
-                                </div>
-                            </div>
+                                    {instrument.emoji}
+                                </span>
+                                <span className={styles.variantBadge} aria-hidden="true">
+                                    {variant}
+                                </span>
+                            </button>
 
                             <button
-                                className={styles.volumeButtonLandscape}
-                                ref={(el) => {
-                                    if (el) volumeButtonRefs.current[rowIndex] = el;
-                                }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    const newSet = new Set(volumeSliderOpen);
-                                    if (newSet.has(rowIndex)) {
-                                        newSet.delete(rowIndex);
-                                    } else {
-                                        newSet.add(rowIndex);
-                                    }
-                                    setVolumeSliderOpen(newSet);
-                                }}
-                                title="Adjust volume"
+                                type="button"
+                                className={styles.volumeButton}
+                                onClick={() => setOpenVolume(openVolume === row ? null : row)}
+                                aria-expanded={openVolume === row}
+                                aria-label={`${instrument.label} volume, ${Math.round((volumes[row] ?? 1) * 100)}%`}
                             >
-                                V
+                                <svg
+                                    className={styles.volumeIcon}
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M4 9h3.5L12 4.5v15L7.5 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z" />
+                                    <path d="M15.5 8.5a4.5 4.5 0 0 1 0 7v-1.8a2.8 2.8 0 0 0 0-3.4V8.5z" />
+                                    <path d="M18 5.5a8 8 0 0 1 0 13v-1.8a6.2 6.2 0 0 0 0-9.4V5.5z" />
+                                </svg>
                             </button>
+
+                            {openVolume === row && (
+                                <div className={styles.volumePopup}>
+                                    <span className={styles.volumeValue} aria-hidden="true">
+                                        {Math.round((volumes[row] ?? 1) * 100)}
+                                    </span>
+                                    <input
+                                        className={styles.volumeSlider}
+                                        type="range"
+                                        min={0}
+                                        max={1}
+                                        step={0.01}
+                                        autoFocus
+                                        value={Number.isFinite(volumes[row]) ? volumes[row] : 1}
+                                        aria-label={`${instrument.label} volume`}
+                                        onChange={(e) => setVolume(row, parseFloat(e.target.value))}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+
+            <div className={styles.scrollArea}>
+                <div
+                    className={styles.grid}
+                    ref={gridRef}
+                    role="group"
+                    aria-label="Step sequencer pattern"
+                    onKeyDown={handleKeyDown}
+                >
+                    {Array.from({ length: numBeats }, (_, beat) => (
+                        <div
+                            key={`ruler-${beat}`}
+                            className={styles.beatMarker}
+                            style={{ '--beat-start': beat * numSubdivisions + 1 } as CSSProperties}
+                            aria-hidden="true"
+                        >
+                            {beat + 1}
                         </div>
                     ))}
-                </div>
 
-                {Array.from(volumeSliderOpen).map((rowIndex) => (
-                    <div
-                        key={`volume-popup-${rowIndex}`}
-                        className={styles.volumeSliderPopupLandscape}
-                        ref={(el) => {
-                            if (el) volumeSliderRefs.current[rowIndex] = el;
-                        }}
-                        style={{
-                            top: `${popupPositions[rowIndex]?.top || 0}px`,
-                            left: `${popupPositions[rowIndex]?.left || 0}px`,
-                            height: `calc(${controlItemRefs.current[rowIndex]?.offsetHeight || 32}px - 4px)`,
-                            visibility: popupPositions[rowIndex] ? 'visible' : 'hidden',
-                        }}
-                    >
-                        <input
-                            className={styles.volumeSliderPopupInputLandscape}
-                            type="range"
-                            min={0}
-                            max={1}
-                            step={0.01}
-                            value={volumes[rowIndex]}
-                            onChange={(e) => setVolume(rowIndex, parseFloat(e.target.value))}
+                    {Array.from({ length: numBeats }, (_, beat) => (
+                        <div
+                            key={`beat-${beat}`}
+                            className={`${styles.beatStripe} ${beat % 2 === 0 ? styles.evenBeat : styles.oddBeat}`}
+                            style={
+                                {
+                                    '--beat-start': beat * numSubdivisions + 1,
+                                    '--beat-span': Math.min(
+                                        numSubdivisions,
+                                        numCols - beat * numSubdivisions
+                                    ),
+                                } as CSSProperties
+                            }
+                            aria-hidden="true"
                         />
-                    </div>
-                ))}
+                    ))}
 
-                <div className={styles.scrollContainer}>
-                    <div className={styles.innerGridContainer}>
-                        <div className={styles.gridContainer}>
-                            <div className={styles.beatBackground}>
-                                {Array.from({ length: numCols / numSubdivisions }).map(
-                                    (_, beatIndex) => (
-                                        <div
-                                            key={`beat-bg-${beatIndex}`}
-                                            className={`${styles.beatStripe} ${
-                                                beatIndex % 2 === 0
-                                                    ? styles.evenBeatHue
-                                                    : styles.oddBeatHue
-                                            }`}
-                                            style={{ width: beatSizeLandscape }}
-                                        />
-                                    )
-                                )}
+                    {grid.map((row, rowIndex) =>
+                        row.map((checked, colIndex) => (
+                            <div
+                                key={`${rowIndex}-${colIndex}`}
+                                className={`${styles.cell} ${currentStep === colIndex ? styles.playing : ''}`}
+                                style={
+                                    {
+                                        '--row': rowIndex + 1,
+                                        '--col': colIndex + 1,
+                                    } as CSSProperties
+                                }
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    data-row={rowIndex}
+                                    data-col={colIndex}
+                                    tabIndex={
+                                        focused.row === rowIndex && focused.col === colIndex
+                                            ? 0
+                                            : -1
+                                    }
+                                    aria-label={`${INSTRUMENTS[rowIndex]?.label ?? `Row ${rowIndex + 1}`}, beat ${Math.floor(colIndex / numSubdivisions) + 1}, step ${(colIndex % numSubdivisions) + 1}`}
+                                    onFocus={() => setFocused({ row: rowIndex, col: colIndex })}
+                                    onChange={() => toggle(rowIndex, colIndex)}
+                                />
                             </div>
-
-                            <div className={styles.drumGrid}>
-                                {grid.map((row, rowIndex) => (
-                                    <div className={styles.gridRow} key={`row-${rowIndex}`}>
-                                        {row.map((checked, colIndex) => (
-                                            <div
-                                                key={`cell-${rowIndex}-${colIndex}`}
-                                                className={`${styles.cell} ${styles.responsiveCell} ${
-                                                    currentStep === colIndex ? styles.playing : ''
-                                                }`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={checked}
-                                                    onChange={() => toggle(rowIndex, colIndex)}
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                        ))
+                    )}
                 </div>
             </div>
         </div>

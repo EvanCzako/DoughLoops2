@@ -1,34 +1,58 @@
 @import './variables.module.css';
 
-:root {
-    --save-button-bg: rgb(30, 75, 179);
-    --save-button-bg-hover: rgb(55, 110, 238);
-    --loop-input-bg: rgb(138, 101, 186);
-}
-
-.saveButton {
-    background-color: var(--save-button-bg);
-    border-radius: 5px;
-    margin-bottom: 10px;
-    height: calc(var(--controls-container-height) * 0.2);
-    width: calc(var(--controls-container-width) * 0.3);
-    font-weight: 900;
-    font-size: 20px;
-    color: var(--ui-text-primary);
-}
-
-.saveButton:hover {
-    background-color: var(--save-button-bg-hover);
+.formHeading {
+    margin: 0 0 8px;
+    font-size: max(11px, calc(var(--base-font-size) * 1.8));
 }
 
 .loopNameEntry {
-    height: 30px;
-    margin-bottom: 10px;
-    background-color: var(--loop-input-bg);
-    font-size: 15px;
     width: 100%;
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    border: 1px solid var(--ui-border);
+    border-radius: 5px;
+    background-color: var(--loop-input-bg);
+    color: var(--ui-text-primary);
+    font-family: inherit;
+    font-size: max(10px, calc(var(--base-font-size) * 1.6));
 }
 
 .loopNameEntry::placeholder {
     color: var(--placeholder-text);
+}
+
+.saveButton {
+    padding: 6px 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--save-button-bg);
+    color: var(--ui-text-primary);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: max(10px, calc(var(--base-font-size) * 1.6));
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.saveButton:hover:not(:disabled) {
+    background-color: var(--save-button-bg-hover);
+}
+
+.saveButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.saveStatus,
+.saveError {
+    margin: 6px 0 0;
+    font-size: max(9px, calc(var(--base-font-size) * 1.3));
+}
+
+.saveStatus {
+    color: var(--color-off-green-1);
+}
+
+.saveError {
+    color: var(--color-off-red-1);
 }

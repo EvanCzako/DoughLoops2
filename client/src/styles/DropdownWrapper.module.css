@@ -1,21 +1,20 @@
-@import './variables.module.css';
-
-:root {
-    --dropdown-bg: #111;
-    --dropdown-border: #333;
-}
-
-.dropdownWrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: var(--dropdown-bg);
-    border: 1px solid var(--dropdown-border);
+.dropdownPanel {
+    position: fixed;
+    right: 15px;
+    z-index: 999;
+    background: var(--ui-surface-overlay);
+    color: var(--ui-text-primary);
+    border: 1px solid var(--ui-border-overlay);
     border-radius: 8px;
     padding: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    min-width: 280px;
+    box-shadow: var(--shadow-lg);
     max-width: 90vw;
-    z-index: 9999;
-    pointer-events: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
+
+.wide {
+    min-width: 280px;
 }

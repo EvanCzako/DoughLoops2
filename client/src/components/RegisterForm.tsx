@@ -1,66 +1,56 @@
 import { useState, FormEvent } from 'react';
-
+import { apiFetch, ApiError } from '../api';
 import styles from '../styles/LoginForm.module.css';
 
+const MIN_PASSWORD_LENGTH = 8;
+
 export default function RegisterForm() {
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
-    function validateInput() {
-        if (!username.trim() || !password.trim()) {
-            setError('Username and password cannot be empty');
-            return false;
-        }
-
-        return true;
-    }
-
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         setError(null);
         setSuccess(null);
 
-        if (!validateInput()) return;
+        if (!username.trim()) {
+            setError('Username cannot be empty');
+            return;
+        }
+        if (password.length < MIN_PASSWORD_LENGTH) {
+            setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters`);
+            return;
+        }
 
         setLoading(true);
-
         try {
-            const res = await fetch(`${API_BASE_URL}/register`, {
+            await apiFetch('/register', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
+                body: { username, password },
+                token: null,
             });
-
-            if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.error || 'Registration failed');
-            }
-
             setSuccess('Registered successfully! You can now log in.');
             setUsername('');
             setPassword('');
-        } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Registration failed');
+        } catch (err) {
+            setError(err instanceof ApiError ? err.message : 'Registration failed');
         } finally {
             setLoading(false);
         }
     }
 
     return (
-        <form
-            className={styles.loginForm}
-            onSubmit={handleSubmit}
-            style={{ maxWidth: 320, margin: 'auto' }}
-        >
+        <form className={styles.loginForm} onSubmit={handleSubmit}>
             <h2>Register</h2>
 
             <input
                 type="text"
                 placeholder="Username"
+                aria-label="Username"
+                autoComplete="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={loading}
@@ -71,6 +61,9 @@ export default function RegisterForm() {
             <input
                 type="password"
                 placeholder="Password"
+                aria-label="Password"
+                autoComplete="new-password"
+                minLength={MIN_PASSWORD_LENGTH}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
@@ -79,12 +72,18 @@ export default function RegisterForm() {
             />
 
             <button type="submit" disabled={loading} className={styles.loginButton}>
-                {loading ? 'Registering...' : 'Register'}
+                {loading ? 'Registering…' : 'Register'}
             </button>
 
-            {error && <p style={{ color: 'var(--color-off-red-1)', marginTop: 8 }}>{error}</p>}
+            {error && (
+                <p className={styles.formError} role="alert">
+                    {error}
+                </p>
+            )}
             {success && (
-                <p style={{ color: 'var(--color-off-green-1)', marginTop: 8 }}>{success}</p>
+                <p className={styles.formSuccess} role="status">
+                    {success}
+                </p>
             )}
         </form>
     );

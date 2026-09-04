@@ -1,4 +1,5 @@
 import { useStore } from '../store';
+import { apiFetch } from '../api';
 import styles from '../styles/LoginForm.module.css';
 
 export default function LogoutButton() {
@@ -9,6 +10,9 @@ export default function LogoutButton() {
     if (!user) return null;
 
     const handleLogout = () => {
+        // Fire-and-forget: the local session is dropped either way, so a failed
+        // revoke shouldn't strand the user in a logged-in UI.
+        apiFetch('/logout', { method: 'POST' }).catch(() => {});
         logout();
         setUserDropdownOpen(false);
     };

@@ -1,47 +1,95 @@
 @import './variables.module.css';
 
-:root {
-    --delete-button-bg: rgb(199, 29, 29);
-    --delete-button-bg-hover: rgb(226, 80, 80);
-}
-
+/*
+ * These styles had never actually rendered -- the component had no mount point
+ * -- so they carried a 10px border and a `max-width: 30%` meant for an older
+ * inline layout. Rewritten for the account panel it now lives in.
+ */
 .userLoopsWrapper {
-    border-width: 10px;
-    border-style: solid;
-    border-color: var(--ui-surface);
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid var(--ui-border);
     border-radius: 10px;
     background-color: var(--color-dark-purple-2);
     font-weight: 600;
-    padding: 10px;
+}
+
+.emptyNote {
+    margin: 0;
+    font-size: max(10px, calc(var(--base-font-size) * 1.5));
+    opacity: 0.85;
+}
+
+.listHeading {
+    margin: 14px 0 8px;
+    font-size: max(11px, calc(var(--base-font-size) * 1.8));
+}
+
+.loopList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .userLoopWrapper {
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.userLoop {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: max(10px, calc(var(--base-font-size) * 1.6));
+    background: none;
+    border: none;
+    padding: 4px 0;
+    text-align: left;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--ui-text-primary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+/* Was a font-size jump on hover, which reflowed the whole list on every
+   pointer move. Colour carries the same affordance without the layout shift. */
+.userLoop:hover {
+    color: var(--ui-accent);
+}
+
+.userLoop[aria-current='true'] {
+    color: var(--grid-cell-active);
+    font-weight: 900;
 }
 
 .deleteButton {
+    flex: 0 0 auto;
     background-color: var(--delete-button-bg);
+    border: none;
     border-radius: 5px;
-    padding: 5px;
-    margin-left: 15px;
-    font-size: calc(var(--base-font-size) * 1.5);
+    padding: 4px 10px;
+    color: var(--ui-text-primary);
+    font-family: inherit;
+    font-size: max(9px, calc(var(--base-font-size) * 1.3));
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
 }
 
 .deleteButton:hover {
     background-color: var(--delete-button-bg-hover);
 }
 
-@media (orientation: landscape) and (min-width: 900px) {
-    .userLoopsWrapper {
-        max-width: 30%;
-    }
-}
-
-.userLoop {
-    font-size: calc(var(--base-font-size) * 2);
-}
-
-.userLoop:hover {
-    font-size: calc(var(--base-font-size) * 2.5);
+.userLoop:focus-visible,
+.deleteButton:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: 4px;
 }

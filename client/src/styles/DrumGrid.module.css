@@ -1,840 +1,431 @@
-@import './variables.module.css';
+/*
+ * One layout, two orientations.
+ *
+ * Portrait and landscape used to be separate JSX trees backed by ~20 pairs of
+ * near-identical `*Portrait` / `*Landscape` classes. They are the same grid
+ * transposed, so every cell declares its own row/column from --row and --col
+ * and the orientation swaps which axis each one feeds. Nothing else changes.
+ */
 
-:root {
-    --grid-cell-size: 80px;
-    --scrollbar-thumb: #ad10a0;
-    --scrollbar-track: #000;
-    --volume-accent: rgb(110, 19, 96);
-    --volume-button-bg: #d9a974;
-    --volume-button-bg-hover: #e8bf8f;
-    --volume-button-border: #c99a5f;
-    --ghost-cell-bg: #222;
-    --fade-edge-color: rgba(166, 15, 153, 0.3);
-    --combobox-bg: rgb(61, 27, 78);
-}
-
-@media (orientation: portrait) {
-    :root {
-        --grid-cell-size: 45px;
-    }
-}
-
-.responsiveCell {
-    width: var(--grid-cell-size);
-    height: 100%;
-    flex-shrink: 0;
-    box-sizing: border-box;
-}
-
-.drumGridOuter {
-    background: var(--grid-background);
-    padding: 16px;
-    border-radius: 10px;
-    box-shadow: var(--shadow-lg);
-    width: 100%;
-    height: 100%;
+.sequencer {
+    display: flex;
+    flex: 1;
     min-height: 0;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    transition: none;
-}
-
-@media (orientation: portrait) {
-    .drumGridOuter[data-orientation='portrait'] {
-        padding: 8px;
-    }
-}
-
-@media (orientation: landscape) {
-    .drumGridOuter[data-orientation='landscape'] {
-        padding: 4px;
-    }
-}
-
-.scrollContainer {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
     min-width: 0;
-    scrollbar-width: thick;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    flex-grow: 1;
-    height: 100%;
-    transition: none;
-    padding-left: 10px;
-    box-sizing: border-box;
-}
-
-.scrollContainer::-webkit-scrollbar {
-    height: 8px;
-}
-
-.scrollContainer::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 4px;
-}
-
-.scrollContainer::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-}
-
-.innerGridContainer {
-    white-space: nowrap;
-    height: auto;
-    display: block;
-    transition: none;
-}
-
-.ghostRow {
-    display: flex;
-    align-items: center;
-    height: var(--grid-cell-size);
-    margin-bottom: 6px;
-}
-
-.ghostRow .labelSpacer {
-    width: 100%;
-}
-
-.ghostRowWrapper {
-    position: relative;
-    z-index: 2;
-}
-
-.ghostCell {
-    width: var(--grid-cell-size);
-    height: calc(var(--grid-cell-size) * 0.25);
-    border-radius: 2px;
-    background: var(--ghost-cell-bg);
-    flex-shrink: 0;
-    box-sizing: border-box;
-}
-
-.ghostSpacer {
-    width: var(--grid-cell-size);
-    height: 100%;
-    flex-shrink: 0;
-}
-
-.active {
-    background: #676767;
-}
-
-.drumGrid {
-    display: flex;
-    flex-direction: column;
     gap: 6px;
-    white-space: nowrap;
-}
-
-@media (orientation: landscape) {
-    .drumGrid {
-        max-height: min(420px, calc(100dvh - 80px));
-        gap: 4px;
-    }
-
-    .drumGrid > .gridRow {
-        flex: 0 0 calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
-        height: calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
-    }
-}
-
-.gridRow {
-    display: flex;
-    height: var(--grid-cell-size);
-    align-items: stretch;
-}
-
-.label {
-    width: 50px;
-    text-align: right;
-    margin-right: 8px;
-    margin-top: 2px;
-    flex-shrink: 0;
-}
-
-.cell {
-    width: var(--grid-cell-size);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 6px;
+    background: var(--grid-background);
+    border-radius: var(--radius-md);
     box-sizing: border-box;
 }
 
-.cell input[type='checkbox'] {
-    appearance: none;
-    width: 100%;
-    height: 100%;
-    background: var(--grid-cell-inactive);
-    border: 1px solid var(--grid-cell-border);
-    border-radius: 4px;
-    cursor: pointer;
+.controlsTrack {
+    display: grid;
+    gap: 6px;
+    /* Volume popups anchor to their control item, so this must not clip. */
+    overflow: visible;
+    flex: 0 0 auto;
 }
 
-.cell input[type='checkbox']:not(:checked):hover {
-    background: color-mix(in srgb, var(--grid-cell-inactive) 85%, var(--ui-accent));
-    border-color: var(--ui-accent);
-    box-shadow: 0 0 12px rgba(187, 154, 247, 0.15);
-}
-
-.cell input[type='checkbox']:checked {
-    background: var(--grid-cell-active);
-    border: 2px solid var(--grid-cell-border);
-    box-shadow: 0 0 8px rgba(255, 158, 100, 0.3);
-}
-
-.playing {
-    box-shadow:
-        inset 0 0 0 2px var(--grid-playing),
-        0 0 8px var(--grid-playing);
-}
-
-.cell.evenBeat,
-.cell.oddBeat {
-    background-color: transparent !important;
-}
-
-.gridContainer {
+.controlItem {
     position: relative;
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-
-.beatBackground {
-    position: absolute;
-    top: 0;
-    left: var(--controls-column-width * 1);
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-    z-index: 0;
-    display: flex;
-}
-
-.beatStripe {
-    height: 100%;
-    flex-shrink: 0;
-}
-
-.evenBeatHue {
-    background-color: var(--grid-beat-even);
-}
-
-.oddBeatHue {
-    background-color: var(--grid-beat-odd);
-}
-
-.drumGrid {
-    position: relative;
-    z-index: 3;
-}
-
-.playing {
-    box-shadow:
-        inset 0 0 0 2px var(--grid-playing),
-        0 0 8px var(--grid-playing);
-    position: relative;
-    z-index: 2;
-}
-
-.controlsBox {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-color: var(--ui-surface);
+    gap: 4px;
+    min-width: 0;
+}
+
+.instrumentButton {
+    position: relative;
+    display: flex;
+    aspect-ratio: auto;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    aspect-ratio: 1;
+    padding: 0;
+    background: var(
+        --surface-gradient,
+        linear-gradient(145deg, var(--ui-surface-light), var(--ui-surface))
+    );
     border: 1px solid var(--ui-border);
-    border-radius: 5px;
-    height: var(--grid-cell-size);
-    cursor: default;
-    box-sizing: border-box;
-    user-select: none;
-    transition: none;
-    will-change: height;
-    flex-shrink: 0;
-    container-type: size;
+    border-radius: 8px;
+    cursor: pointer;
+    transition:
+        transform var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
-@media (orientation: landscape) {
-    .controlsBox {
-        height: 100%;
-        aspect-ratio: 1;
-        flex-shrink: 0;
-    }
-}
-
-.controlsBox:hover {
-    background-color: color-mix(in srgb, var(--ui-surface) 85%, var(--ui-accent));
+.instrumentButton:hover {
     border-color: var(--ui-accent);
-    transform: scale(1.05);
-    transition: none;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.instrumentButton:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
 }
 
 .instrumentEmoji {
-    font-size: clamp(16px, 62cqmin, 56px);
+    font-size: calc(var(--kit-main) * 0.52);
     line-height: 1;
+    user-select: none;
+}
+
+.volumeButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
-    user-select: none;
-    border-radius: 4px;
-    padding: 4px;
+    flex: 0 0 auto;
+    padding: 0;
+    background: var(--ui-surface);
+    color: var(--volume-button-bg);
+    padding: 0;
+    border: 1px solid var(--ui-border);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: max(8px, calc(var(--kit-main) * 0.2));
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
 }
 
-@media (orientation: landscape) {
-    .instrumentEmoji {
-        padding: 2px;
-    }
+.volumeButton:hover {
+    background: var(--ui-hover);
+    border-color: var(--volume-button-bg);
 }
 
-.controlsBox select {
-    font-size: 12px;
-    margin-bottom: 6px;
-    width: 100%;
-    text-overflow: ellipsis;
-    background-color: var(--ui-surface-light);
+.volumeButton[aria-expanded='true'] {
+    background: var(--volume-button-bg);
+    color: var(--button-ink);
+    border-color: var(--volume-button-border);
+}
+
+.volumeButton:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.volumePopup {
+    position: absolute;
+    z-index: 5;
     display: flex;
-    flex-direction: column;
-    border-color: var(--ui-accent);
-    box-shadow: 0 0 0 1px var(--ui-accent);
-}
-
-@media (orientation: landscape) {
-    .controlsBox select {
-        font-size: 11px;
-        margin-bottom: 3px;
-    }
-}
-
-.controlsBox input[type='range'] {
-    width: 100%;
-}
-
-.sampleComboBox {
-    background-color: var(--combobox-bg);
-    border-radius: 5px;
-    font-size: calc(var(--grid-cell-size) * 0.4);
-    max-height: 60%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: 900;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: var(--ui-surface-overlay);
+    border: 1px solid var(--ui-border);
+    border-radius: 6px;
+    box-shadow: var(--shadow-lg);
 }
 
 .volumeSlider {
     accent-color: var(--volume-accent);
-    width: 100%;
-    height: 30%;
+    margin: 0;
 }
 
-@media (orientation: landscape) {
-    .volumeSlider {
-        height: 20%;
-    }
-}
-
-.controlsColumn {
+.scrollArea {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-right: 4px;
-    flex-shrink: 0;
-    width: var(--controls-column-width);
-    margin-left: 0;
-    transition: none !important;
-    will-change: height;
-    contain: layout style;
-}
-
-@media (orientation: landscape) {
-    .controlsColumn {
-        height: 100%;
-        width: fit-content;
-        padding-right: 4px;
-        overflow-y: auto;
-        flex-shrink: 0;
-        transition: none !important;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        max-height: min(420px, calc(100dvh - 80px));
-    }
-}
-
-.controlsBoxSpacer {
-    color: var(--ui-text-primary);
-    height: var(--grid-cell-size);
-    flex-shrink: 0;
-    background-color: var(--ui-surface);
-    border: 1px solid var(--ui-border);
-    border-bottom: 2px solid var(--ui-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: larger;
-    font-weight: 700;
-    border-radius: 6px;
-    box-shadow: var(--shadow-sm);
-}
-
-.gridArea {
-    position: relative;
-    width: fit-content;
-}
-
-.fixedGridContainer {
-    display: flex;
-    align-items: flex-start;
-    width: 100%;
-    height: 100%;
-    flex-grow: 1;
-    transition: none;
-}
-
-@media (orientation: landscape) {
-    .fixedGridContainer {
-        height: 100%;
-        gap: 0;
-        transition: none;
-        position: relative;
-    }
-
-    .fixedGridContainer::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 28px;
-        height: 100%;
-        background: linear-gradient(to right, transparent, var(--fade-edge-color));
-        pointer-events: none;
-        z-index: 4;
-    }
-}
-
-.portraitContainer {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    gap: 0;
-    transition: none;
+    flex: 1 1 auto;
+    min-width: 0;
     min-height: 0;
-    position: relative;
-}
-
-.portraitContainer::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 28px;
-    background: linear-gradient(to bottom, transparent, var(--fade-edge-color));
-    pointer-events: none;
-    z-index: 4;
-}
-
-.controlsRowPortrait {
-    display: flex;
-    gap: 0;
-    padding-bottom: 4px;
-    flex-shrink: 0;
-    overflow-x: hidden;
-    overflow-y: visible;
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    z-index: 10;
-    background: var(--grid-background);
-    position: relative;
-    align-items: flex-start;
-    width: 100%;
-    justify-content: space-around;
+    -webkit-overflow-scrolling: touch;
 }
 
-.controlsRowPortrait::-webkit-scrollbar {
-    height: 4px;
-}
-
-.controlsRowPortrait::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 2px;
-}
-
-.controlsRowPortrait::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-}
-
-.controlsBoxPortrait {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    background-color: var(--ui-surface);
-    border: 1px solid var(--ui-border);
-    border-radius: 5px;
-    padding: 4px;
-    flex-shrink: 0;
-    width: var(--grid-cell-size);
-    aspect-ratio: 1;
-    box-shadow: var(--shadow-sm);
-    box-sizing: border-box;
-    user-select: none;
-    transition: none;
-    container-type: size;
-}
-
-.controlsBoxPortrait:hover {
-    background-color: color-mix(in srgb, var(--ui-surface) 85%, var(--ui-accent));
-    border-color: var(--ui-accent);
-    transform: scale(1.05);
-    transition: none;
-}
-
-.controlsItemPortrait {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    flex: 1;
-    flex-shrink: 0;
-    position: relative;
-    min-width: 0;
-}
-
-.volumeButtonPortrait {
-    background: var(--volume-button-bg);
-    color: #000;
-    border: 1px solid var(--volume-button-border);
-    border-radius: 3px;
-    padding: 2px 4px;
-    font-size: 9px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 11;
-    transition: all 0.15s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.volumeButtonPortrait:hover {
-    background: var(--volume-button-bg-hover);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.volumeButtonPortrait:active {
-    transform: scale(0.95);
-}
-
-.instrumentEmojiPortrait {
-    font-size: clamp(16px, 62cqmin, 56px);
-    height: 30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    border-radius: 4px;
-    padding: 4px;
-}
-
-.controlsBoxPortrait select {
-    font-size: 10px;
-    width: 100%;
-    height: 45%;
-    text-overflow: ellipsis;
-    background-color: var(--ui-surface-light);
-    color: var(--ui-text-primary);
-    border: 1px solid var(--ui-border);
-    border-radius: 3px;
-    padding: 2px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.controlsBoxPortrait select:hover {
-    background-color: color-mix(in srgb, var(--ui-surface-light) 90%, var(--ui-accent));
-    border-color: var(--ui-accent);
-}
-
-.volumeSliderPortrait {
-    width: 80%;
-    height: 40%;
-    accent-color: var(--volume-accent);
-    display: none;
-}
-
-.volumeSliderPopup {
-    position: fixed;
-    background: var(--ui-surface);
-    border: 1px solid var(--ui-accent);
-    border-radius: 6px;
-    padding: 4px 0;
-    z-index: 9999;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 110px;
-    pointer-events: auto;
-}
-
-.volumeSliderPopupInput {
-    width: 24px;
-    height: 90px;
-    accent-color: var(--volume-accent);
-    cursor: pointer;
-    -webkit-appearance: slider-vertical;
-    appearance: slider-vertical;
-}
-
-.volumeDisplayPortrait {
-    font-size: 10px;
-    color: var(--ui-text-primary);
-    font-weight: bold;
-    min-width: 30px;
-    text-align: center;
-}
-
-.scrollContainerPortrait {
-    overflow-x: hidden;
-    overflow-y: auto;
-    white-space: normal;
-    width: 100%;
-    scrollbar-width: thick;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    flex-grow: 1;
-    height: 100%;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    transition: none;
-}
-
-.scrollContainerPortrait::-webkit-scrollbar {
+.scrollArea::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
-.scrollContainerPortrait::-webkit-scrollbar-thumb {
+.scrollArea::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
 
-.scrollContainerPortrait::-webkit-scrollbar-track {
+.scrollArea::-webkit-scrollbar-track {
     background: var(--scrollbar-track);
 }
 
-.innerGridContainerPortrait {
-    display: flex;
-    flex-direction: column;
-    white-space: normal;
-    width: 100%;
-    transition: none;
-}
-
-.ghostColumnWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-right: 8px;
-    flex-shrink: 0;
-}
-
-.ghostColumnSpacer {
-    width: var(--grid-cell-size);
-    height: var(--grid-cell-size);
-    flex-shrink: 0;
-}
-
-.ghostCellPortrait {
-    width: var(--grid-cell-size);
-    height: calc(var(--grid-cell-size) * 0.25);
-    border-radius: 2px;
-    background: var(--ghost-cell-bg);
-    flex-shrink: 0;
-    box-sizing: border-box;
-}
-
-.drumGridPortrait {
-    display: flex;
-    flex-direction: column;
+.grid {
+    display: grid;
     gap: 6px;
     position: relative;
-    z-index: 3;
-    width: 100%;
 }
 
-.beatBackgroundPortrait {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+/* Stripes are grid items spanning one beat, not an absolutely positioned
+   overlay that had to be kept in sync with the cell metrics by hand. */
+.beatStripe {
+    border-radius: 6px;
     pointer-events: none;
     z-index: 0;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
 }
 
-.beatStripePortrait {
-    width: 100%;
-    flex: 1;
-    margin: 0;
-    padding: 0;
+.evenBeat {
+    background-color: var(--grid-beat-even);
 }
 
-.gridRowPortrait {
-    display: flex;
-    height: var(--grid-cell-size);
-    align-items: stretch;
-    gap: 6px;
-    padding-left: 3px;
-    padding-right: 3px;
+.oddBeat {
+    background-color: var(--grid-beat-odd);
 }
-.cellPortrait {
-    width: var(--grid-cell-size);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    flex-shrink: 0;
+
+.cell {
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    min-width: 0;
+    min-height: 0;
 }
 
-.cellPortrait input[type='checkbox'] {
+.cell input[type='checkbox'] {
     appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
     width: 100%;
     height: 100%;
     background: var(--grid-cell-inactive);
     border: 1px solid var(--grid-cell-border);
-    border-radius: 4px;
+    border-radius: var(--cell-radius);
     cursor: pointer;
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
-.cellPortrait input[type='checkbox']:not(:checked):hover {
-    background: color-mix(in srgb, var(--grid-cell-inactive) 85%, var(--ui-accent));
+.cell input[type='checkbox']:not(:checked):hover {
+    background: var(--grid-cell-hover);
     border-color: var(--ui-accent);
-    box-shadow: 0 0 12px rgba(187, 154, 247, 0.15);
 }
 
-.cellPortrait input[type='checkbox']:checked {
+.cell input[type='checkbox']:checked {
     background: var(--grid-cell-active);
-    border: 2px solid var(--grid-cell-border);
-    box-shadow: 0 0 8px rgba(255, 158, 100, 0.3);
+    border-color: var(--grid-cell-active);
+    box-shadow: 0 0 10px var(--grid-active-glow);
 }
 
-.gridRowPortrait .playing {
-    box-shadow:
-        inset 0 0 0 2px var(--grid-playing),
-        0 0 8px var(--grid-playing);
-    position: relative;
+.cell input[type='checkbox']:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.playing::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: var(--radius-sm);
+    background: var(--grid-playhead-wash);
+    box-shadow: inset 0 0 0 1px var(--grid-playing);
+    pointer-events: none;
     z-index: 2;
 }
 
-@media (orientation: portrait) {
-    .cellPortrait {
-        width: auto;
-        flex: 1;
-        min-width: 0;
-    }
-
-    .controlsBoxPortrait {
-        flex: 0 0 auto;
-        min-width: 0;
-        aspect-ratio: 1;
-        height: var(--grid-cell-size);
-        width: var(--grid-cell-size);
-    }
-
-    .controlsItemPortrait {
-        flex: 0 0 auto;
-        min-width: 0;
-    }
-
-    .gridRowPortrait {
-        height: clamp(28px, 7vw, 45px);
-        min-height: unset;
-    }
-
-    .volumeSliderPortrait {
-        display: none;
-    }
+.playing input[type='checkbox']:checked {
+    box-shadow: 0 0 14px var(--grid-active-glow);
+    filter: brightness(1.15);
 }
 
-.controlsItemLandscape {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex: 0 0 calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
-    height: calc((min(420px, calc(100dvh - 80px)) - 4px * 7) / 8);
-}
+/* ---- Landscape: instruments are rows, steps march left to right ---------- */
 
-.volumeButtonLandscape {
-    background: var(--volume-button-bg);
-    color: #000;
-    border: 1px solid var(--volume-button-border);
-    border-radius: 2px;
-    padding: 0;
-    font-size: 7px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 11;
-    transition: all 0.15s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    flex-shrink: 0;
-    width: 16px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    line-height: 1;
-}
-
-.volumeButtonLandscape:hover {
-    background: var(--volume-button-bg-hover);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.volumeButtonLandscape:active {
-    transform: scale(0.95);
-}
-
-.volumeSliderPopupLandscape {
-    position: fixed;
-    background: var(--ui-surface);
-    border: 1px solid var(--ui-accent);
-    border-radius: 6px;
-    padding: 0 6px;
-    z-index: 9999;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    display: flex;
+.sequencer {
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 110px;
-    pointer-events: auto;
-    transform: translateY(-50%);
 }
 
-.volumeSliderPopupInputLandscape {
-    width: 90px;
-    height: 80%;
-    accent-color: var(--volume-accent);
-    cursor: pointer;
-    -webkit-appearance: slider-horizontal;
-    appearance: slider-horizontal;
+.controlsTrack {
+    grid-template-rows: repeat(var(--num-rows, 8), var(--cell-h));
+    grid-auto-flow: row;
+    align-content: center;
+    height: 100%;
+    width: calc(var(--kit-main) + var(--kit-track-extra));
+}
+
+.controlItem {
+    height: auto;
+    min-height: 0;
+}
+
+.volumeButton {
+    width: 2em;
+    align-self: stretch;
+}
+
+.volumePopup {
+    top: 50%;
+    left: calc(100% + 6px);
+    transform: translateY(-50%);
+    height: var(--cell-h);
+    width: calc(var(--kit-main) * 2.6);
+}
+
+.volumeSlider {
+    width: 100%;
+}
+
+.scrollArea {
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: safe center;
+    align-items: safe center;
+}
+
+.grid {
+    /* Track sizes come from computeGridMetrics(), which measures this panel and
+       clamps the cell's aspect ratio. Fixed tracks rather than 1fr: once the
+       ratio is bounded the grid must be allowed to outgrow the scroll area and
+       scroll, instead of compressing cells into slivers to fit. */
+    grid-template-columns: repeat(var(--num-cols), var(--cell-w));
+    grid-template-rows: var(--ruler-track) repeat(var(--num-rows), var(--cell-h));
+    flex: 0 0 auto;
+    margin: auto;
+}
+
+.cell {
+    grid-column: var(--col);
+    grid-row: calc(var(--row) + 1);
+}
+
+.beatStripe {
+    grid-column: var(--beat-start) / span var(--beat-span);
+    grid-row: 2 / -1;
+}
+
+.volumeIcon {
+    width: 1.5em;
+    height: 1.5em;
+    flex: 0 0 auto;
+}
+
+/* Beat ruler. Shares the grid's tracks, so it cannot drift out of alignment
+   with the cells the way a separately measured strip would. */
+.beatMarker {
+    grid-column: var(--beat-start);
+    grid-row: 1;
+    justify-self: start;
+    padding: 0 0 3px 2px;
+    z-index: 3;
+    font-size: max(8px, calc(var(--cell-w) * 0.22));
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ui-text-primary);
+    opacity: 0.55;
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+}
+
+.variantBadge {
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    font-size: max(7px, calc(var(--kit-main) * 0.16));
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ui-text-primary);
+    opacity: 0.45;
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+}
+
+.volumeValue {
+    flex: 0 0 auto;
+    min-width: 2.4em;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ui-text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- Portrait: the same grid transposed, steps march top to bottom -------
+ *
+ * This block must stay LAST in the file. A media query adds no specificity, so
+ * these rules only beat their landscape counterparts on source order -- when
+ * base rules were appended after it, the portrait beat-ruler placement was
+ * silently overridden and the numbers laid out along the wrong axis.
+ */
+
+@media (orientation: portrait) {
+    .sequencer {
+        flex-direction: column;
+    }
+
+    /* Same track template as .grid, so the kit lines up with the columns it
+       labels; both are max-content and centred, so their edges coincide. */
+    .controlsTrack {
+        grid-template-columns: var(--ruler-track) repeat(var(--num-rows, 8), var(--cell-w));
+        grid-template-rows: none;
+        width: max-content;
+        height: auto;
+        margin: 0;
+    }
+
+    .controlItem {
+        grid-column: calc(var(--lane) + 2);
+        grid-row: 1;
+    }
+
+    .controlItem {
+        flex-direction: column;
+        height: auto;
+        gap: 2px;
+    }
+
+    .instrumentButton {
+        aspect-ratio: 1;
+    }
+
+    .volumeButton {
+        width: 100%;
+        height: 1.6em;
+        align-self: auto;
+    }
+
+    .volumePopup {
+        top: calc(100% + 6px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: max(120px, 100%);
+        height: auto;
+    }
+
+    .scrollArea {
+        overflow-x: hidden;
+        overflow-y: auto;
+        /* Aligned with .controlsTrack's origin, not centred -- see above. */
+        justify-content: flex-start;
+        /* Steps flow downward from the top; don't centre them vertically. */
+        align-items: flex-start;
+    }
+
+    .grid {
+        grid-template-columns: var(--ruler-track) repeat(var(--num-rows), var(--cell-w));
+        grid-template-rows: repeat(var(--num-cols), var(--cell-h));
+        width: max-content;
+        height: auto;
+        margin: 0;
+    }
+
+    .cell {
+        grid-column: calc(var(--row) + 1);
+        grid-row: var(--col);
+    }
+
+    .beatStripe {
+        grid-column: 2 / -1;
+        grid-row: var(--beat-start) / span var(--beat-span);
+    }
+
+    .beatMarker {
+        grid-column: 1;
+        grid-row: var(--beat-start);
+        align-self: start;
+        justify-self: center;
+        padding: 0;
+        margin: 0;
+    }
 }

@@ -1,61 +1,53 @@
 import { useState, FormEvent } from 'react';
-import { useStore, User } from '../store';
+import { useStore } from '../store';
+import { apiFetch, ApiError } from '../api';
 import styles from '../styles/LoginForm.module.css';
 
-export default function LoginForm() {
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+interface LoginResponse {
+    token: string;
+    userId: number;
+    username: string;
+}
 
-    const setUser = useStore((state) => state.setUser);
+export default function LoginForm() {
+    const setSession = useStore((s) => s.setSession);
+    const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
-    const setUserDropdownOpen = useStore((s) => s.setUserDropdownOpen);
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         setLoading(true);
         setError(null);
-        setSuccess(null);
 
         try {
-            const res = await fetch(`${API_BASE_URL}/login`, {
+            const data = await apiFetch<LoginResponse>('/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
+                body: { username, password },
+                token: null,
             });
 
-            if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.error || 'Login failed');
-            }
-
-            const data: { userId: number; username: string } = await res.json();
-
-            const loggedInUser: User = { id: data.userId, username: data.username };
-            setUser(loggedInUser);
-            setSuccess('Login successful!');
+            setSession({ id: data.userId, username: data.username }, data.token);
             setUserDropdownOpen(false);
-        } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Login failed');
+        } catch (err) {
+            setError(err instanceof ApiError ? err.message : 'Login failed');
         } finally {
             setLoading(false);
         }
     }
 
     return (
-        <form
-            className={styles.loginForm}
-            onSubmit={handleSubmit}
-            style={{ maxWidth: 320, margin: 'auto' }}
-        >
+        <form className={styles.loginForm} onSubmit={handleSubmit}>
             <h2>Login</h2>
 
             <input
                 type="text"
                 placeholder="Username"
+                aria-label="Username"
+                autoComplete="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={loading}
@@ -66,6 +58,8 @@ export default function LoginForm() {
             <input
                 type="password"
                 placeholder="Password"
+                aria-label="Password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
@@ -74,12 +68,18 @@ export default function LoginForm() {
             />
 
             <button type="submit" disabled={loading} className={styles.loginButton}>
-                {loading ? 'Waiting...' : 'Login'}
+                {loading ? 'Waiting…' : 'Login'}
             </button>
 
-            {error && <p style={{ color: 'var(--color-off-red-1)', marginTop: 8 }}>{error}</p>}
-            {success && (
-                <p style={{ color: 'var(--color-off-green-1)', marginTop: 8 }}>{success}</p>
+            {loading && (
+                <p className={styles.formHint}>
+                    The API sleeps when idle — the first request can take a minute.
+                </p>
+            )}
+            {error && (
+                <p className={styles.formError} role="alert">
+                    {error}
+                </p>
             )}
         </form>
     );

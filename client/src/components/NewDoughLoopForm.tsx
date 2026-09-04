@@ -1,10 +1,10 @@
-import { useStore } from '../store';
-import styles from '../styles/NewDoughLoopForm.module.css';
+import { FormEvent, useState } from 'react';
+import { useStore, DoughLoop } from '../store';
+import { apiFetch, ApiError } from '../api';
 import { encodeDrumGrid } from '../utils';
+import styles from '../styles/NewDoughLoopForm.module.css';
 
 export default function NewDoughLoopForm() {
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
     const user = useStore((s) => s.user);
     const bpm = useStore((s) => s.bpm);
     const numBeats = useStore((s) => s.numBeats);
@@ -14,63 +14,72 @@ export default function NewDoughLoopForm() {
     const setName = useStore((s) => s.setName);
     const selectedSamples = useStore((s) => s.selectedSamples);
     const volumes = useStore((s) => s.volumes);
-    const addDoughLoop = useStore((s) => s.addDoughLoop);
-    const replaceDoughLoop = useStore((s) => s.replaceDoughLoop);
-    const setError = useStore((s) => s.setError);
-    const fontSize = useStore((s) => s.fontSize);
-    const computedFontSize = Math.max(10, fontSize * 2.5);
+    const upsertDoughLoop = useStore((s) => s.upsertDoughLoop);
+    const logout = useStore((s) => s.logout);
 
-    const handleSave = async () => {
-        if (!user) return null;
+    const [saving, setSaving] = useState(false);
+    const [message, setMessage] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-        const beatRep = encodeDrumGrid({
-            bpm,
-            numBeats,
-            subdivisions: numSubdivisions,
-            grid: grid,
-            samples: selectedSamples,
-            volumes,
-        });
+    const handleSave = async (e: FormEvent) => {
+        e.preventDefault();
+        if (!user || !name.trim()) return;
+
+        setSaving(true);
+        setError(null);
+        setMessage(null);
 
         try {
-            const res = await fetch(`${API_BASE_URL}/doughloops`, {
+            const saved = await apiFetch<DoughLoop>('/doughloops', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: user.id, name: name, beatRep }),
+                body: {
+                    name: name.trim(),
+                    beatRep: encodeDrumGrid({
+                        bpm,
+                        numBeats,
+                        subdivisions: numSubdivisions,
+                        grid,
+                        samples: selectedSamples,
+                        volumes,
+                    }),
+                },
             });
 
-            if (!res.ok) throw new Error('Failed to save');
-
-            const newLoop = await res.json();
-
-            if (res.status === 201) {
-                addDoughLoop(newLoop);
-            } else if (res.status === 200) {
-                replaceDoughLoop(newLoop);
-            }
-
-            setName('');
-        } catch {
-            setError('Error saving loop');
+            upsertDoughLoop(saved);
+            setMessage(`Saved “${saved.name}”`);
+        } catch (err) {
+            if (err instanceof ApiError && err.status === 401) logout();
+            else setError(err instanceof ApiError ? err.message : 'Error saving loop');
+        } finally {
+            setSaving(false);
         }
     };
 
     return (
-        <div>
-            <h3 style={{ fontSize: computedFontSize }}>New Loop</h3>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Loop name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className={styles.loopNameEntry}
-                    style={{ fontSize: `${fontSize * 2}px` }}
-                />
-                <button onClick={handleSave} className={styles.saveButton}>
-                    Save
-                </button>
-            </div>
-        </div>
+        <form onSubmit={handleSave}>
+            <h3 className={styles.formHeading}>Save Loop</h3>
+            <input
+                type="text"
+                placeholder="Loop name"
+                aria-label="Loop name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={styles.loopNameEntry}
+                maxLength={64}
+            />
+            <button type="submit" className={styles.saveButton} disabled={saving || !name.trim()}>
+                {saving ? 'Saving…' : 'Save'}
+            </button>
+            {message && (
+                <p className={styles.saveStatus} role="status">
+                    {message}
+                </p>
+            )}
+            {error && (
+                <p className={styles.saveError} role="alert">
+                    {error}
+                </p>
+            )}
+        </form>
     );
 }
