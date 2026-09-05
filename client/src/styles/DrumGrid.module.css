@@ -237,8 +237,12 @@
     flex-direction: row;
 }
 
+/* Same track template as .grid, including the beat ruler's leading track, so
+   each lane lines up with the row it labels; both are centred in a box of the
+   same height, so leaving the ruler out here dropped the kit half a ruler
+   plus half a gap below its cells. */
 .controlsTrack {
-    grid-template-rows: repeat(var(--num-rows, 8), var(--cell-h));
+    grid-template-rows: var(--ruler-track) repeat(var(--num-rows, 8), var(--cell-h));
     grid-auto-flow: row;
     align-content: center;
     height: 100%;
@@ -246,6 +250,8 @@
 }
 
 .controlItem {
+    grid-column: 1;
+    grid-row: calc(var(--lane) + 2);
     height: auto;
     min-height: 0;
 }
