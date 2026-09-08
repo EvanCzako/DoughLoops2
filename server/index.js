@@ -12,8 +12,14 @@ app.set('trust proxy', 1);
 /*
  * Production origins are fixed; any localhost port is allowed in development so
  * a dev server that picked a different port isn't silently blocked.
+ *
+ * Both hosts are listed because the client is moving from the project page to
+ * its own subdomain. github.io stays valid for as long as GitHub keeps
+ * redirecting the old URL -- a visitor who followed a stale link is served the
+ * redirect target, but anyone with the old page still open keeps the old
+ * origin, and dropping it early would fail their next save.
  */
-const PROD_ORIGINS = ['https://evanczako.github.io'];
+const PROD_ORIGINS = ['https://evanczako.github.io', 'https://doughloops.evanczako.com'];
 const isDev = process.env.NODE_ENV !== 'production';
 
 app.use(
