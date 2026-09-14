@@ -2,7 +2,7 @@
 
 In-browser beat machine/step-sequencer!
 
-[Check it out](https://evanczako.github.io/DoughLoops2/)
+[Check it out](https://doughloops.evanczako.com/)
 
 ## License
 

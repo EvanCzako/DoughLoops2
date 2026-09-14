@@ -1,0 +1,263 @@
+<!doctype html>
+<!--
+  Source for public/og.png -- the social share preview (Slack, LinkedIn,
+  iMessage). Not published as a page: it lives in tools/, which Vite never
+  copies, so only the rendered PNG in public/ ships.
+
+  Regenerate after editing:
+      npm run og
+
+  The seeds below are copied verbatim from the Midnight block in
+  src/styles/variables.module.css, and the derived colours use the same
+  color-mix() formulas the grid itself uses, so the card drifts out of brand
+  only if someone edits the palette and forgets to re-run the script.
+
+  The motif is the app: a real 16-step, 4-track pattern drawn with the same
+  cell, stripe and playhead colours DrumGrid renders. A scraper preview is the
+  only picture most people will ever see of this app, so it shows the thing
+  rather than a logo on a background.
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="./space-grotesk-latin.css" />
+        <style>
+            :root {
+                /* Midnight seeds -- see variables.module.css */
+                --seed-page: #0b0b10;
+                --seed-surface: #24283b;
+                --seed-text: #c0caf5;
+                --seed-accent: #bb9af7;
+
+                --seed-cell: #1f2335;
+                --seed-cell-border: #565f89;
+                --seed-active: #ff9e64;
+                --seed-playhead: #f7768e;
+                --seed-beat-a: #636eff;
+                --seed-beat-b: #ff79c6;
+                --stripe-strength: 32%;
+
+                --ui-text-muted: color-mix(in srgb, var(--seed-text) 78%, var(--seed-surface));
+                --grid-beat-even: color-mix(
+                    in srgb,
+                    var(--seed-beat-a) var(--stripe-strength),
+                    transparent
+                );
+                --grid-beat-odd: color-mix(
+                    in srgb,
+                    var(--seed-beat-b) var(--stripe-strength),
+                    transparent
+                );
+                --grid-playhead-wash: color-mix(in srgb, var(--seed-playhead) 16%, transparent);
+                --grid-active-glow: color-mix(in srgb, var(--seed-active) 40%, transparent);
+
+                /* One source of truth for the grid metrics: 16 columns at
+                   --cell-w plus 15 --cell-gap must equal the 1032px the card
+                   padding leaves. */
+                --cell-w: 56px;
+                --cell-h: 40px;
+                --cell-gap: 9px;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            /* The screenshot is taken at exactly this size; the body must not
+               introduce scrollbars or the capture picks up a grey gutter. */
+            body {
+                width: 1200px;
+                height: 630px;
+                overflow: hidden;
+                background: var(--seed-page);
+                font-family: 'Space Grotesk', system-ui, sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .card {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                padding: 74px 84px 66px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            /* Echo of the app's active-cell glow, warm rather than the hub's
+               purple because this card's accent is the orange step colour. */
+            .glow {
+                position: absolute;
+                top: -220px;
+                right: -160px;
+                width: 760px;
+                height: 760px;
+                border-radius: 50%;
+                background: radial-gradient(
+                    circle,
+                    color-mix(in srgb, var(--seed-active) 13%, transparent) 0%,
+                    transparent 65%
+                );
+            }
+
+            .top {
+                position: relative;
+            }
+
+            /* The wordmark is 800x200; 620 wide keeps it crisp at 1x without
+               dominating the card.
+
+               The source PNG is matted on pure black, not transparent, so on
+               the #0b0b10 page it would otherwise read as a hard-edged black
+               box around the logo. screen blending maps those black pixels to
+               the page colour exactly -- screen against #000 is a no-op -- and
+               leaves the bright wordmark untouched. */
+            .wordmark {
+                display: block;
+                width: 620px;
+                height: auto;
+                mix-blend-mode: screen;
+                /* The source has 24px of its own matte to the left of the
+                   frame, which is 18.6px once scaled to 620. Pulling that back
+                   puts the visible frame on the same left edge as the tagline
+                   and the grid instead of floating 19px inside them. */
+                margin-left: -18.6px;
+            }
+
+            .tagline {
+                margin-top: 22px;
+                font-size: 27px;
+                font-weight: 500;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--ui-text-muted);
+            }
+
+            .bottom {
+                position: relative;
+            }
+
+            .grid {
+                position: relative;
+                height: calc(4 * var(--cell-h) + 3 * var(--cell-gap));
+            }
+
+            /* Beat stripes are their own layer rather than grid items: the
+               cells auto-place, and an explicitly positioned item in the same
+               grid would push them out of their rows. */
+            .bands {
+                position: absolute;
+                inset: 0;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: var(--cell-gap);
+            }
+
+            .bands span {
+                border-radius: 7px;
+            }
+
+            .bands span:nth-child(odd) {
+                background: var(--grid-beat-even);
+            }
+
+            .bands span:nth-child(even) {
+                background: var(--grid-beat-odd);
+            }
+
+            /* Step 7, mid-bar: far enough from either edge to read as playback
+               in progress rather than a pattern that has not started. */
+            .playhead {
+                position: absolute;
+                top: -7px;
+                bottom: -7px;
+                left: calc(6 * (var(--cell-w) + var(--cell-gap)) - 4px);
+                width: calc(var(--cell-w) + 8px);
+                border-radius: 8px;
+                background: var(--grid-playhead-wash);
+                box-shadow: inset 0 0 0 1px
+                    color-mix(in srgb, var(--seed-playhead) 30%, transparent);
+            }
+
+            .cells {
+                position: relative;
+                display: grid;
+                grid-template-columns: repeat(16, var(--cell-w));
+                grid-template-rows: repeat(4, var(--cell-h));
+                gap: var(--cell-gap);
+            }
+
+            .cells i {
+                border-radius: 4px;
+                background: var(--seed-cell);
+                border: 1px solid var(--seed-cell-border);
+            }
+
+            .cells i.on {
+                background: var(--seed-active);
+                border-color: var(--seed-active);
+                box-shadow: 0 0 10px var(--grid-active-glow);
+            }
+
+            .footer {
+                position: relative;
+                margin-top: 40px;
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+            }
+
+            .domain {
+                font-size: 27px;
+                font-weight: 500;
+                color: var(--seed-accent);
+            }
+
+            .caption {
+                font-size: 23px;
+                font-weight: 400;
+                color: var(--ui-text-muted);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="glow"></div>
+
+            <div class="top">
+                <img class="wordmark" src="../src/assets/DoughLoops2-downSaturated.png" alt="" />
+                <div class="tagline">In-browser step sequencer</div>
+            </div>
+
+            <div class="bottom">
+                <div class="grid">
+                    <div class="bands"><span></span><span></span><span></span><span></span></div>
+                    <div class="playhead"></div>
+                    <div class="cells">
+                        <!-- kick -->
+                        <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i
+                        ><i></i> <i class="on"></i><i></i><i></i><i></i><i></i><i></i
+                        ><i class="on"></i><i></i>
+                        <!-- snare -->
+                        <i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i> <i></i
+                        ><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i>
+                        <!-- hats -->
+                        <i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i
+                        ><i class="on"></i><i></i> <i class="on"></i><i></i><i class="on"></i><i></i
+                        ><i class="on"></i><i></i><i class="on"></i><i></i>
+                        <!-- perc -->
+                        <i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i> <i></i
+                        ><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i class="on"></i>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <div class="domain">doughloops.evanczako.com</div>
+                    <div class="caption">Any time signature. No install, no sign-up.</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

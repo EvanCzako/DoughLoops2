@@ -7,7 +7,7 @@ sibling projects).
 ## What this is
 
 An in-browser step sequencer / drum machine. Deployed as a static SPA to GitHub
-Pages (`https://evanczako.github.io/DoughLoops2/`) with a small Express + SQLite
+Pages (`https://doughloops.evanczako.com/`) with a small Express + SQLite
 API on Render (`https://doughloops2.onrender.com`) for user accounts and saved
 loops. Part of a portfolio family that links back to `evanczako.com` and
 `DoughLab2`.
