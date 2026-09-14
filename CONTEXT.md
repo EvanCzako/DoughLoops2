@@ -154,8 +154,19 @@ npm run lint                # delegates to client's flat ESLint config
 npm run format              # prettier, 4-space, single quotes, 100 cols
 npm run typecheck           # tsc --noEmit, clean as of this writing
 npm run check               # typecheck + lint + build, the pre-commit gate
-cd client && npm run deploy # gh-pages -d dist
+cd client && npm run deploy # gh-pages -d dist (predeploy builds first)
+cd client && npm run og     # re-render client/public/og.png
 ```
+
+**`deploy` and `og` live in `client/`, not the root** — the root `package.json`
+has no `deploy` script at all, so `npm run deploy` from the repo root fails with
+"Missing script: deploy". That failure is easy to miss: the commit still pushes,
+nothing publishes, and the site keeps serving the previous build with no error
+anywhere. This is unlike the two sibling apps, which deploy from their roots.
+
+`npm run og` renders the social card through headless Chrome at exactly
+1200x630. It copies its palette seeds from `variables.module.css`, so re-run it
+after any palette change or the card quietly drifts out of brand.
 
 `client/.env` points at localhost:3000; `client/.env.production` at Render.
 Render spins down on the free tier — `api.ts` allows 60s and the login form says
